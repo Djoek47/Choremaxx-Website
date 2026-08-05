@@ -1,20 +1,20 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Brand colors - ChoreMaxx */
-  --color-primary: #E4552B;
-  --color-accent: #D85A30;
+  /* Brand colors - ChoreMaxx soft pastels */
+  --color-primary: #D85A30;
+  --color-accent: #E4552B;
   
   /* Text colors */
-  --color-dark-text: #1a1a1a;
-  --color-light-text: #4a4a4a;
+  --color-dark-text: #2d2d2d;
+  --color-light-text: #5a5a5a;
   
-  /* Neutrals */
-  --color-background: #f5f7fa;
+  /* Neutrals - soft pastels */
+  --color-background: #f9f8f6;
   --color-surface: #FFFFFF;
-  --color-surface-secondary: #F8FAFC;
-  --color-divider: #E2E8F0;
-  --color-muted: #9CA3AF;
+  --color-surface-secondary: #f5f3f0;
+  --color-divider: #e8ddd8;
+  --color-muted: #a0a0a0;
   
   /* Semantic colors */
   --color-success: #34C759;
@@ -22,12 +22,12 @@
   --color-danger: #FF453A;
   
   /* Glass effect - premium frosted glass */
-  --color-glass: rgba(255, 255, 255, 0.8);
-  --color-glass-dark: rgba(255, 255, 255, 0.6);
+  --color-glass: rgba(255, 255, 255, 0.75);
+  --color-glass-dark: rgba(255, 255, 255, 0.5);
   
   /* Radius */
-  --radius: 16px;
-  --radius-lg: 28px;
+  --radius: 20px;
+  --radius-lg: 32px;
   --radius-full: 9999px;
   
   /* Font stack */
@@ -70,28 +70,28 @@
 
 @layer components {
   .btn-primary {
-    @apply px-8 py-4 bg-gradient-to-r from-primary to-accent text-white rounded-full font-bold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300 active:scale-95;
+    @apply px-8 py-3 bg-primary text-white rounded-full font-semibold text-base shadow-md hover:shadow-lg transition-all duration-300 hover:scale-102;
   }
   
   .btn-secondary {
-    @apply px-8 py-4 border-2 border-primary text-primary rounded-full font-bold text-lg hover:bg-primary/5 transition-all duration-300;
+    @apply px-8 py-3 border-2 border-primary text-primary rounded-full font-semibold text-base hover:bg-primary/5 transition-all duration-300;
   }
   
   .btn-text {
-    @apply text-primary font-semibold hover:opacity-70 transition-opacity duration-300;
+    @apply text-primary font-medium hover:opacity-70 transition-opacity duration-300;
   }
   
-  /* Premium frosted glass card */
+  /* Premium frosted glass card with soft shadows */
   .glass {
-    @apply backdrop-blur-xl bg-white/70 border border-white/40 rounded-[var(--radius-lg)] shadow-xl hover:shadow-2xl transition-all duration-300;
+    @apply backdrop-blur-lg bg-white/75 border border-white/50 rounded-[var(--radius-lg)] shadow-lg hover:shadow-2xl transition-all duration-300;
   }
   
   .glass-sm {
-    @apply backdrop-blur-xl bg-white/70 border border-white/40 rounded-[var(--radius)] shadow-lg hover:shadow-xl transition-all duration-300;
+    @apply backdrop-blur-lg bg-white/75 border border-white/50 rounded-[var(--radius)] shadow-md hover:shadow-lg transition-all duration-300;
   }
   
   .glass-dark {
-    @apply backdrop-blur-xl bg-white/60 border border-white/30 rounded-[var(--radius-lg)] shadow-lg;
+    @apply backdrop-blur-lg bg-white/60 border border-white/40 rounded-[var(--radius-lg)] shadow-lg;
   }
   
   .section-container {
