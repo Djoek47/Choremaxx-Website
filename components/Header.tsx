@@ -8,7 +8,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 glass-sm border-b border-divider">
+    <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/70 border-b border-white/20 shadow-sm">
       <nav className="section-container flex items-center justify-between gap-8">
         <Link href="/" className="flex items-center gap-2 flex-shrink-0">
           <Image
@@ -18,9 +18,8 @@ export default function Header() {
             height={32}
             className="w-8 h-8"
           />
-          <span className="text-xl font-bold">
-            <span className="text-dark-text">chore</span>
-            <span className="text-primary">maxx</span>
+          <span className="text-xl font-bold bg-gradient-to-r from-dark-text to-primary bg-clip-text text-transparent">
+            ChoreMaxx
           </span>
         </Link>
 
