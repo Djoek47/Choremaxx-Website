@@ -5,182 +5,330 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'ChoreMaxx — AI Household Operating System',
   description:
-    'Run your household together. AI-powered task management, rewards, and family coordination in one calm place.',
-  openGraph: {
-    title: 'ChoreMaxx — AI Household Operating System',
-    description:
-      'Run your household together. AI-powered task management, rewards, and family coordination in one calm place.',
-    url: 'https://mytikas73.com',
-  },
+    'Run your household together. AI-powered task management, rewards, and family coordination in one app.',
 };
 
+/* ── Icon components ─────────────────────────────────────── */
+function TasksIcon() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="6" width="16" height="2" rx="1" fill="rgba(255,255,255,0.80)" />
+      <rect x="4" y="11" width="12" height="2" rx="1" fill="rgba(255,255,255,0.60)" />
+      <rect x="4" y="16" width="14" height="2" rx="1" fill="rgba(255,255,255,0.60)" />
+      <circle cx="22" cy="20" r="5" stroke="rgba(255,255,255,0.80)" strokeWidth="1.5" />
+      <path d="M19.5 20l1.5 1.5 2.5-2.5" stroke="rgba(255,255,255,0.80)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function RewardsIcon() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14 4l2.5 5 5.5 0.8-4 3.9 0.9 5.5L14 16.5l-4.9 2.7 0.9-5.5L6 9.8l5.5-0.8z" stroke="rgba(255,255,255,0.80)" strokeWidth="1.5" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function CalendarIcon() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="7" width="18" height="16" rx="3" stroke="rgba(255,255,255,0.80)" strokeWidth="1.5" />
+      <path d="M5 12h18" stroke="rgba(255,255,255,0.60)" strokeWidth="1.5" />
+      <path d="M10 5v4M18 5v4" stroke="rgba(255,255,255,0.80)" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="10" cy="17" r="1.2" fill="rgba(255,255,255,0.70)" />
+      <circle cx="14" cy="17" r="1.2" fill="rgba(255,255,255,0.70)" />
+      <circle cx="18" cy="17" r="1.2" fill="rgba(255,255,255,0.70)" />
+    </svg>
+  );
+}
+function FamilyIcon() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="10" cy="10" r="3.5" stroke="rgba(255,255,255,0.80)" strokeWidth="1.5" />
+      <circle cx="19" cy="10" r="3.5" stroke="rgba(255,255,255,0.80)" strokeWidth="1.5" />
+      <path d="M4 23c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="rgba(255,255,255,0.80)" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M17 23c0-3.314 0.895-6 2-6 1.105 0 2 2.686 2 6" stroke="rgba(255,255,255,0.60)" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+function NovaIcon() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="14" cy="14" r="8" stroke="rgba(255,255,255,0.80)" strokeWidth="1.5" />
+      <path d="M14 10v4l3 3" stroke="rgba(255,255,255,0.80)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="14" cy="14" r="2" fill="rgba(255,255,255,0.30)" />
+    </svg>
+  );
+}
+
+/* ── Decorative 3-D ring (pure CSS/SVG) ─────────────────── */
+function Ring({ size, top, left, right, bottom, rotate = 0, opacity = 0.3 }: {
+  size: number; top?: string; left?: string; right?: string; bottom?: string; rotate?: number; opacity?: number;
+}) {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: 'absolute',
+        width:  size,
+        height: size,
+        top,    left,    right,   bottom,
+        borderRadius: '50%',
+        border: '10px solid rgba(200,170,255,0.28)',
+        boxShadow: 'inset 0 0 40px rgba(180,140,255,0.18), 0 0 60px rgba(140,100,255,0.18)',
+        transform: `rotate(${rotate}deg)`,
+        opacity,
+        pointerEvents: 'none',
+      }}
+    />
+  );
+}
+
+/* ── Module tiles data ───────────────────────────────────── */
+const modules = [
+  { label: 'Tasks',    icon: <TasksIcon />,    desc: 'Assign, track, prove done'      },
+  { label: 'Rewards',  icon: <RewardsIcon />,  desc: 'XP, badges, tiers, allowance'   },
+  { label: 'Plan',     icon: <CalendarIcon />, desc: 'Calendar, events, itineraries'  },
+  { label: 'Family',   icon: <FamilyIcon />,   desc: 'Roles, kids, roommates'         },
+  { label: 'Nova AI',  icon: <NovaIcon />,     desc: 'Briefings & smart suggestions'  },
+];
+
+const steps = [
+  {
+    n: '01',
+    title: 'Create your household',
+    body: 'Name your space, choose a reward style, and invite family members by code or QR.',
+  },
+  {
+    n: '02',
+    title: 'Assign what matters today',
+    body: 'Set tasks, due dates, and difficulty levels. Kids earn XP. Parents track momentum live.',
+  },
+  {
+    n: '03',
+    title: 'Earn, celebrate, stay balanced',
+    body: 'Watch streaks grow, unlock badges, and reach tiers. Nova re-balances work automatically.',
+  },
+];
+
+const roles = [
+  {
+    title: 'Parents & Admins',
+    items: ['Create and manage households', 'Assign tasks to any member', 'Review photo completions', 'Approve and grant rewards'],
+  },
+  {
+    title: 'Kids',
+    items: ['See your task queue', 'Request one-off tasks', 'Earn XP and badges', 'Climb the leaderboard'],
+  },
+  {
+    title: 'Roommates',
+    items: ['Equal shared household', 'Your own private tasks', 'Track fair contributions', 'No drama, just data'],
+  },
+];
+
+/* ═══════════════════════════════════════════════════════════ */
 export default function Home() {
   return (
-    <div className="min-h-screen overflow-hidden">
-      {/* Hero Section with Soft Pastel Gradient */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-purple-100/40 via-pink-50 to-blue-100/40">
-        {/* Soft wavy organic shapes */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
-          <svg className="absolute top-0 left-0 w-full h-32 opacity-60" viewBox="0 0 1200 200" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="wave1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#d8a5d8" stopOpacity="0.3" />
-                <stop offset="100%" stopColor="#ffc9d1" stopOpacity="0.2" />
-              </linearGradient>
-            </defs>
-            <path d="M0,80 Q300,40 600,80 T1200,80 L1200,0 L0,0 Z" fill="url(#wave1)" />
-            <path d="M0,120 Q300,80 600,120 T1200,120 L1200,60 Q600,100 0,60 Z" fill="#e8d5e8" opacity="0.25" />
-          </svg>
-        </div>
+    <div className="page-bg">
 
-        <div className="section-container relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
-              <div className="space-y-6">
-                <Image
-                  src="/brand/choremaxx-logo-mark.png"
-                  alt="ChoreMaxx"
-                  width={64}
-                  height={64}
-                  className="w-14 h-14"
-                />
-                <h1 className="text-balance text-dark-text leading-tight">
-                  Run your household together
+      {/* ── HERO ──────────────────────────────────────────── */}
+      <section className="relative overflow-hidden" style={{ minHeight: '100vh' }}>
+        {/* Decorative blobs */}
+        <div className="blob-1" style={{ top: '-120px', right: '-80px', opacity: 0.5 }} />
+        <div className="blob-2" style={{ bottom: '0', left: '-100px', opacity: 0.4 }} />
+        <div className="blob-3" style={{ top: '40%', left: '40%', opacity: 0.35 }} />
+
+        {/* Floating rings — like the reference 3-D objects */}
+        <Ring size={500} top="-120px" right="-180px" rotate={-20} opacity={0.35} />
+        <Ring size={360} bottom="-80px" left="-100px" rotate={15} opacity={0.25} />
+        <Ring size={220} top="30%" right="8%" rotate={45} opacity={0.20} />
+
+        <div
+          className="container-page relative z-10"
+          style={{ paddingTop: '7rem', paddingBottom: '5rem' }}
+        >
+          <div className="flex flex-col lg:flex-row items-center gap-16">
+
+            {/* Left column — headline + CTA */}
+            <div className="flex-1 flex flex-col gap-8 max-w-2xl">
+              <div className="flex flex-col gap-5">
+                <div className="chip self-start">AI Household OS</div>
+
+                <h1 className="text-balance">
+                  Run your household{' '}
+                  <span style={{ color: 'rgba(216,180,254,1)' }}>together.</span>
                 </h1>
-                <p className="text-xl text-light-text leading-relaxed max-w-xl">
-                  AI-powered task management, rewards, and family coordination in one calm place.
+
+                <p className="text-lg text-white/70 leading-relaxed max-w-xl">
+                  ChoreMaxx combines AI-powered task management, family rewards, and smart scheduling
+                  into one beautiful app — so every household member knows exactly what to do.
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div className="flex flex-wrap gap-4">
                 <Link href="/download" className="btn-primary">
                   Get the app
                 </Link>
-                <Link href="/how-it-works" className="btn-secondary">
+                <Link href="/how-it-works" className="btn-outline">
                   See how it works
                 </Link>
               </div>
 
-              <p className="text-sm text-muted">
-                Available on iOS and Android
-              </p>
+              <p className="text-sm text-white/40">Available on iOS and Android</p>
             </div>
 
-            <div className="relative hidden lg:flex items-center justify-center">
-              <div className="glass p-4 rounded-3xl shadow-xl">
-                <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6631-v9iwoCWH3W4q6dq7oB2z5HISd3Verm.png"
-                  alt="ChoreMaxx App"
-                  width={240}
-                  height={480}
-                  className="w-full h-auto rounded-2xl"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Problem Section */}
-      <section className="relative bg-gradient-to-r from-pink-50/50 via-purple-50/30 to-blue-50/50 py-20 md:py-28">
-        <div className="section-container">
-          <div className="max-w-3xl mx-auto text-center space-y-6">
-            <h2 className="text-balance text-dark-text">
-              Household work shouldn&apos;t live in five apps and someone&apos;s head.
-            </h2>
-            <p className="text-lg text-light-text leading-relaxed">
-              Unfinished chores, missed assignments, unfair distribution. ChoreMaxx brings clarity, fairness, and momentum to every household.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="bg-gradient-to-b from-white to-blue-50/30 relative overflow-hidden py-20 md:py-28">
-        <div className="section-container">
-          <h2 className="text-center mb-16 text-balance text-dark-text">How it works</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                step: '1',
-                title: 'Create your household',
-                description: 'Name your space, choose your reward style, and invite family by code or QR.',
-              },
-              {
-                step: '2',
-                title: 'Assign what matters today',
-                description:
-                  'Set tasks, due dates, difficulty levels. Kids earn XP. Parents track momentum in real time.',
-              },
-              {
-                step: '3',
-                title: 'Earn, celebrate, stay balanced',
-                description:
-                  'Watch streaks build, unlock badges, reach tiers. Nova suggests adjustments when work gets uneven.',
-              },
-            ].map((item, i) => (
-              <div key={i} className="glass p-7 space-y-4 transform hover:shadow-2xl transition-all duration-300">
-                <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg">
-                  {item.step}
+            {/* Right column — glass card with app preview */}
+            <div className="flex-shrink-0 hidden lg:flex items-center justify-center relative">
+              <div
+                className="glass-card p-5 flex flex-col gap-4"
+                style={{ width: 320, position: 'relative', zIndex: 2 }}
+              >
+                {/* Mini stat row inside the glass card */}
+                <div className="flex gap-3">
+                  <div className="glass-tile flex-1 p-3 text-center">
+                    <p className="text-2xl font-bold text-white">43</p>
+                    <p className="text-xs text-white/60 mt-0.5">Tasks today</p>
+                  </div>
+                  <div className="glass-tile flex-1 p-3 text-center">
+                    <p className="text-2xl font-bold text-white">1,992</p>
+                    <p className="text-xs text-white/60 mt-0.5">XP earned</p>
+                  </div>
+                  <div className="glass-tile flex-1 p-3 text-center">
+                    <p className="text-2xl font-bold text-white">31</p>
+                    <p className="text-xs text-white/60 mt-0.5">Day streak</p>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-dark-text">{item.title}</h3>
-                <p className="text-light-text text-sm leading-relaxed">{item.description}</p>
+
+                {/* App screenshot */}
+                <div style={{ borderRadius: 16, overflow: 'hidden' }}>
+                  <Image
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6631-v9iwoCWH3W4q6dq7oB2z5HISd3Verm.png"
+                    alt="ChoreMaxx app interface"
+                    width={280}
+                    height={400}
+                    className="w-full h-auto"
+                    style={{ display: 'block' }}
+                  />
+                </div>
+
+                {/* Mini label */}
+                <p className="text-xs text-white/50 text-center">
+                  Your household · Today
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ── MODULES GRID ──────────────────────────────────── */}
+      <section className="section relative overflow-hidden">
+        <div className="blob-2" style={{ top: '-60px', right: '10%', opacity: 0.25 }} />
+
+        <div className="container-page relative z-10">
+          <div className="flex flex-col items-center gap-4 mb-14 text-center">
+            <p className="text-sm font-semibold text-white/50 uppercase tracking-widest">
+              Everything in one place
+            </p>
+            <h2 className="text-balance">Five modules. One household.</h2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {modules.map(({ label, icon, desc }) => (
+              <div
+                key={label}
+                className="glass-tile flex flex-col items-center gap-3 p-5 text-center cursor-default"
+              >
+                <div
+                  style={{
+                    width: 52,
+                    height: 52,
+                    borderRadius: 14,
+                    background: 'rgba(255,255,255,0.10)',
+                    border: '1px solid rgba(255,255,255,0.18)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {icon}
+                </div>
+                <p className="text-sm font-semibold text-white">{label}</p>
+                <p className="text-xs text-white/55 leading-snug">{desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Modules */}
-      <section className="bg-gradient-to-b from-pink-50/40 to-white py-20 md:py-28">
-        <div className="section-container">
-          <h2 className="text-center mb-16 text-balance text-dark-text">Everything you need</h2>
+      {/* ── HOW IT WORKS ──────────────────────────────────── */}
+      <section className="section relative overflow-hidden">
+        <div className="blob-1" style={{ bottom: '-100px', left: '-80px', opacity: 0.30 }} />
+        <Ring size={420} top="-80px" right="-100px" rotate={30} opacity={0.18} />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
-            {[
-              { title: 'Home', desc: 'Daily momentum, tasks, briefings' },
-              { title: 'Tasks', desc: 'Assign, schedule, track, prove' },
-              { title: 'Plan', desc: 'Calendar, events, itineraries' },
-              { title: 'Rewards', desc: 'XP, badges, tiers, allowance' },
-              { title: 'Nova', desc: 'AI co-manager briefings' },
-            ].map((module, i) => (
-              <div key={i} className="glass-sm p-5 text-center space-y-3 hover:shadow-lg transition-all duration-300">
-                <h3 className="font-semibold text-dark-text">{module.title}</h3>
-                <p className="text-xs text-light-text leading-relaxed">{module.desc}</p>
-              </div>
-            ))}
+        <div className="container-page relative z-10">
+          <div className="flex flex-col items-center gap-4 mb-14 text-center">
+            <p className="text-sm font-semibold text-white/50 uppercase tracking-widest">Simple setup</p>
+            <h2 className="text-balance">Up and running in minutes</h2>
           </div>
-        </div>
-      </section>
-
-      {/* Roles Section */}
-      <section className="relative bg-gradient-to-b from-blue-50/40 to-white py-20 md:py-28">
-        <div className="section-container">
-          <h2 className="text-center mb-16 text-balance text-dark-text">Fairness, no chaos</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                role: 'Parents & Admins',
-                features: ['Create households', 'Manage roles', 'Review completions', 'Approve rewards'],
-              },
-              {
-                role: 'Kids',
-                features: ['See your tasks', 'Request one-offs', 'Earn rewards', 'Check your rank'],
-              },
-              {
-                role: 'Roommates',
-                features: ['Shared household', 'Your own tasks', 'Earn together', 'Keep it fair'],
-              },
-            ].map((item, i) => (
-              <div key={i} className="glass p-7 space-y-5 hover:shadow-lg transition-all duration-300">
-                <h3 className="text-xl font-bold text-dark-text">{item.role}</h3>
-                <ul className="space-y-3">
-                  {item.features.map((feature, j) => (
-                    <li key={j} className="flex items-start gap-3">
-                      <span className="text-primary font-bold text-lg flex-shrink-0">✓</span>
-                      <span className="text-light-text text-sm">{feature}</span>
+            {steps.map(({ n, title, body }) => (
+              <div key={n} className="glass-card p-8 flex flex-col gap-5">
+                <span
+                  style={{
+                    fontSize: '3rem',
+                    fontWeight: 800,
+                    color: 'rgba(255,255,255,0.12)',
+                    lineHeight: 1,
+                    fontVariantNumeric: 'tabular-nums',
+                  }}
+                >
+                  {n}
+                </span>
+                <h3 className="text-white font-bold text-lg">{title}</h3>
+                <p className="text-sm text-white/65 leading-relaxed">{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── ROLES ─────────────────────────────────────────── */}
+      <section className="section relative overflow-hidden">
+        <div className="blob-2" style={{ top: 0, right: '-60px', opacity: 0.25 }} />
+
+        <div className="container-page relative z-10">
+          <div className="flex flex-col items-center gap-4 mb-14 text-center">
+            <p className="text-sm font-semibold text-white/50 uppercase tracking-widest">Built for everyone</p>
+            <h2 className="text-balance">Fairness, no chaos</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {roles.map(({ title, items }) => (
+              <div key={title} className="glass-card p-8 flex flex-col gap-6">
+                <h3 className="text-white font-bold text-xl">{title}</h3>
+                <ul className="flex flex-col gap-3">
+                  {items.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <span
+                        style={{
+                          width: 18,
+                          height: 18,
+                          borderRadius: '50%',
+                          background: 'rgba(167,139,250,0.35)',
+                          border: '1px solid rgba(167,139,250,0.60)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0,
+                          marginTop: 2,
+                        }}
+                      >
+                        <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
+                          <path d="M1.5 4.5l2 2 4-4" stroke="rgba(255,255,255,0.90)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
+                      <span className="text-sm text-white/70">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -190,57 +338,53 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Trust Section */}
-      <section className="relative bg-white py-16 md:py-20 border-t border-divider">
-        <div className="section-container">
-          <div className="max-w-3xl mx-auto text-center space-y-8">
-            <h2 className="text-balance text-dark-text">Privacy-first. Always.</h2>
-            <p className="text-lg text-light-text leading-relaxed">
-              Your household data stays yours. Parental controls built in. Delete your account anytime.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link href="/privacy" className="btn-text">
-                Privacy Policy
-              </Link>
-              <span className="hidden sm:inline text-divider">•</span>
-              <Link href="/terms" className="btn-text">
-                Terms of Service
-              </Link>
-              <span className="hidden sm:inline text-divider">•</span>
-              <Link href="/kids" className="btn-text">
-                Kids & Parental Controls
-              </Link>
+      {/* ── PRIVACY STRIP ─────────────────────────────────── */}
+      <section className="section relative">
+        <div className="container-page">
+          <div
+            className="glass-card p-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left"
+          >
+            <div className="flex flex-col gap-3 max-w-xl">
+              <h2 className="text-white text-2xl font-bold">Privacy-first. Always.</h2>
+              <p className="text-white/65 text-sm leading-relaxed">
+                Your household data belongs to your household — never sold, never shared.
+                Parental controls built in. Delete your account and all data at any time.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Link href="/privacy" className="chip">Privacy Policy</Link>
+              <Link href="/terms"   className="chip">Terms</Link>
+              <Link href="/kids"    className="chip">Kids Controls</Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="relative bg-gradient-to-r from-purple-100/50 via-pink-100/50 to-blue-100/50 py-20 md:py-28 overflow-hidden">
-        {/* Soft wavy shape */}
-        <svg className="absolute top-0 left-0 w-full h-20 opacity-40" viewBox="0 0 1200 100" preserveAspectRatio="none">
-          <path d="M0,30 Q300,10 600,30 T1200,30 L1200,0 L0,0 Z" fill="#d8a5d8" opacity="0.3" />
-        </svg>
-        
-        <div className="section-container relative z-10 pt-8">
-          <div className="max-w-2xl mx-auto text-center space-y-8">
-            <h2 className="text-balance text-dark-text text-4xl md:text-5xl">Ready to run your household together?</h2>
-            <p className="text-lg text-light-text leading-relaxed">
-              Join thousands of families discovering calm household coordination.
-            </p>
+      {/* ── FINAL CTA ─────────────────────────────────────── */}
+      <section className="section relative overflow-hidden">
+        <div className="blob-1" style={{ top: '-80px', left: '30%', opacity: 0.35 }} />
+        <Ring size={600} top="-200px" right="-200px" rotate={-10} opacity={0.20} />
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Link href="/download" className="btn-primary px-8 py-3">
-                Get ChoreMaxx
-              </Link>
-              <Link href="/support" className="btn-secondary px-8 py-3">
-                Get help
-              </Link>
-            </div>
+        <div className="container-page relative z-10 flex flex-col items-center text-center gap-8">
+          <p className="text-sm font-semibold text-white/50 uppercase tracking-widest">Ready?</p>
+          <h2 className="text-balance text-5xl md:text-6xl font-extrabold text-white" style={{ maxWidth: 700 }}>
+            Your household is waiting.
+          </h2>
+          <p className="text-white/65 text-lg max-w-md leading-relaxed">
+            Join thousands of families running happier homes with ChoreMaxx.
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link href="/download" className="btn-primary px-10 py-4 text-base">
+              Download free
+            </Link>
+            <Link href="/support" className="btn-outline px-10 py-4 text-base">
+              Talk to us
+            </Link>
           </div>
+          <p className="text-xs text-white/35">iOS and Android · Free to start · No credit card required</p>
         </div>
       </section>
+
     </div>
   );
 }

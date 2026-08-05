@@ -5,115 +5,113 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-gradient-to-r from-amber-700 via-orange-600 to-amber-600 shadow-lg relative overflow-hidden">
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-orange-500/20 to-amber-900/30 mix-blend-overlay pointer-events-none" />
-      
-      <nav className="section-container flex items-center justify-between gap-8 relative z-10">
-        <Link href="/" className="flex items-center gap-3 flex-shrink-0 group">
-          <div className="relative">
+    <header className="sticky top-0 z-50">
+      {/* Glass nav bar floating over the purple background */}
+      <div
+        style={{
+          background: 'rgba(255,255,255,0.10)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          borderBottom: '1px solid rgba(255,255,255,0.12)',
+        }}
+      >
+        <div className="container-page flex items-center justify-between gap-6 py-4">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group">
             <Image
               src="/brand/choremaxx-logo-mark.png"
               alt="ChoreMaxx"
-              width={36}
-              height={36}
-              className="w-9 h-9 drop-shadow-lg"
+              width={34}
+              height={34}
+              className="w-8 h-8"
             />
+            <span className="text-xl font-bold text-white tracking-tight">
+              ChoreMaxx
+            </span>
+          </Link>
+
+          {/* Desktop nav links */}
+          <nav className="hidden md:flex items-center gap-10" aria-label="Main navigation">
+            {[
+              { label: 'How it works', href: '/how-it-works' },
+              { label: 'Features',     href: '/features'     },
+              { label: 'Support',      href: '/support'      },
+              { label: 'Download',     href: '/download'     },
+            ].map(({ label, href }) => (
+              <Link
+                key={href}
+                href={href}
+                className="text-sm font-medium text-white/80 hover:text-white transition-colors duration-200"
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* CTA */}
+          <div className="hidden md:flex items-center gap-3">
+            <Link href="/download" className="btn-outline text-sm py-2 px-5">
+              Get the app
+            </Link>
           </div>
-          <span className="text-2xl font-bold text-white drop-shadow-lg group-hover:drop-shadow-xl transition-all duration-300" style={{
-            textShadow: '0 2px 8px rgba(0,0,0,0.3), 0 -1px 0 rgba(255,255,255,0.2)'
-          }}>
-            ChoreMaxx
-          </span>
-        </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-12">
-          <Link
-            href="/how-it-works"
-            className="text-sm font-semibold text-white/90 hover:text-white transition-all duration-300 drop-shadow-md"
+          {/* Mobile hamburger */}
+          <button
+            className="md:hidden text-white p-1"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={mobileOpen}
           >
-            How it works
-          </Link>
-          <Link
-            href="/features"
-            className="text-sm font-semibold text-white/90 hover:text-white transition-all duration-300 drop-shadow-md"
-          >
-            Features
-          </Link>
-          <Link
-            href="/support"
-            className="text-sm font-semibold text-white/90 hover:text-white transition-all duration-300 drop-shadow-md"
-          >
-            Support
-          </Link>
-          <Link
-            href="/download"
-            className="text-sm font-semibold text-white/90 hover:text-white transition-all duration-300 drop-shadow-md"
-          >
-            Download
-          </Link>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {mobileOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
         </div>
 
-        <div className="hidden md:flex items-center gap-3">
-          <Link href="/privacy" className="text-xs font-medium text-white/80 hover:text-white transition-all drop-shadow-md">
-            Privacy
-          </Link>
-          <Link href="/download" className="px-6 py-2 bg-white text-amber-700 font-bold rounded-full hover:shadow-xl transition-all duration-300 drop-shadow-lg">
-            Get the app
-          </Link>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-white drop-shadow-md relative z-20"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        {/* Mobile menu */}
+        {mobileOpen && (
+          <div
+            style={{
+              background: 'rgba(76,29,149,0.92)',
+              backdropFilter: 'blur(24px)',
+              WebkitBackdropFilter: 'blur(24px)',
+              borderTop: '1px solid rgba(255,255,255,0.10)',
+            }}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        </button>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-gradient-to-b from-orange-600 to-amber-700 border-b border-amber-800/50 md:hidden shadow-xl">
-            <div className="section-container flex flex-col gap-4 py-6">
-              <Link href="/how-it-works" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
-                How it works
-              </Link>
-              <Link href="/features" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
-                Features
-              </Link>
-              <Link href="/support" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
-                Support
-              </Link>
-              <Link href="/download" className="text-sm font-semibold text-white/90 hover:text-white transition-colors">
-                Download
-              </Link>
-              <Link href="/privacy" className="text-xs text-white/70 hover:text-white transition-colors">
-                Privacy
-              </Link>
-              <Link href="/download" className="px-6 py-2 bg-white text-amber-700 font-bold rounded-full hover:shadow-lg transition-all w-full text-center">
+            <nav className="container-page flex flex-col gap-5 py-6">
+              {[
+                { label: 'How it works', href: '/how-it-works' },
+                { label: 'Features',     href: '/features'     },
+                { label: 'Support',      href: '/support'      },
+                { label: 'Download',     href: '/download'     },
+              ].map(({ label, href }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="text-base font-medium text-white/80 hover:text-white transition-colors"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {label}
+                </Link>
+              ))}
+              <Link
+                href="/download"
+                className="btn-primary text-sm mt-2 self-start"
+                onClick={() => setMobileOpen(false)}
+              >
                 Get the app
               </Link>
-            </div>
+            </nav>
           </div>
         )}
-      </nav>
+      </div>
     </header>
   );
 }

@@ -1,157 +1,89 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import PageShell from '@/components/PageShell';
 
 export const metadata: Metadata = {
   title: 'AI Household Operating System — ChoreMaxx',
   description:
-    'ChoreMaxx is an AI household operating system that coordinates tasks, schedules, rewards, and family communication in one app.',
+    'ChoreMaxx is an AI household OS that coordinates tasks, schedules, rewards, and family communication in one app.',
   canonical: 'https://mytikas73.com/household-os',
-  openGraph: {
-    title: 'AI Household Operating System — ChoreMaxx',
-    description:
-      'ChoreMaxx is an AI household operating system that coordinates tasks, schedules, rewards, and family communication in one app.',
-    url: 'https://mytikas73.com/household-os',
-    type: 'website',
-  },
 };
+
+const modules = [
+  { title: 'Home Dashboard',  desc: 'Household momentum, today\'s work, Nova briefing, and quick actions.' },
+  { title: 'Tasks',           desc: 'Create, assign, track, and complete work with difficulty levels and photo proof.' },
+  { title: 'Plan',            desc: 'All household events, tasks, and itineraries in one calendar view.' },
+  { title: 'Rewards',         desc: 'XP system, reward shop, tier progression, leaderboards, and badges.' },
+  { title: 'Nova AI',         desc: 'AI co-manager: daily briefings, smart suggestions, load monitoring.' },
+];
+
+const whoFor = [
+  { label: 'Parents',        desc: 'Stop nagging. Assign once, track always. See what is getting done.' },
+  { label: 'Kids',           desc: 'Clear expectations, fair rewards, friendly competition.' },
+  { label: 'Roommates',      desc: 'Shared household, clear responsibilities, no resentment.' },
+  { label: 'Blended families', desc: 'Multiple kids, schedules, expectations all in one system.' },
+];
 
 export default function HouseholdOS() {
   return (
-    <div className="min-h-screen bg-background">
-      <section className="section-container">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="mb-6 text-balance">The Household Operating System</h1>
+    <PageShell
+      heading="The Household Operating System"
+      sub="Coordinates work, schedules, rewards, and communication — like an OS for your home."
+    >
+      {/* Intro */}
+      <p className="text-white/70 text-lg leading-relaxed mb-10 max-w-2xl">
+        ChoreMaxx brings clarity, fairness, and momentum to every household. One system, one source of truth,
+        everyone coordinated.
+      </p>
 
-          <div className="space-y-8">
-            <p className="text-lg text-light-text">
-              ChoreMaxx is an AI household operating system that brings clarity, fairness, and momentum to every
-              household. Like an OS for your home, it coordinates work, schedules, rewards, and communication in one
-              calm place.
-            </p>
-
-            <div className="glass p-8 space-y-6">
-              <div>
-                <h2 className="mb-4">Core modules</h2>
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-semibold text-dark-text mb-2">Home Dashboard</h3>
-                    <p className="text-sm text-light-text">
-                      Household momentum, today&apos;s work, Nova&apos;s briefing, and quick actions.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-dark-text mb-2">Tasks</h3>
-                    <p className="text-sm text-light-text">
-                      Create, assign, track, and complete work with difficulty levels, due dates, and photo proof.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-dark-text mb-2">Plan (Calendar)</h3>
-                    <p className="text-sm text-light-text">
-                      All household events, tasks, itineraries, and pickups in one calendar view.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-dark-text mb-2">Rewards</h3>
-                    <p className="text-sm text-light-text">
-                      XP system, reward shop, tier progression, leaderboards, and badges.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-dark-text mb-2">Nova (AI)</h3>
-                    <p className="text-sm text-light-text">
-                      AI co-manager that sends briefings, suggests rebalancing, and recommends next steps.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="border-t border-white/20 pt-6">
-                <h3 className="font-semibold text-dark-text mb-4">Why it&apos;s an OS</h3>
-                <ul className="space-y-2 text-light-text text-sm">
-                  <li>
-                    <strong className="text-dark-text">Centralized:</strong> No jumping between apps. Everything is
-                    here.
-                  </li>
-                  <li>
-                    <strong className="text-dark-text">Interconnected:</strong> Tasks sync to calendar. Rewards connect
-                    to XP. Everything flows.
-                  </li>
-                  <li>
-                    <strong className="text-dark-text">Intelligent:</strong> Nova learns household patterns and suggests
-                    improvements.
-                  </li>
-                  <li>
-                    <strong className="text-dark-text">Fair:</strong> Rules engine ensures transparent, enforceable
-                    expectations.
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div>
-              <h2 className="mb-6">The problem it solves</h2>
-              <div className="glass-dark p-8 space-y-4">
-                <p className="text-light-text">
-                  Modern households are chaotic. Chores live in text threads. Schedules are scattered. One person
-                  usually carries the mental load. Tasks slip. Kids don&apos;t understand expectations. Fairness is
-                  unclear.
-                </p>
-                <p className="text-light-text">
-                  ChoreMaxx is the operating system that brings order. One system. One source of truth. Everyone
-                  coordinated.
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <h2 className="mb-6">Who benefits</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="glass p-6 space-y-3">
-                  <h3 className="font-semibold text-dark-text">Parents</h3>
-                  <p className="text-sm text-light-text">
-                    Stop nagging. Assign once, track always. See what&apos;s getting done.
-                  </p>
-                </div>
-                <div className="glass p-6 space-y-3">
-                  <h3 className="font-semibold text-dark-text">Kids</h3>
-                  <p className="text-sm text-light-text">
-                    Clear expectations, fair rewards, friendly competition.
-                  </p>
-                </div>
-                <div className="glass p-6 space-y-3">
-                  <h3 className="font-semibold text-dark-text">Roommates</h3>
-                  <p className="text-sm text-light-text">
-                    Shared household, clear responsibilities, no resentment.
-                  </p>
-                </div>
-                <div className="glass p-6 space-y-3">
-                  <h3 className="font-semibold text-dark-text">Blended families</h3>
-                  <p className="text-sm text-light-text">
-                    Multiple kids, schedules, expectations all in one system.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="glass-dark p-8">
-              <h2 className="mb-6 text-dark-text">Ready to upgrade your household?</h2>
-              <p className="text-light-text mb-6">
-                ChoreMaxx is the OS your household has been waiting for. Coordination, fairness, and peace of mind in
-                one app.
-              </p>
-              <div className="flex gap-4">
-                <Link href="/download" className="btn-primary">
-                  Get the app
-                </Link>
-                <Link href="/features" className="btn-text">
-                  See all features
-                </Link>
-              </div>
-            </div>
+      {/* Core modules */}
+      <h2 className="text-white font-bold text-2xl mb-5">Core modules</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-14">
+        {modules.map(({ title, desc }) => (
+          <div key={title} className="glass-tile p-6 flex flex-col gap-2">
+            <h3 className="text-white font-semibold text-sm">{title}</h3>
+            <p className="text-xs text-white/60 leading-relaxed">{desc}</p>
           </div>
+        ))}
+      </div>
+
+      {/* Why it is an OS */}
+      <div className="glass-card p-8 mb-10">
+        <h2 className="text-white font-bold text-xl mb-5">Why it is an OS</h2>
+        <ul className="flex flex-col gap-3">
+          {[
+            ['Centralized',   'No jumping between apps. Everything is here.'],
+            ['Interconnected','Tasks sync to calendar. Rewards connect to XP. Everything flows.'],
+            ['Intelligent',   'Nova learns household patterns and suggests improvements.'],
+            ['Fair',          'Rules engine ensures transparent, enforceable expectations.'],
+          ].map(([strong, rest]) => (
+            <li key={strong} className="text-sm text-white/65 flex items-start gap-2">
+              <span style={{ color: 'rgba(196,181,253,0.90)', fontWeight: 700, flexShrink: 0 }}>{strong}:</span>
+              <span>{rest}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Who benefits */}
+      <h2 className="text-white font-bold text-2xl mb-5">Who benefits</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-14">
+        {whoFor.map(({ label, desc }) => (
+          <div key={label} className="glass-tile p-6 flex flex-col gap-2">
+            <h3 className="text-white font-semibold text-sm">{label}</h3>
+            <p className="text-xs text-white/60 leading-relaxed">{desc}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* CTA */}
+      <div className="glass-card p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <p className="text-white font-semibold">Ready to upgrade your household?</p>
+        <div className="flex gap-3">
+          <Link href="/download" className="btn-primary">Get the app</Link>
+          <Link href="/features" className="btn-outline">See all features</Link>
         </div>
-      </section>
-    </div>
+      </div>
+    </PageShell>
   );
 }
