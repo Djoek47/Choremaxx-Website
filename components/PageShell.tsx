@@ -1,8 +1,3 @@
-/**
- * PageShell — wraps every secondary page in the deep-purple background
- * with decorative blobs, matching the design system.
- */
-
 import type { ReactNode } from 'react';
 
 export default function PageShell({
@@ -15,24 +10,34 @@ export default function PageShell({
   sub?: string;
 }) {
   return (
-    <div className="page-bg" style={{ minHeight: '100vh' }}>
-      {/* Ambient blobs */}
-      <div className="blob-1" aria-hidden style={{ top: -120, right: -80, opacity: 0.40 }} />
-      <div className="blob-2" aria-hidden style={{ bottom: 0, left: -100, opacity: 0.30 }} />
+    <div style={{ background: '#F6F5FA', minHeight: '100vh' }}>
+      {/* Decorative blobs */}
+      <div
+        aria-hidden
+        className="blob blob-purple"
+        style={{ width: 500, height: 500, top: -120, right: -80, opacity: 0.45, position: 'absolute', pointerEvents: 'none' }}
+      />
+      <div
+        aria-hidden
+        className="blob blob-blue"
+        style={{ width: 380, height: 380, bottom: 0, left: -100, opacity: 0.35, position: 'absolute', pointerEvents: 'none' }}
+      />
 
       {/* Page header */}
       <div
-        className="container-page"
-        style={{ paddingTop: '4rem', paddingBottom: '2.5rem' }}
+        className="container-page relative"
+        style={{ paddingTop: '4rem', paddingBottom: '2.5rem', zIndex: 1 }}
       >
         <div className="flex flex-col gap-3 max-w-3xl">
-          <h1 className="text-balance text-white">{heading}</h1>
-          {sub && <p className="text-white/65 text-lg leading-relaxed max-w-2xl">{sub}</p>}
+          <h1 className="text-balance" style={{ color: '#0F0E17' }}>{heading}</h1>
+          {sub && (
+            <p className="text-lg leading-relaxed max-w-2xl" style={{ color: '#8B8AA0' }}>{sub}</p>
+          )}
         </div>
       </div>
 
       {/* Page body */}
-      <div className="container-page" style={{ paddingTop: 0, paddingBottom: '5rem' }}>
+      <div className="container-page relative" style={{ paddingTop: 0, paddingBottom: '5rem', zIndex: 1 }}>
         {children}
       </div>
     </div>

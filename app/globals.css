@@ -1,237 +1,280 @@
 @import 'tailwindcss';
 
 @theme {
-  /* ChoreMaxx — deep violet glass system */
-  --color-primary:          #7C3AED;
-  --color-primary-light:    #9B5CF6;
-  --color-primary-dark:     #5B21B6;
+  /* ─── ChoreMaxx light lavender / iOS 27 glass system ─── */
 
-  --color-bg:               #6B21A8;
-  --color-bg-deep:          #4C1D95;
-  --color-bg-mid:           #7E22CE;
+  /* Background */
+  --color-bg:               #F6F5FA;
+  --color-bg-card:          #FFFFFF;
+  --color-bg-card-glass:    rgba(255, 255, 255, 0.70);
 
-  --color-glass:            rgba(255, 255, 255, 0.10);
-  --color-glass-border:     rgba(255, 255, 255, 0.18);
-  --color-glass-hover:      rgba(255, 255, 255, 0.16);
+  /* Brand */
+  --color-primary:          #5B8CFF;
+  --color-primary-dark:     #4A6FE0;
+  --color-primary-light:    #E8EEFF;
 
-  --color-text-primary:     #FFFFFF;
-  --color-text-secondary:   rgba(255, 255, 255, 0.70);
-  --color-text-muted:       rgba(255, 255, 255, 0.45);
+  /* Accents */
+  --color-success:          #5BD6BD;
+  --color-rewards:          #FFD166;
+  --color-danger:           #FF6B81;
+  --color-lavender:         #C986FF;
+  --color-cyan:             #9EE7FF;
 
-  --color-pill-bg:          rgba(255, 255, 255, 0.15);
-  --color-pill-border:      rgba(255, 255, 255, 0.25);
+  /* Text */
+  --color-text-primary:     #0F0E17;
+  --color-text-secondary:   #3D3A4E;
+  --color-text-muted:       #8B8AA0;
 
+  /* Glass / surfaces */
+  --color-glass:            rgba(255, 255, 255, 0.65);
+  --color-glass-border:     rgba(255, 255, 255, 0.80);
+  --color-glass-dark:       rgba(200, 190, 230, 0.18);
+
+  /* Misc */
   --radius-sm:  12px;
   --radius-md:  18px;
-  --radius-lg:  28px;
-  --radius-xl:  40px;
+  --radius-lg:  24px;
+  --radius-xl:  32px;
+  --radius-2xl: 40px;
 
-  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --font-sans: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
-/* ─── Base ───────────────────────────────────────────────────── */
+/* ─── Base ─────────────────────────────────────────────────── */
 @layer base {
   html {
-    background: #5B21B6;
+    background: #F6F5FA;
   }
 
   body {
     @apply font-sans antialiased;
-    background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 35%, #7E22CE 65%, #6D28D9 100%);
+    background-color: #F6F5FA;
+    color: #0F0E17;
     min-height: 100vh;
-    color: #fff;
   }
 
   h1 {
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-size: clamp(2.75rem, 5.5vw, 5rem);
     font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    color: #fff;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    color: #0F0E17;
   }
 
   h2 {
-    font-size: clamp(1.75rem, 3vw, 3rem);
+    font-size: clamp(1.75rem, 3vw, 2.75rem);
     font-weight: 700;
     line-height: 1.15;
-    color: #fff;
+    letter-spacing: -0.02em;
+    color: #0F0E17;
   }
 
   h3 {
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
     font-weight: 600;
-    color: #fff;
+    line-height: 1.3;
+    color: #0F0E17;
   }
 
   p {
     line-height: 1.65;
-    color: rgba(255, 255, 255, 0.70);
+    color: #3D3A4E;
   }
 }
 
-/* ─── Components ─────────────────────────────────────────────── */
+/* ─── Components ───────────────────────────────────────────── */
 @layer components {
 
-  /* Glass card — the core building block */
+  /* White glass card — core building block */
   .glass-card {
-    background: rgba(255, 255, 255, 0.10);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.70);
+    backdrop-filter: blur(35px) saturate(180%);
+    -webkit-backdrop-filter: blur(35px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.80);
     border-radius: var(--radius-lg);
-    transition: background 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 24px rgba(100, 80, 180, 0.07), 0 1px 3px rgba(0,0,0,0.04);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
   }
   .glass-card:hover {
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 12px 40px rgba(100, 80, 180, 0.14), 0 2px 8px rgba(0,0,0,0.06);
+    transform: translateY(-2px);
   }
 
   /* Smaller glass tile */
   .glass-tile {
-    background: rgba(255, 255, 255, 0.10);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.75);
     border-radius: var(--radius-md);
-    transition: background 0.3s ease;
+    box-shadow: 0 2px 12px rgba(100, 80, 180, 0.06);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
   }
   .glass-tile:hover {
-    background: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 6px 24px rgba(100, 80, 180, 0.12);
+    transform: translateY(-1px);
   }
 
-  /* Primary pill button — solid purple */
+  /* Section card (white, very slight shadow) */
+  .section-card {
+    background: #FFFFFF;
+    border-radius: var(--radius-xl);
+    box-shadow: 0 2px 20px rgba(100, 80, 180, 0.06);
+    border: 1px solid rgba(200, 190, 230, 0.25);
+  }
+
+  /* Primary pill button */
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.75rem 2rem;
-    background: #7C3AED;
+    gap: 0.5rem;
+    padding: 0.8125rem 1.875rem;
+    background: #5B8CFF;
     color: #fff;
     font-weight: 600;
     font-size: 0.9375rem;
     border-radius: 9999px;
-    border: 1px solid rgba(255, 255, 255, 0.20);
-    transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
-    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.50);
+    border: none;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 20px rgba(91, 140, 255, 0.40);
     text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
   }
   .btn-primary:hover {
-    background: #6D28D9;
+    background: #4A6FE0;
     transform: translateY(-1px);
-    box-shadow: 0 8px 28px rgba(124, 58, 237, 0.65);
+    box-shadow: 0 8px 28px rgba(91, 140, 255, 0.55);
   }
 
-  /* Outline pill button */
-  .btn-outline {
+  /* Ghost/outline pill button */
+  .btn-ghost {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.7rem 2rem;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
     background: transparent;
-    color: #fff;
+    color: #3D3A4E;
     font-weight: 600;
     font-size: 0.9375rem;
     border-radius: 9999px;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
-    transition: background 0.25s ease, border-color 0.25s ease;
+    border: 1.5px solid rgba(150, 140, 200, 0.35);
+    transition: background 0.2s ease, border-color 0.2s ease;
     text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
   }
-  .btn-outline:hover {
-    background: rgba(255, 255, 255, 0.10);
-    border-color: rgba(255, 255, 255, 0.70);
+  .btn-ghost:hover {
+    background: rgba(91, 140, 255, 0.07);
+    border-color: rgba(91, 140, 255, 0.40);
+    color: #5B8CFF;
   }
 
-  /* Chip / tag pill */
+  /* Small label chip */
   .chip {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
-    padding: 0.35rem 1rem;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 0.3rem 0.875rem;
+    background: rgba(91, 140, 255, 0.10);
+    border: 1px solid rgba(91, 140, 255, 0.22);
     border-radius: 9999px;
     font-size: 0.8125rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.90);
+    color: #5B8CFF;
   }
 
-  /* Page wrapper — full-bleed purple background */
-  .page-bg {
-    background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 35%, #7E22CE 65%, #6D28D9 100%);
-    min-height: 100vh;
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Content max-width container */
+  /* Page max-width container */
   .container-page {
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 
   /* Section vertical rhythm */
   .section {
-    padding: 5rem 0;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
   }
-  @media (min-width: 768px) {
+  @media (max-width: 768px) {
     .section {
-      padding: 7rem 0;
+      padding-top: 4rem;
+      padding-bottom: 4rem;
     }
   }
+
+  /* Section heading block */
+  .section-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3.5rem;
+    text-align: center;
+  }
+
+  /* Eyebrow label above headings */
+  .eyebrow {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5B8CFF;
+  }
 }
 
-/* ─── Decorative blobs ───────────────────────────────────────── */
-.blob-1 {
+/* ─── Ambient blobs (light pastel) ────────────────────────── */
+.blob {
   position: absolute;
-  width: 520px;
-  height: 520px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(167, 139, 250, 0.35) 0%, transparent 70%);
-  filter: blur(60px);
+  pointer-events: none;
+  filter: blur(70px);
+}
+.blob-purple {
+  background: radial-gradient(circle, rgba(181, 150, 255, 0.30) 0%, transparent 70%);
+}
+.blob-blue {
+  background: radial-gradient(circle, rgba(148, 195, 255, 0.28) 0%, transparent 70%);
+}
+.blob-pink {
+  background: radial-gradient(circle, rgba(255, 182, 216, 0.22) 0%, transparent 70%);
+}
+.blob-teal {
+  background: radial-gradient(circle, rgba(91, 214, 189, 0.20) 0%, transparent 70%);
+}
+
+/* ─── Floating glass ring decorations ─────────────────────── */
+.ring-deco {
+  position: absolute;
+  border-radius: 50%;
   pointer-events: none;
 }
 
-.blob-2 {
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(196, 181, 253, 0.25) 0%, transparent 70%);
-  filter: blur(50px);
-  pointer-events: none;
+/* ─── Nav pill (floats centered) ──────────────────────────── */
+.nav-pill {
+  background: rgba(255, 255, 255, 0.80);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(200, 195, 230, 0.45);
+  border-radius: 9999px;
+  box-shadow: 0 4px 24px rgba(100, 80, 160, 0.10);
 }
 
-.blob-3 {
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(109, 40, 217, 0.60) 0%, transparent 70%);
-  filter: blur(40px);
-  pointer-events: none;
-}
-
-/* ─── Floating 3-D ring decoration (pure CSS) ───────────────── */
-.ring-decoration {
-  position: absolute;
-  border-radius: 50%;
-  border: 10px solid rgba(200, 180, 255, 0.25);
-  box-shadow:
-    inset 0 0 30px rgba(200, 180, 255, 0.15),
-    0 0 40px rgba(150, 100, 255, 0.20);
-  pointer-events: none;
-}
-
-/* ─── Utilities ──────────────────────────────────────────────── */
+/* ─── Utilities ────────────────────────────────────────────── */
 @layer utilities {
-  .text-white-70 { color: rgba(255,255,255,0.70); }
-  .text-white-50 { color: rgba(255,255,255,0.50); }
-  .text-white-30 { color: rgba(255,255,255,0.30); }
   .text-balance  { text-wrap: balance; }
   .text-pretty   { text-wrap: pretty; }
+  .text-primary  { color: #5B8CFF; }
+  .text-muted    { color: #8B8AA0; }
+  .text-dark     { color: #0F0E17; }
+  .text-body     { color: #3D3A4E; }
+
+  .bg-page       { background-color: #F6F5FA; }
 }

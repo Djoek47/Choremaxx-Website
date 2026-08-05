@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#6B21A8',
+  themeColor: '#5B8CFF',
   userScalable: true,
 };
 
@@ -46,10 +46,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth" style={{ background: '#5B21B6' }}>
+    <html lang="en" className="scroll-smooth" style={{ background: '#F6F5FA' }}>
       <head>
         <link rel="canonical" href="https://mytikas73.com" />
-        <meta name="theme-color" content="#6B21A8" />
+        <meta name="theme-color" content="#5B8CFF" />
         <script type="application/ld+json">
           {JSON.stringify({
             '@context': 'https://schema.org',
