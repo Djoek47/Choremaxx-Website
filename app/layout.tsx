@@ -12,7 +12,7 @@ const SITE_URL = 'https://www.choremaxx.app';
 const PALETTES = ['sky', 'citrus', 'coral', 'berry'] as const;
 const DEFAULT_PALETTE = 'coral';
 
-/* Tab / favicon plates — Orbit icon-{p}.png (day) / icon-{p}-dark.png (night). */
+/* Tab / favicon plates — always the colored icon-{p}.png for palette match. */
 const TAB_ICON_DAY = '/brand/icons/icon-coral.png';
 
 export const metadata: Metadata = {
@@ -53,7 +53,8 @@ export const metadata: Metadata = {
  * header/footer logo mark, wordmark, and browser tab icon never flash the
  * wrong colors. New tab/session → new random palette (excluding last visit).
  * Appearance follows prefers-color-scheme and updates live when the OS theme flips.
- * Tab favicon uses icon-{palette}.png (day) / icon-{palette}-dark.png (night). */
+ * Tab favicon always uses the colored plate icon-{palette}.png (color match only —
+ * not day/night). */
 const PALETTE_BOOTSTRAP_SCRIPT = `(function(){
   var palettes = ${JSON.stringify(PALETTES)};
   var primaries = { sky: '#378ADD', citrus: '#EF9F27', coral: '#D85A30', berry: '#7F77DD' };
@@ -99,8 +100,8 @@ const PALETTE_BOOTSTRAP_SCRIPT = `(function(){
     var palette = currentPalette();
     root.setAttribute('data-appearance', appearance);
     root.style.colorScheme = night ? 'dark' : 'light';
-    var icon = '/brand/icons/icon-' + palette + (night ? '-dark' : '') + '.png';
-    setFavicon(icon);
+    /* Always the colored tab plate — berry→purple, sky→blue, etc. Day/night ignored. */
+    setFavicon('/brand/icons/icon-' + palette + '.png');
     var primary = primaries[palette] || primaries.coral;
     var nightBg = nightTints[palette] || nightTints.coral;
     setThemeColor(primary, '(prefers-color-scheme: light)');
