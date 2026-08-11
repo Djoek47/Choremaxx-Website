@@ -1,7 +1,9 @@
 # Website agent handoff — ChoreMaxx
 
 **Repo:** [Djoek47/Choremaxx-Website](https://github.com/Djoek47/Choremaxx-Website)  
-**Working branch:** `cursor/website-brand-palettes-9ecd` → [PR #1](https://github.com/Djoek47/Choremaxx-Website/pull/1)  
+**Working branch:** `cursor/website-brand-v2-9ecd` (aggregates brand V1 + auth-bridge docs)  
+**Prior brand branch:** `cursor/website-brand-palettes-9ecd` → [PR #1](https://github.com/Djoek47/Choremaxx-Website/pull/1)  
+**Auth-bridge source:** `cursor/website-auth-bridge-instructions-3686`  
 **Live domain:** https://www.choremaxx.app  
 **Sibling app (Orbit):** [Djoek47/Orbit](https://github.com/Djoek47/Orbit) @ `cursor/choremaxx-make-v10-5f8f` ([PR #29](https://github.com/Djoek47/Orbit/pull/29))
 
@@ -11,6 +13,8 @@ This file is the checklist for finishing / maintaining the marketing site. Read 
 - `docs/site-copy-a1-patch.md` — Poppins, families-only, pricing, legal re-host
 - `docs/legal/privacy-policy.md` + `docs/legal/terms-of-service.md`
 - `constants/accent-themes.ts` + `constants/brand-lockup.ts` + `assets/brand/marks/`
+- `docs/auth-callback-bridge-for-website-agent.md` — **/auth/callback** email bridge (must ship)
+- `docs/orbit-handoff/APP_AGENT_INSTRUCTIONS.md` — Orbit confirm + deletion UX patch
 
 ---
 
