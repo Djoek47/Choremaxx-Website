@@ -26,7 +26,7 @@ export default function PageShell({
       {/* Page header */}
       <div
         className="container-page relative"
-        style={{ paddingTop: '4rem', paddingBottom: '2.5rem', zIndex: 1 }}
+        style={{ paddingTop: '5.5rem', paddingBottom: '2.5rem', zIndex: 1 }}
       >
         <div className="flex flex-col gap-3 max-w-3xl">
           <h1 className="text-balance" style={{ color: '#0F0E17' }}>{heading}</h1>

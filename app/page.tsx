@@ -48,7 +48,7 @@ function Section({ children, className = '', id }: { children: React.ReactNode; 
 const featureItems = [
   {
     icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z',
-    label: 'AI Assistant',
+    label: 'Poppins AI',
     sub: 'Natural conversations. Real results.',
   },
   {
@@ -128,7 +128,7 @@ const pricingPlans = [
     price: '$4.99',
     period: '/month',
     desc: 'Advanced features for growing homes.',
-    features: ['Unlimited members', 'AI Assistant', 'Advanced scheduling', 'Rewards & XP', 'Priority support'],
+    features: ['Unlimited members', 'Poppins AI', 'Advanced scheduling', 'Rewards & XP', 'Priority support'],
     cta: 'Start Free Trial',
     highlight: true,
     badge: 'Most Popular',
@@ -145,7 +145,7 @@ const pricingPlans = [
 ];
 
 const faqItems = [
-  { q: 'How does the AI Assistant work?',     a: 'Nova uses advanced AI to understand your household patterns, suggest optimal task assignments, and proactively remind members — all through natural conversation.' },
+  { q: 'How does Poppins work?',     a: 'Poppins uses advanced AI to understand your household patterns, bundle trips, suggest optimal task assignments, and proactively remind members — all through natural conversation. You always approve changes.' },
   { q: 'Can I use ChoreMaxx with roommates?', a: 'Absolutely. ChoreMaxx has a dedicated Roommates mode with equal role management, fair task distribution tracking, and split-responsibility tools.' },
   { q: 'Is my data secure?',                  a: 'Yes. All household data is encrypted end-to-end. We never sell your data. You can export or delete everything at any time from within the app.' },
   { q: 'Can I customize tasks and rewards?',  a: 'Yes — create any task with custom names, difficulty, frequency, and XP value. Rewards are fully configurable by household admins.' },
@@ -278,7 +278,7 @@ export default function Home() {
                       <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                     </svg>
                   </div>
-                  <span className="text-xs font-semibold" style={{ color: 'var(--color-primary)' }}>AI Assistant</span>
+                  <span className="text-xs font-semibold" style={{ color: 'var(--color-primary)' }}>Poppins</span>
                   <span className="text-xs ml-auto" style={{ color: '#8B8AA0' }}>now</span>
                 </div>
                 <p className="text-xs" style={{ color: '#0F0E17' }}>Laundry completed!</p>

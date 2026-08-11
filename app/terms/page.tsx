@@ -18,7 +18,7 @@ export default function Terms() {
       <h2>The service</h2>
       <p>
         Choremaxx helps households coordinate tasks, groceries, calendar events, rewards, and AI briefings through
-        Nova. Features may change as we ship updates.
+        Poppins. Features may change as we ship updates.
       </p>
 
       <h2>Accounts & households</h2>
@@ -38,9 +38,9 @@ export default function Terms() {
         We may suspend accounts that violate these Terms.
       </p>
 
-      <h2>AI / Nova</h2>
+      <h2>AI / Poppins</h2>
       <p>
-        Nova suggestions are assistive. Consequential household changes should be reviewed by humans. AI output may
+        Poppins suggestions are assistive. Consequential household changes should be reviewed by humans. AI output may
         be imperfect.
       </p>
 

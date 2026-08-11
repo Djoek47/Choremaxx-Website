@@ -28,10 +28,10 @@ export default function PrivacyPolicy() {
         </li>
         <li>
           <strong>Device data:</strong> push notification tokens, approximate location when you enable grocery
-          suggestions, voice audio temporarily when you use Talk to Nova.
+          suggestions, voice audio temporarily when you use Talk to Poppins.
         </li>
         <li>
-          <strong>Usage analytics:</strong> feature events that help improve Choremaxx (task completion, Nova
+          <strong>Usage analytics:</strong> feature events that help improve Choremaxx (task completion, Poppins
           interactions).
         </li>
       </ul>
@@ -39,7 +39,7 @@ export default function PrivacyPolicy() {
       <h2>How we use data</h2>
       <ul>
         <li>Provide household coordination features and realtime sync.</li>
-        <li>Generate Nova briefings and recommendations.</li>
+        <li>Generate Poppins briefings and recommendations.</li>
         <li>Send notifications you request or that household rules allow.</li>
         <li>Maintain security, prevent abuse, and meet legal obligations.</li>
       </ul>
@@ -53,7 +53,7 @@ export default function PrivacyPolicy() {
       <h2>Sharing</h2>
       <p>
         We use infrastructure processors such as Supabase (database/auth/storage), Expo/Apple/Google for app delivery
-        and push, and OpenAI (or equivalent) for Nova when enabled. We do not sell personal data.
+        and push, and OpenAI (or equivalent) for Poppins when enabled. We do not sell personal data.
       </p>
 
       <h2>Retention & deletion</h2>

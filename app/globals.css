@@ -196,7 +196,8 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
   }
 
   /* Ghost/outline pill button */
-  .btn-ghost {
+  .btn-ghost,
+  .btn-outline {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -213,7 +214,8 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
     white-space: nowrap;
     cursor: pointer;
   }
-  .btn-ghost:hover {
+  .btn-ghost:hover,
+  .btn-outline:hover {
     background: color-mix(in srgb, var(--color-primary) 7%, transparent);
     border-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
     color: var(--color-primary);

@@ -3,48 +3,113 @@ import Link from 'next/link';
 import PageShell from '@/components/PageShell';
 
 export const metadata: Metadata = {
-  title: 'ChoreMaxx Features — Tasks, Plan, Rewards, Nova',
-  description: 'Explore every module of ChoreMaxx: Tasks, Plan, Rewards, Nova, and more.',
+  title: 'ChoreMaxx Features — Home, Tasks, Plan, Rewards, Poppins',
+  description:
+    'Explore every module of ChoreMaxx: Home, Tasks, Plan, Groceries, Rewards, Rankings, and Poppins AI.',
+  alternates: { canonical: 'https://www.choremaxx.app/features' },
 };
 
 const features = [
   {
+    label: 'Home',
+    desc: 'Household command center. Today’s progress, member chips, streak, groceries, and the next plan — all at a glance.',
+    details: [
+      'Live completion %, streak, and XP',
+      'Per-member progress chips',
+      "Today’s task queue",
+      'Groceries & Plan shortcuts',
+      'Poppins activity notifications',
+    ],
+  },
+  {
     label: 'Tasks',
     desc: 'Create, assign, track, and complete household work. Every task has difficulty, due date, assignee, and optional photo proof.',
-    details: ['136+ pre-built household chores', 'Custom task creation', 'Repeat schedules', 'Photo proof uploads', 'Difficulty levels & XP values'],
+    details: [
+      '100+ pre-built household chores',
+      'Custom task creation',
+      'Repeat schedules',
+      'Photo proof uploads',
+      'Difficulty levels & XP values',
+    ],
   },
   {
     label: 'Plan',
-    desc: 'Calendar view of all household events, tasks, and itineraries in one place.',
-    details: ['Month and week view', 'Color-coded event types', 'Itinerary builder', 'Calendar sync', 'Location-aware reminders'],
-  },
-  {
-    label: 'Rewards',
-    desc: 'Store, shop, tiers, and leaderboards. Members earn XP and spend it on real household rewards.',
-    details: ['XP system', 'Custom reward shop', 'Tier progression (12 levels)', 'Live leaderboard', 'Achievement badges', 'Streak tracking'],
-  },
-  {
-    label: 'Nova AI',
-    desc: 'Your AI co-manager. Daily briefings, task rebalancing, and smart recommendations — you always approve.',
-    details: ['Morning briefing', 'Load balancing suggestions', 'Predictive recommendations', 'Natural language chat', 'Privacy-first on-device mode'],
-  },
-  {
-    label: 'Home',
-    desc: 'Household command center. Momentum score, task queue, Nova briefing, and quick actions at a glance.',
-    details: ['Live momentum score', "Today's tasks at a glance", 'Nova AI briefing', 'Quick task actions', 'Urgency tracking'],
+    desc: 'Smart trip routing for school pickups, practices, and errands — with leave-by times and minutes saved.',
+    details: [
+      'Poppins smart-trip bundling',
+      'Stop-by-stop itineraries',
+      'Time saved vs. separate runs',
+      'Start Trip in Maps',
+      'Calendar & routines',
+    ],
   },
   {
     label: 'Groceries',
-    desc: 'Built-in low/missing item tracking. Shared lists, purchase tracking, Apple Reminders export.',
-    details: ['Add low/missing items', 'Shared grocery list', 'Quantity tracking', 'Checked/unchecked states', 'Export to Apple Reminders'],
+    desc: 'Shared shopping lists sorted by aisle. Favorites, buy-again, and in-store walking order.',
+    details: [
+      'Shared household list',
+      'Favorites & buy again',
+      'Aisle / walking order',
+      'Quantity & category tags',
+      'Start shopping mode',
+    ],
+  },
+  {
+    label: 'Rewards & Rankings',
+    desc: 'XP, streaks, reward shop, and live leaderboards. Motivate without nagging.',
+    details: [
+      'Custom reward shop',
+      'Hold-to-request rewards',
+      'Weekly & all-time rankings',
+      'Streaks and badges',
+      'Allowance tracking',
+    ],
+  },
+  {
+    label: 'Poppins AI',
+    desc: 'Your AI co-manager. Background monitoring, trip suggestions, and rebalance prompts — you always approve.',
+    details: [
+      'Schedule & GPS awareness',
+      'Smart trip bundling',
+      'Task rebalance suggestions',
+      'Reward & streak nudges',
+      'Privacy-first, approve-first',
+    ],
   },
 ];
 
 const roles = [
-  { role: 'Owner',        perms: ['Create household', 'Manage all invites', 'Delete household', 'View all settings'] },
-  { role: 'Admin Parent', perms: ['Create & assign tasks', 'Manage reward shop', 'Approve completions', 'Invite new members'] },
-  { role: 'Adult Member', perms: ['See household tasks', 'Complete assigned tasks', 'Request one-off tasks', 'Earn & spend XP'] },
-  { role: 'Child',        perms: ['See your tasks', 'Mark tasks complete', 'Upload proof photos', 'View XP & badges'] },
+  {
+    role: 'Owner',
+    perms: ['Create household', 'Manage all invites', 'Delete household', 'View all settings'],
+  },
+  {
+    role: 'Admin Parent',
+    perms: [
+      'Create & assign tasks',
+      'Manage reward shop',
+      'Approve completions',
+      'Invite new members',
+    ],
+  },
+  {
+    role: 'Adult Member',
+    perms: [
+      'See household tasks',
+      'Complete assigned tasks',
+      'Request one-off tasks',
+      'Earn & spend XP',
+    ],
+  },
+  {
+    role: 'Child',
+    perms: [
+      'See your tasks',
+      'Mark tasks complete',
+      'Upload proof photos',
+      'View XP & badges',
+    ],
+  },
 ];
 
 export default function Features() {
@@ -55,31 +120,84 @@ export default function Features() {
           <div key={label} className="glass-card p-8 flex flex-col md:flex-row gap-8">
             <div className="flex-1 flex flex-col gap-3">
               <h2 style={{ color: '#0F0E17', fontSize: '1.2rem', fontWeight: 700 }}>{label}</h2>
-              <p className="text-sm leading-relaxed" style={{ color: '#8B8AA0' }}>{desc}</p>
+              <p className="text-sm leading-relaxed" style={{ color: '#8B8AA0' }}>
+                {desc}
+              </p>
             </div>
-            <div style={{ borderLeft: '1px solid rgba(200,190,230,0.35)' }} className="pl-8 flex-1 hidden md:block">
-              <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: '#8B8AA0' }}>What you get</p>
+            <div
+              style={{ borderLeft: '1px solid rgba(200,190,230,0.35)' }}
+              className="pl-8 flex-1 hidden md:block"
+            >
+              <p
+                className="text-xs font-semibold uppercase tracking-widest mb-4"
+                style={{ color: '#8B8AA0' }}
+              >
+                What you get
+              </p>
               <ul className="flex flex-col gap-2">
                 {details.map(d => (
-                  <li key={d} className="flex items-center gap-2 text-sm" style={{ color: '#3D3A4E' }}>
-                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--color-primary)', flexShrink: 0, display: 'inline-block' }} />
+                  <li
+                    key={d}
+                    className="flex items-center gap-2 text-sm"
+                    style={{ color: '#3D3A4E' }}
+                  >
+                    <span
+                      style={{
+                        width: 5,
+                        height: 5,
+                        borderRadius: '50%',
+                        background: 'var(--color-primary)',
+                        flexShrink: 0,
+                        display: 'inline-block',
+                      }}
+                    />
                     {d}
                   </li>
                 ))}
               </ul>
             </div>
+            {/* Mobile details */}
+            <ul className="flex flex-col gap-2 md:hidden">
+              {details.map(d => (
+                <li
+                  key={d}
+                  className="flex items-center gap-2 text-sm"
+                  style={{ color: '#3D3A4E' }}
+                >
+                  <span
+                    style={{
+                      width: 5,
+                      height: 5,
+                      borderRadius: '50%',
+                      background: 'var(--color-primary)',
+                      flexShrink: 0,
+                      display: 'inline-block',
+                    }}
+                  />
+                  {d}
+                </li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>
 
-      <h2 className="text-2xl font-bold mb-6" style={{ color: '#0F0E17' }}>Roles & permissions</h2>
+      <h2 className="text-2xl font-bold mb-6" style={{ color: '#0F0E17' }}>
+        Roles & permissions
+      </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-16">
         {roles.map(({ role, perms }) => (
           <div key={role} className="glass-tile p-6 flex flex-col gap-4">
-            <h3 className="font-semibold text-sm" style={{ color: '#0F0E17' }}>{role}</h3>
+            <h3 className="font-semibold text-sm" style={{ color: '#0F0E17' }}>
+              {role}
+            </h3>
             <ul className="flex flex-col gap-2">
               {perms.map(p => (
-                <li key={p} className="flex items-start gap-2 text-xs" style={{ color: '#3D3A4E' }}>
+                <li
+                  key={p}
+                  className="flex items-start gap-2 text-xs"
+                  style={{ color: '#3D3A4E' }}
+                >
                   <span style={{ color: 'var(--color-primary)', fontWeight: 700 }}>✓</span>
                   {p}
                 </li>
@@ -90,8 +208,17 @@ export default function Features() {
       </div>
 
       <div className="glass-card p-10 flex flex-col md:flex-row items-center justify-between gap-6">
-        <p className="text-lg font-semibold" style={{ color: '#0F0E17' }}>Ready to try ChoreMaxx?</p>
-        <Link href="/download" className="btn-primary">Download free</Link>
+        <p className="text-lg font-semibold" style={{ color: '#0F0E17' }}>
+          Ready to try ChoreMaxx?
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/download" className="btn-primary">
+            Download free
+          </Link>
+          <Link href="/how-it-works" className="btn-ghost">
+            How it works
+          </Link>
+        </div>
       </div>
     </PageShell>
   );
