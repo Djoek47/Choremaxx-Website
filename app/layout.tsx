@@ -64,20 +64,20 @@ const PALETTE_BOOTSTRAP_SCRIPT = `(function(){
     var p = root.getAttribute('data-palette');
     return (p && palettes.indexOf(p) !== -1) ? p : '${DEFAULT_PALETTE}';
   }
-  function setFavicon(href) {
-    var links = document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"]');
-    if (!links.length) {
-      var link = document.createElement('link');
-      link.rel = 'icon';
-      link.type = 'image/png';
-      link.href = href;
-      document.head.appendChild(link);
-      return;
+  function setFavicon(palette) {
+    /* Browsers cache favicons aggressively (not cookies). Replace the <link>
+     * node and cache-bust with ?p= so each palette is a distinct URL. */
+    var href = '/brand/icons/icon-' + palette + '.png?p=' + encodeURIComponent(palette);
+    var stale = document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"]');
+    for (var i = 0; i < stale.length; i++) {
+      stale[i].parentNode && stale[i].parentNode.removeChild(stale[i]);
     }
-    for (var i = 0; i < links.length; i++) {
-      links[i].type = 'image/png';
-      links[i].href = href;
-    }
+    var link = document.createElement('link');
+    link.id = 'cm-favicon';
+    link.rel = 'icon';
+    link.type = 'image/png';
+    link.href = href;
+    document.head.appendChild(link);
   }
   function setThemeColor(color, media) {
     var selector = media
@@ -100,8 +100,8 @@ const PALETTE_BOOTSTRAP_SCRIPT = `(function(){
     var palette = currentPalette();
     root.setAttribute('data-appearance', appearance);
     root.style.colorScheme = night ? 'dark' : 'light';
-    /* Always the colored tab plate — berry→purple, sky→blue, etc. Day/night ignored. */
-    setFavicon('/brand/icons/icon-' + palette + '.png');
+    /* Colored tab plate only — berry→purple, sky→blue. Day/night ignored. */
+    setFavicon(palette);
     var primary = primaries[palette] || primaries.coral;
     var nightBg = nightTints[palette] || nightTints.coral;
     setThemeColor(primary, '(prefers-color-scheme: light)');
