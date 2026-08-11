@@ -77,7 +77,7 @@ components/          # Header, Footer, PageShell, LegalDocument
 lib/palettes.ts      # Palette tokens (mirror Orbit)
 public/brand/        # Official house marks + icon plates
 public/emails/       # Resend / email logo
-public/screenshots/  # Marketing captures (hero placeholder until real app shots land)
+public/screenshots/  # App UI captures (home, plan, shopping, rewards, poppins-activity)
 ```
 
 ## Product locks (do not drift)
@@ -92,7 +92,7 @@ From Orbit Master Brief / weekend ship playbook:
 
 ## Still open
 
-- Drop real iOS app screenshots into `public/screenshots/` and wire the homepage hero mockup (still on a legacy blob URL)
+- Optional: add `public/screenshots/tasks.png` for the Features Tasks row
 - Clear Vercel custom Build Command when convenient
 - Merge PR → `main` and confirm production deploy on www.choremaxx.app
 

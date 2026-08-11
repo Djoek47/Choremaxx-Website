@@ -36,9 +36,19 @@ function Ring({ size, style }: { size: number; style?: React.CSSProperties }) {
 }
 
 /* ─── Section wrapper ─────────────────────────────────────── */
-function Section({ children, className = '', id }: { children: React.ReactNode; className?: string; id?: string }) {
+function Section({
+  children,
+  className = '',
+  id,
+  style,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  id?: string;
+  style?: React.CSSProperties;
+}) {
   return (
-    <section id={id} className={`section relative overflow-hidden ${className}`}>
+    <section id={id} className={`section relative overflow-hidden ${className}`} style={style}>
       {children}
     </section>
   );
@@ -110,6 +120,14 @@ const testimonials = [
     name: 'Alex T.',
     role: 'Working parent',
   },
+];
+
+const productScreenshots = [
+  { src: '/screenshots/home.png', label: 'Home', alt: 'ChoreMaxx Home — Today dashboard' },
+  { src: '/screenshots/plan.png', label: 'Plan', alt: 'ChoreMaxx Plan — smart trip routing' },
+  { src: '/screenshots/shopping.png', label: 'Shopping', alt: 'ChoreMaxx Shopping — aisle-sorted list' },
+  { src: '/screenshots/rewards.png', label: 'Rewards', alt: 'ChoreMaxx Rewards — privilege cards' },
+  { src: '/screenshots/poppins-activity.png', label: 'Poppins', alt: 'ChoreMaxx Poppins Activity feed' },
 ];
 
 const pricingPlans = [
@@ -250,10 +268,10 @@ export default function Home() {
                 }}
               >
                 <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6631-v9iwoCWH3W4q6dq7oB2z5HISd3Verm.png"
-                  alt="ChoreMaxx app — The Johnsons household dashboard"
-                  width={280}
-                  height={560}
+                  src="/screenshots/home.png"
+                  alt="ChoreMaxx app — Today dashboard with household tasks, groceries, and plan"
+                  width={470}
+                  height={1024}
                   className="w-full h-auto"
                   priority
                 />
@@ -339,6 +357,36 @@ export default function Home() {
                 </div>
                 <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{label}</p>
                 <p className="text-xs leading-snug" style={{ color: 'var(--color-text-muted)' }}>{sub}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* ── 3b. APP SURFACES ────────────────────────────── */}
+      <Section>
+        <div className="container-page">
+          <div className="section-heading">
+            <h2 className="text-balance">See It In The App</h2>
+            <p className="text-base" style={{ color: 'var(--color-text-muted)' }}>
+              Home, Plan, Shopping, Rewards, and Poppins — real product screens.
+            </p>
+          </div>
+          <div className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory justify-start lg:justify-center">
+            {productScreenshots.map(({ src, label, alt }) => (
+              <div key={label} className="flex flex-col items-center gap-3 flex-shrink-0 snap-center" style={{ width: 180 }}>
+                <div
+                  className="overflow-hidden w-full"
+                  style={{
+                    borderRadius: 28,
+                    border: '1px solid var(--color-glass-border)',
+                    boxShadow: '0 12px 40px rgba(100,80,180,0.12)',
+                    background: 'var(--color-glass)',
+                  }}
+                >
+                  <Image src={src} alt={alt} width={470} height={1024} className="w-full h-auto block" />
+                </div>
+                <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{label}</p>
               </div>
             ))}
           </div>

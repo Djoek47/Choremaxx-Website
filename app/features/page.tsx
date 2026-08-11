@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import PageShell from '@/components/PageShell';
 
@@ -13,6 +14,8 @@ const features = [
   {
     label: 'Home',
     desc: 'Household command center. Today’s progress, member chips, streak, groceries, and the next plan — all at a glance.',
+    screenshot: '/screenshots/home.png',
+    screenshotAlt: 'ChoreMaxx Home — Today dashboard',
     details: [
       'Live completion %, streak, and XP',
       'Per-member progress chips',
@@ -24,6 +27,8 @@ const features = [
   {
     label: 'Tasks',
     desc: 'Create, assign, track, and complete household work. Every task has difficulty, due date, assignee, and optional photo proof.',
+    screenshot: null as string | null,
+    screenshotAlt: '',
     details: [
       '100+ pre-built household chores',
       'Custom task creation',
@@ -35,6 +40,8 @@ const features = [
   {
     label: 'Plan',
     desc: 'Smart trip routing for school pickups, practices, and errands — with leave-by times and minutes saved.',
+    screenshot: '/screenshots/plan.png',
+    screenshotAlt: 'ChoreMaxx Plan — smart trip routing',
     details: [
       'Poppins smart-trip bundling',
       'Stop-by-stop itineraries',
@@ -46,6 +53,8 @@ const features = [
   {
     label: 'Groceries',
     desc: 'Shared shopping lists sorted by aisle. Favorites, buy-again, and in-store walking order.',
+    screenshot: '/screenshots/shopping.png',
+    screenshotAlt: 'ChoreMaxx Shopping — aisle-sorted list',
     details: [
       'Shared household list',
       'Favorites & buy again',
@@ -57,6 +66,8 @@ const features = [
   {
     label: 'Rewards & Rankings',
     desc: 'XP, streaks, reward shop, and live leaderboards. Motivate without nagging.',
+    screenshot: '/screenshots/rewards.png',
+    screenshotAlt: 'ChoreMaxx Rewards — privilege cards',
     details: [
       'Custom reward shop',
       'Hold-to-request rewards',
@@ -68,6 +79,8 @@ const features = [
   {
     label: 'Poppins AI',
     desc: 'Your AI co-manager. Background monitoring, trip suggestions, and rebalance prompts — you always approve.',
+    screenshot: '/screenshots/poppins-activity.png',
+    screenshotAlt: 'ChoreMaxx Poppins Activity feed',
     details: [
       'Schedule & GPS awareness',
       'Smart trip bundling',
@@ -77,7 +90,6 @@ const features = [
     ],
   },
 ];
-
 const roles = [
   {
     role: 'Owner',
@@ -116,68 +128,63 @@ export default function Features() {
   return (
     <PageShell heading="Features & modules" sub="Everything your household needs in one app.">
       <div className="flex flex-col gap-5 mb-16">
-        {features.map(({ label, desc, details }) => (
-          <div key={label} className="glass-card p-8 flex flex-col md:flex-row gap-8">
-            <div className="flex-1 flex flex-col gap-3">
+        {features.map(({ label, desc, details, screenshot, screenshotAlt }) => (
+          <div key={label} className="glass-card p-8 flex flex-col lg:flex-row gap-8 items-start">
+            <div className="flex-1 flex flex-col gap-3 min-w-0">
               <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.2rem', fontWeight: 700 }}>{label}</h2>
               <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
                 {desc}
               </p>
-            </div>
-            <div
-              style={{ borderLeft: '1px solid rgba(200,190,230,0.35)' }}
-              className="pl-8 flex-1 hidden md:block"
-            >
-              <p
-                className="text-xs font-semibold uppercase tracking-widest mb-4"
-                style={{ color: 'var(--color-text-muted)' }}
-              >
-                What you get
-              </p>
-              <ul className="flex flex-col gap-2">
-                {details.map(d => (
-                  <li
-                    key={d}
-                    className="flex items-center gap-2 text-sm"
-                    style={{ color: 'var(--color-text-secondary)' }}
-                  >
-                    <span
-                      style={{
-                        width: 5,
-                        height: 5,
-                        borderRadius: '50%',
-                        background: 'var(--color-primary)',
-                        flexShrink: 0,
-                        display: 'inline-block',
-                      }}
-                    />
-                    {d}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            {/* Mobile details */}
-            <ul className="flex flex-col gap-2 md:hidden">
-              {details.map(d => (
-                <li
-                  key={d}
-                  className="flex items-center gap-2 text-sm"
-                  style={{ color: 'var(--color-text-secondary)' }}
+              <div className="mt-2">
+                <p
+                  className="text-xs font-semibold uppercase tracking-widest mb-4"
+                  style={{ color: 'var(--color-text-muted)' }}
                 >
-                  <span
-                    style={{
-                      width: 5,
-                      height: 5,
-                      borderRadius: '50%',
-                      background: 'var(--color-primary)',
-                      flexShrink: 0,
-                      display: 'inline-block',
-                    }}
-                  />
-                  {d}
-                </li>
-              ))}
-            </ul>
+                  What you get
+                </p>
+                <ul className="flex flex-col gap-2">
+                  {details.map(d => (
+                    <li
+                      key={d}
+                      className="flex items-center gap-2 text-sm"
+                      style={{ color: 'var(--color-text-secondary)' }}
+                    >
+                      <span
+                        style={{
+                          width: 5,
+                          height: 5,
+                          borderRadius: '50%',
+                          background: 'var(--color-primary)',
+                          flexShrink: 0,
+                          display: 'inline-block',
+                        }}
+                      />
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            {screenshot && (
+              <div
+                className="mx-auto lg:mx-0 flex-shrink-0 overflow-hidden"
+                style={{
+                  width: 200,
+                  borderRadius: 28,
+                  border: '1px solid var(--color-glass-border)',
+                  boxShadow: '0 12px 40px rgba(100,80,180,0.14)',
+                  background: 'var(--color-glass)',
+                }}
+              >
+                <Image
+                  src={screenshot}
+                  alt={screenshotAlt}
+                  width={470}
+                  height={1024}
+                  className="w-full h-auto block"
+                />
+              </div>
+            )}
           </div>
         ))}
       </div>

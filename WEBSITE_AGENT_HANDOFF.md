@@ -35,12 +35,13 @@ This file is the checklist for finishing / maintaining the marketing site. Read 
 | System day/night (`data-appearance`) from prefers-color-scheme | ✅ |
 | Website logos: foreground (day) / tinted (night) per palette | ✅ |
 | Wordmark night chore from Orbit NIGHT_CHORE; surfaces from color-palettes | ✅ |
+| App screenshots wired (home, plan, shopping, rewards, poppins-activity) | ✅ |
 
 ---
 
 ## Still TODO (human or next agent)
 
-1. **App screenshots** — User will supply iOS captures (Home, Groceries, Plan, Rankings, Rewards, Poppins Activity, Shopping). Drop into `public/screenshots/` and replace the homepage hero phone `src` (currently a Vercel blob `IMG_6631-…`).
+1. **Tasks screenshot** — Drop `public/screenshots/tasks.png` when available; Features Tasks row will pick it up when wired.
 2. **Merge + redeploy** — Merge PR #1 to `main`; confirm Vercel production on www.choremaxx.app (privacy/terms must be live for ASC).
 3. **Optional Vercel cleanup** — Clear custom Build Command so it is just `next build` / `pnpm build`.
 4. **iOS accent prefs** — Leave app-side accent prefs alone; site only mirrors the four logo packs for marketing.
