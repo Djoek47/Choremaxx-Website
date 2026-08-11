@@ -235,92 +235,128 @@ export default function Home() {
                 </Link>
               </div>
 
-              {/* Star rating */}
-              <div className="flex items-center gap-3">
-                <div className="flex -space-x-2">
-                  {[1,2,3,4].map(i => (
-                    <div key={i} className="w-8 h-8 rounded-full border-2 border-white overflow-hidden"
-                      style={{ background: `hsl(${250 + i * 20},60%,75%)` }} />
-                  ))}
-                </div>
-                <div>
-                  <span style={{ color: '#FFD166', fontSize: '0.875rem', fontWeight: 700 }}>4.9 ★★★★★</span>
-                  <span className="text-sm ml-2" style={{ color: 'var(--color-text-muted)' }}>Loved by 50,000+ families</span>
-                </div>
-              </div>
+              {/* Quiet social proof — no avatar clutter */}
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)', letterSpacing: '-0.01em' }}>
+                <span style={{ color: 'var(--color-text-primary)', fontWeight: 600 }}>4.9</span>
+                <span aria-hidden style={{ margin: '0 0.4em', opacity: 0.35 }}>·</span>
+                Loved by 50,000+ families
+              </p>
             </div>
 
-            {/* Right: phone mockup + floating widget cards */}
-            <div className="flex-1 relative hidden lg:flex items-center justify-center" style={{ minHeight: 580 }}>
-
-              {/* Main phone card */}
+            {/* Right: one composition — phone + two floating surfaces */}
+            <div
+              className="flex-1 relative hidden lg:flex items-center justify-center"
+              style={{ minHeight: 620 }}
+            >
+              {/* Soft depth behind the device */}
               <div
-                className="relative z-10"
+                aria-hidden
+                className="absolute"
                 style={{
-                  width: 280,
-                  background: 'var(--color-glass)',
-                  backdropFilter: 'blur(35px)',
-                  WebkitBackdropFilter: 'blur(35px)',
-                  borderRadius: 40,
-                  border: '1px solid var(--color-glass-border)',
-                  boxShadow: '0 24px 80px rgba(100,80,200,0.18), 0 4px 16px rgba(0,0,0,0.08)',
-                  overflow: 'hidden',
+                  width: 320,
+                  height: 520,
+                  borderRadius: '50%',
+                  background: 'radial-gradient(circle, color-mix(in srgb, var(--color-primary) 18%, transparent) 0%, transparent 70%)',
+                  filter: 'blur(40px)',
+                  zIndex: 0,
+                }}
+              />
+
+              {/* Device — hardware-like frame */}
+              <div
+                className="relative z-10 hero-device"
+                style={{
+                  width: 268,
+                  borderRadius: 36,
+                  padding: 10,
+                  background: 'color-mix(in srgb, var(--color-text-primary) 92%, transparent)',
+                  boxShadow:
+                    '0 40px 80px rgba(15, 14, 23, 0.22), 0 8px 24px rgba(15, 14, 23, 0.12), inset 0 0 0 1px rgba(255,255,255,0.12)',
                 }}
               >
-                <Image
-                  src="/screenshots/home.png"
-                  alt="ChoreMaxx app — Today dashboard with household tasks, groceries, and plan"
-                  width={470}
-                  height={1024}
-                  className="w-full h-auto"
-                  priority
-                />
+                <div
+                  style={{
+                    borderRadius: 28,
+                    overflow: 'hidden',
+                    background: 'var(--color-bg)',
+                  }}
+                >
+                  <Image
+                    src="/screenshots/home.png"
+                    alt="ChoreMaxx app — Today dashboard with household tasks, groceries, and plan"
+                    width={470}
+                    height={1024}
+                    className="w-full h-auto block"
+                    priority
+                  />
+                </div>
               </div>
 
-              {/* Floating widget: Grocery List */}
-              <div className="glass-card p-4 absolute left-0 top-8" style={{ width: 165, zIndex: 20 }}>
-                <p className="text-xs font-semibold mb-2" style={{ color: 'var(--color-text-primary)' }}>Grocery List</p>
-                {['Milk', 'Eggs', 'Bread', 'Bananas'].map((item, i) => (
-                  <div key={item} className="flex items-center gap-2 py-0.5">
-                    <div className="w-4 h-4 rounded-full border flex items-center justify-center flex-shrink-0"
-                      style={{ borderColor: i < 2 ? '#5BD6BD' : '#C986FF', background: i < 2 ? 'rgba(91,214,189,0.15)' : 'transparent' }}>
-                      {i < 2 && <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#5BD6BD" strokeWidth="3"><path d="M5 13l4 4L19 7" /></svg>}
-                    </div>
-                    <span className="text-xs" style={{ color: i < 2 ? 'var(--color-text-muted)' : 'var(--color-text-primary)', textDecoration: i < 2 ? 'line-through' : 'none' }}>{item}</span>
-                  </div>
-                ))}
-              </div>
+              {/* Float 1 — Grocery (left) */}
+              <aside
+                className="hero-float hero-float-grocery"
+                style={{ left: 0, top: '18%', width: 188 }}
+                aria-label="Grocery list preview"
+              >
+                <p className="hero-float-label">Grocery</p>
+                <ul className="hero-float-list">
+                  {[
+                    { item: 'Milk', done: true },
+                    { item: 'Eggs', done: true },
+                    { item: 'Bread', done: false },
+                    { item: 'Bananas', done: false },
+                  ].map(({ item, done }) => (
+                    <li key={item} className={done ? 'is-done' : undefined}>
+                      <span className="hero-check" aria-hidden>
+                        {done ? (
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                            <path d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : null}
+                      </span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </aside>
 
-              {/* Floating widget: AI Assistant */}
-              <div className="glass-card p-4 absolute right-0 top-12" style={{ width: 185, zIndex: 20 }}>
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--color-primary), #C986FF)' }}>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="white">
+              {/* Float 2 — Poppins (right) */}
+              <aside
+                className="hero-float hero-float-poppins"
+                style={{ right: 0, top: '22%', width: 204 }}
+                aria-label="Poppins activity preview"
+              >
+                <div className="hero-float-row">
+                  <span className="hero-float-mark" aria-hidden>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                     </svg>
-                  </div>
-                  <span className="text-xs font-semibold" style={{ color: 'var(--color-primary)' }}>Poppins</span>
-                  <span className="text-xs ml-auto" style={{ color: 'var(--color-text-muted)' }}>now</span>
+                  </span>
+                  <span className="hero-float-label" style={{ marginBottom: 0 }}>Poppins</span>
+                  <span className="hero-float-time">now</span>
                 </div>
-                <p className="text-xs" style={{ color: 'var(--color-text-primary)' }}>Laundry completed!</p>
-                <p className="text-xs" style={{ color: '#5BD6BD', fontWeight: 600 }}>Sarah earned +80 XP</p>
-              </div>
+                <p className="hero-float-title">Laundry completed</p>
+                <p className="hero-float-meta">Sarah · +80 XP</p>
+              </aside>
 
-              {/* Floating widget: Kids XP */}
-              <div className="glass-card p-4 absolute left-0 bottom-20" style={{ width: 160, zIndex: 20 }}>
-                <p className="text-xs font-semibold mb-1" style={{ color: 'var(--color-text-muted)' }}>Kids XP</p>
-                <p className="text-3xl font-bold" style={{ color: 'var(--color-text-primary)', letterSpacing: '-0.03em' }}>1,250</p>
-                <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Total XP</p>
-              </div>
-
-              {/* Floating widget: Energy Harmony */}
-              <div className="glass-card p-4 absolute right-0 bottom-16" style={{ width: 170, zIndex: 20 }}>
-                <p className="text-xs font-semibold mb-1" style={{ color: 'var(--color-text-primary)' }}>Energy Harmony</p>
-                <p className="text-sm font-bold" style={{ color: '#5BD6BD' }}>High</p>
-                <svg width="130" height="40" viewBox="0 0 130 40" fill="none" className="mt-1">
-                  <path d="M0 25 Q25 10 50 20 T100 15 T130 22" stroke="#5BD6BD" strokeWidth="2" fill="none" />
-                </svg>
-              </div>
+              {/* Quiet metric — bottom, single line of truth */}
+              <aside
+                className="hero-float hero-float-metric"
+                style={{ left: 'calc(50% - 110px)', bottom: 12, width: 220 }}
+                aria-label="Household XP"
+              >
+                <div className="hero-metric">
+                  <div>
+                    <p className="hero-float-label">Kids XP</p>
+                    <p className="hero-metric-value">1,250</p>
+                  </div>
+                  <div className="hero-metric-divider" aria-hidden />
+                  <div>
+                    <p className="hero-float-label">Harmony</p>
+                    <p className="hero-metric-status">High</p>
+                  </div>
+                </div>
+              </aside>
             </div>
           </div>
         </div>
