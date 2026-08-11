@@ -40,15 +40,19 @@ This file is the checklist for finishing / maintaining the marketing site. Read 
 | Website logos: foreground (day) / tinted (night) per palette | ✅ |
 | Wordmark night chore from Orbit NIGHT_CHORE; surfaces from color-palettes | ✅ |
 | App screenshots wired (home, plan, shopping, rewards, poppins-activity) | ✅ |
+| Tab favicon matches session palette color (cache-busted `?p=`) | ✅ |
+| Auth-bridge docs merged (`docs/auth-callback-bridge…` + Orbit handoff) | ✅ |
 
 ---
 
 ## Still TODO (human or next agent)
 
-1. **Tasks screenshot** — Drop `public/screenshots/tasks.png` when available; Features Tasks row will pick it up when wired.
-2. **Merge + redeploy** — Merge PR #1 to `main`; confirm Vercel production on www.choremaxx.app (privacy/terms must be live for ASC).
-3. **Optional Vercel cleanup** — Clear custom Build Command so it is just `next build` / `pnpm build`.
-4. **iOS accent prefs** — Leave app-side accent prefs alone; site only mirrors the four logo packs for marketing.
+1. **Ship `/auth/callback`** — Implement per `docs/auth-callback-bridge-for-website-agent.md` (deep-link bridge + AASA). Critical for email confirm CTAs.
+2. **Tasks screenshot** — Drop `public/screenshots/tasks.png` when available; Features Tasks row will pick it up when wired.
+3. **Merge + redeploy** — Merge brand V2 to `main`; confirm Vercel production on www.choremaxx.app (privacy/terms must be live for ASC).
+4. **Optional Vercel cleanup** — Clear custom Build Command so it is just `next build` / `pnpm build`.
+5. **iOS accent prefs** — Leave app-side accent prefs alone; site only mirrors the four logo packs for marketing.
+6. **Orbit agent** — Apply `docs/orbit-handoff/orbit-email-confirm-deletion-ux-3686.patch` per `APP_AGENT_INSTRUCTIONS.md` (separate repo).
 
 ---
 
