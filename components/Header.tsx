@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { useState } from 'react';
 
 export default function Header() {
@@ -25,18 +24,12 @@ export default function Header() {
           className="flex items-center gap-2 flex-shrink-0"
           aria-label="ChoreMaxx home"
         >
-          <Image
-            src="/brand/choremaxx-logo-mark.png"
-            alt=""
-            width={28}
-            height={28}
-            className="w-7 h-7"
-          />
+          <span className="brand-logo w-7 h-7" role="img" aria-hidden="true" />
           <span
             className="text-lg font-bold tracking-tight"
-            style={{ color: '#0F0E17' }}
+            style={{ color: 'var(--color-secondary)' }}
           >
-            chore<span style={{ color: '#5B8CFF' }}>maxx</span>
+            chore<span style={{ color: 'var(--color-primary)' }}>maxx</span>
           </span>
         </Link>
 
@@ -51,7 +44,7 @@ export default function Header() {
               href={href}
               className="px-4 py-1.5 text-sm font-medium rounded-full transition-colors duration-200"
               style={{ color: '#3D3A4E' }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(91,140,255,0.08)')}
+              onMouseEnter={e => (e.currentTarget.style.background = 'color-mix(in srgb, var(--color-primary) 8%, transparent)')}
               onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               {label}

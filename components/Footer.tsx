@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 
 const columns = [
   {
@@ -44,15 +43,9 @@ export default function Footer() {
           {/* Brand column */}
           <div className="md:col-span-1 flex flex-col gap-5">
             <Link href="/" className="flex items-center gap-2" aria-label="ChoreMaxx home">
-              <Image
-                src="/brand/choremaxx-logo-mark.png"
-                alt=""
-                width={28}
-                height={28}
-                className="w-7 h-7"
-              />
-              <span className="text-base font-bold" style={{ color: '#0F0E17' }}>
-                chore<span style={{ color: '#5B8CFF' }}>maxx</span>
+              <span className="brand-logo w-7 h-7" role="img" aria-hidden="true" />
+              <span className="text-base font-bold" style={{ color: 'var(--color-secondary)' }}>
+                chore<span style={{ color: 'var(--color-primary)' }}>maxx</span>
               </span>
             </Link>
             <p className="text-sm leading-relaxed" style={{ color: '#8B8AA0', maxWidth: 180 }}>
@@ -113,7 +106,7 @@ export default function Footer() {
                       href={href}
                       className="text-sm transition-colors duration-200"
                       style={{ color: '#3D3A4E' }}
-                      onMouseEnter={e => (e.currentTarget.style.color = '#5B8CFF')}
+                      onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-primary)')}
                       onMouseLeave={e => (e.currentTarget.style.color = '#3D3A4E')}
                     >
                       {label}
@@ -155,7 +148,7 @@ export default function Footer() {
               <button
                 type="submit"
                 className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{ background: '#5B8CFF' }}
+                style={{ background: 'var(--color-primary)' }}
                 aria-label="Subscribe"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -185,7 +178,7 @@ export default function Footer() {
                 href={href}
                 className="text-xs transition-colors"
                 style={{ color: '#8B8AA0' }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#5B8CFF')}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-primary)')}
                 onMouseLeave={e => (e.currentTarget.style.color = '#8B8AA0')}
               >
                 {label}

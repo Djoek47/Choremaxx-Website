@@ -47,11 +47,11 @@ export default function LegalDocument({
         .legal-prose li { margin-bottom: 0.5em; }
         .legal-prose strong { color: #0F0E17; font-weight: 600; }
         .legal-prose a {
-          color: #5B8CFF;
+          color: var(--color-primary);
           text-decoration: none;
           transition: color 0.2s;
         }
-        .legal-prose a:hover { color: #4A6FE0; }
+        .legal-prose a:hover { color: var(--color-primary-dark); }
       `}</style>
     </div>
   );

@@ -62,7 +62,7 @@ export default function Features() {
               <ul className="flex flex-col gap-2">
                 {details.map(d => (
                   <li key={d} className="flex items-center gap-2 text-sm" style={{ color: '#3D3A4E' }}>
-                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#5B8CFF', flexShrink: 0, display: 'inline-block' }} />
+                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--color-primary)', flexShrink: 0, display: 'inline-block' }} />
                     {d}
                   </li>
                 ))}
@@ -80,7 +80,7 @@ export default function Features() {
             <ul className="flex flex-col gap-2">
               {perms.map(p => (
                 <li key={p} className="flex items-start gap-2 text-xs" style={{ color: '#3D3A4E' }}>
-                  <span style={{ color: '#5B8CFF', fontWeight: 700 }}>✓</span>
+                  <span style={{ color: 'var(--color-primary)', fontWeight: 700 }}>✓</span>
                   {p}
                 </li>
               ))}

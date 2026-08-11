@@ -8,10 +8,11 @@
   --color-bg-card:          #FFFFFF;
   --color-bg-card-glass:    rgba(255, 255, 255, 0.70);
 
-  /* Brand */
+  /* Brand — overridden per-session by the active house palette (see [data-palette] below) */
   --color-primary:          #5B8CFF;
   --color-primary-dark:     #4A6FE0;
   --color-primary-light:    #E8EEFF;
+  --color-secondary:        #1B2A4A;
 
   /* Accents */
   --color-success:          #5BD6BD;
@@ -43,6 +44,48 @@
 :root {
   color-scheme: light;
 }
+
+/* ─── House palettes ───────────────────────────────────────────
+   One of these is chosen per browsing session (see the bootstrap
+   script in app/layout.tsx) and applied via [data-palette] on
+   <html>, re-tinting the primary brand color, the wordmark, and
+   the logo mark without touching layout or copy.               */
+html[data-palette='sky'] {
+  --color-primary:       #4C8DFF;
+  --color-primary-dark:  #2F6FE0;
+  --color-primary-light: #E7EFFF;
+  --color-secondary:     #143C7A;
+}
+html[data-palette='citrus'] {
+  --color-primary:       #F5B400;
+  --color-primary-dark:  #D89A00;
+  --color-primary-light: #FFF3D6;
+  --color-secondary:     #7A4B00;
+}
+html[data-palette='coral'] {
+  --color-primary:       #FF6B4A;
+  --color-primary-dark:  #E24A2A;
+  --color-primary-light: #FFE3D9;
+  --color-secondary:     #7A1F12;
+}
+html[data-palette='berry'] {
+  --color-primary:       #B23AD1;
+  --color-primary-dark:  #8F1FAE;
+  --color-primary-light: #F4DFFB;
+  --color-secondary:     #3D1049;
+}
+
+/* Logo mark — swaps house-mark artwork to match the active palette */
+.brand-logo {
+  display: inline-block;
+  background-image: url('/brand/choremaxx-logo-mark-sky.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+html[data-palette='citrus'] .brand-logo { background-image: url('/brand/choremaxx-logo-mark-citrus.png'); }
+html[data-palette='coral']  .brand-logo { background-image: url('/brand/choremaxx-logo-mark-coral.png');  }
+html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremaxx-logo-mark-berry.png');  }
 
 /* ─── Base ─────────────────────────────────────────────────── */
 @layer base {
@@ -134,22 +177,22 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 0.8125rem 1.875rem;
-    background: #5B8CFF;
+    background: var(--color-primary);
     color: #fff;
     font-weight: 600;
     font-size: 0.9375rem;
     border-radius: 9999px;
     border: none;
     transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 4px 20px rgba(91, 140, 255, 0.40);
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-primary) 40%, transparent);
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
   }
   .btn-primary:hover {
-    background: #4A6FE0;
+    background: var(--color-primary-dark);
     transform: translateY(-1px);
-    box-shadow: 0 8px 28px rgba(91, 140, 255, 0.55);
+    box-shadow: 0 8px 28px color-mix(in srgb, var(--color-primary) 55%, transparent);
   }
 
   /* Ghost/outline pill button */
@@ -171,9 +214,9 @@
     cursor: pointer;
   }
   .btn-ghost:hover {
-    background: rgba(91, 140, 255, 0.07);
-    border-color: rgba(91, 140, 255, 0.40);
-    color: #5B8CFF;
+    background: color-mix(in srgb, var(--color-primary) 7%, transparent);
+    border-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
+    color: var(--color-primary);
   }
 
   /* Small label chip */
@@ -182,12 +225,12 @@
     align-items: center;
     gap: 0.375rem;
     padding: 0.3rem 0.875rem;
-    background: rgba(91, 140, 255, 0.10);
-    border: 1px solid rgba(91, 140, 255, 0.22);
+    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
     border-radius: 9999px;
     font-size: 0.8125rem;
     font-weight: 500;
-    color: #5B8CFF;
+    color: var(--color-primary);
   }
 
   /* Page max-width container */
@@ -226,7 +269,7 @@
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #5B8CFF;
+    color: var(--color-primary);
   }
 }
 
@@ -271,7 +314,7 @@
 @layer utilities {
   .text-balance  { text-wrap: balance; }
   .text-pretty   { text-wrap: pretty; }
-  .text-primary  { color: #5B8CFF; }
+  .text-primary  { color: var(--color-primary); }
   .text-muted    { color: #8B8AA0; }
   .text-dark     { color: #0F0E17; }
   .text-body     { color: #3D3A4E; }

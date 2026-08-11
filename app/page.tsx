@@ -182,7 +182,7 @@ export default function Home() {
 
               {/* Eyebrow chip */}
               <div className="chip self-start">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5B8CFF" strokeWidth="2">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="2">
                   <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                 </svg>
                 AI Household Operating System
@@ -192,7 +192,7 @@ export default function Home() {
                 Finally.<br />
                 A Home That<br />
                 Runs{' '}
-                <span style={{ color: '#5B8CFF' }}>Itself.</span>
+                <span style={{ color: 'var(--color-primary)' }}>Itself.</span>
               </h1>
 
               <p className="text-lg" style={{ color: '#3D3A4E', maxWidth: 440 }}>
@@ -273,12 +273,12 @@ export default function Home() {
               {/* Floating widget: AI Assistant */}
               <div className="glass-card p-4 absolute right-0 top-12" style={{ width: 185, zIndex: 20 }}>
                 <div className="flex items-center gap-2 mb-1">
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #5B8CFF, #C986FF)' }}>
+                  <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--color-primary), #C986FF)' }}>
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="white">
                       <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                     </svg>
                   </div>
-                  <span className="text-xs font-semibold" style={{ color: '#5B8CFF' }}>AI Assistant</span>
+                  <span className="text-xs font-semibold" style={{ color: 'var(--color-primary)' }}>AI Assistant</span>
                   <span className="text-xs ml-auto" style={{ color: '#8B8AA0' }}>now</span>
                 </div>
                 <p className="text-xs" style={{ color: '#0F0E17' }}>Laundry completed!</p>
@@ -330,7 +330,7 @@ export default function Home() {
               <div key={label} className="glass-tile p-5 flex flex-col items-center text-center gap-3">
                 <div
                   className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                  style={{ background: 'rgba(91,140,255,0.10)', color: '#5B8CFF' }}
+                  style={{ background: 'color-mix(in srgb, var(--color-primary) 10%, transparent)', color: 'var(--color-primary)' }}
                 >
                   <Icon d={icon} size={22} />
                 </div>
@@ -354,11 +354,11 @@ export default function Home() {
               <div
                 key={label}
                 className="glass-tile p-5 flex flex-col items-center text-center gap-3 cursor-pointer"
-                style={i === 0 ? { border: '1.5px solid rgba(91,140,255,0.40)', background: 'rgba(91,140,255,0.06)' } : {}}
+                style={i === 0 ? { border: '1.5px solid color-mix(in srgb, var(--color-primary) 40%, transparent)', background: 'color-mix(in srgb, var(--color-primary) 6%, transparent)' } : {}}
               >
                 <div
                   className="w-11 h-11 rounded-2xl flex items-center justify-center"
-                  style={{ background: i === 0 ? 'rgba(91,140,255,0.12)' : 'rgba(100,80,180,0.07)', color: '#5B8CFF' }}
+                  style={{ background: i === 0 ? 'color-mix(in srgb, var(--color-primary) 12%, transparent)' : 'rgba(100,80,180,0.07)', color: 'var(--color-primary)' }}
                 >
                   <Icon d={iconPath} size={20} />
                 </div>
@@ -392,25 +392,25 @@ export default function Home() {
                     className="flex flex-col items-center gap-3"
                     style={{ width: 130 }}
                   >
-                    <p className="text-xs font-semibold" style={{ color: active ? '#5B8CFF' : '#8B8AA0' }}>{time}</p>
+                    <p className="text-xs font-semibold" style={{ color: active ? 'var(--color-primary)' : '#8B8AA0' }}>{time}</p>
                     <div
                       className="w-full rounded-2xl p-4 flex flex-col items-center gap-2 text-center"
                       style={{
-                        background: active ? '#5B8CFF' : 'rgba(255,255,255,0.80)',
-                        border: `1px solid ${active ? '#5B8CFF' : 'rgba(200,190,230,0.35)'}`,
-                        boxShadow: active ? '0 8px 32px rgba(91,140,255,0.30)' : '0 2px 12px rgba(100,80,180,0.06)',
+                        background: active ? 'var(--color-primary)' : 'rgba(255,255,255,0.80)',
+                        border: `1px solid ${active ? 'var(--color-primary)' : 'rgba(200,190,230,0.35)'}`,
+                        boxShadow: active ? '0 8px 32px color-mix(in srgb, var(--color-primary) 30%, transparent)' : '0 2px 12px rgba(100,80,180,0.06)',
                       }}
                     >
                       <p className="text-sm font-semibold" style={{ color: active ? '#FFF' : '#0F0E17' }}>{label}</p>
                       <p className="text-xs" style={{ color: active ? 'rgba(255,255,255,0.75)' : '#8B8AA0' }}>{person}</p>
                     </div>
                     {/* Timeline dot */}
-                    <div className="w-3 h-3 rounded-full" style={{ background: active ? '#5B8CFF' : '#C0BBDA' }} />
+                    <div className="w-3 h-3 rounded-full" style={{ background: active ? 'var(--color-primary)' : '#C0BBDA' }} />
                   </div>
                 ))}
               </div>
               {/* Timeline line */}
-              <div className="h-px mt-1" style={{ background: 'linear-gradient(90deg, #5B8CFF 28%, #C0BBDA 28%)' }} />
+              <div className="h-px mt-1" style={{ background: 'linear-gradient(90deg, var(--color-primary) 28%, #C0BBDA 28%)' }} />
             </div>
           </div>
         </div>
@@ -440,14 +440,14 @@ export default function Home() {
                 style={{ minWidth: 260 }}
               >
                 <p className="text-sm" style={{ color: '#8B8AA0' }}>You earned</p>
-                <p className="text-5xl font-extrabold" style={{ color: '#5B8CFF', letterSpacing: '-0.04em' }}>+120 XP</p>
+                <p className="text-5xl font-extrabold" style={{ color: 'var(--color-primary)', letterSpacing: '-0.04em' }}>+120 XP</p>
                 <p className="text-sm font-semibold" style={{ color: '#5BD6BD' }}>Great job!</p>
                 <div>
                   <div className="flex justify-between text-xs mb-1.5">
                     <span style={{ color: '#8B8AA0' }}>1,250 / 2,000 XP</span>
                   </div>
-                  <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(91,140,255,0.12)' }}>
-                    <div className="h-full rounded-full" style={{ width: '62.5%', background: 'linear-gradient(90deg, #5B8CFF, #C986FF)' }} />
+                  <div className="h-2 rounded-full overflow-hidden" style={{ background: 'color-mix(in srgb, var(--color-primary) 12%, transparent)' }}>
+                    <div className="h-full rounded-full" style={{ width: '62.5%', background: 'linear-gradient(90deg, var(--color-primary), #C986FF)' }} />
                   </div>
                 </div>
               </div>
@@ -483,11 +483,11 @@ export default function Home() {
             {testimonials.map(({ quote, name, role }) => (
               <div key={name} className="glass-card p-8 flex flex-col gap-5">
                 <svg width="28" height="20" viewBox="0 0 28 20" fill="none">
-                  <path d="M0 20V12C0 5.373 4.477 1.12 13.43 0l1.14 2.286C9.143 3.428 6.857 6.095 6.286 10H12V20H0zm16 0V12C16 5.373 20.477 1.12 29.43 0L30.57 2.286C25.143 3.428 22.857 6.095 22.286 10H28V20H16z" fill="#5B8CFF" opacity="0.20" />
+                  <path d="M0 20V12C0 5.373 4.477 1.12 13.43 0l1.14 2.286C9.143 3.428 6.857 6.095 6.286 10H12V20H0zm16 0V12C16 5.373 20.477 1.12 29.43 0L30.57 2.286C25.143 3.428 22.857 6.095 22.286 10H28V20H16z" fill="var(--color-primary)" opacity="0.20" />
                 </svg>
                 <p className="text-base leading-relaxed" style={{ color: '#3D3A4E' }}>{quote}</p>
                 <div className="flex items-center gap-3 mt-auto">
-                  <div className="w-10 h-10 rounded-full" style={{ background: 'linear-gradient(135deg, #5B8CFF44, #C986FF44)' }} />
+                  <div className="w-10 h-10 rounded-full" style={{ background: 'linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 27%, transparent), #C986FF44)' }} />
                   <div>
                     <p className="text-sm font-semibold" style={{ color: '#0F0E17' }}>{name}</p>
                     <p className="text-xs" style={{ color: '#8B8AA0' }}>{role}</p>
@@ -508,9 +508,9 @@ export default function Home() {
             <div className="flex items-center gap-2 mt-2">
               <div
                 className="flex items-center gap-1 p-1 rounded-full"
-                style={{ background: 'rgba(91,140,255,0.08)', border: '1px solid rgba(91,140,255,0.20)' }}
+                style={{ background: 'color-mix(in srgb, var(--color-primary) 8%, transparent)', border: '1px solid color-mix(in srgb, var(--color-primary) 20%, transparent)' }}
               >
-                <span className="px-4 py-1.5 rounded-full text-sm font-semibold" style={{ background: '#5B8CFF', color: '#FFF' }}>Monthly</span>
+                <span className="px-4 py-1.5 rounded-full text-sm font-semibold" style={{ background: 'var(--color-primary)', color: '#FFF' }}>Monthly</span>
                 <span className="px-4 py-1.5 rounded-full text-sm font-medium" style={{ color: '#8B8AA0' }}>
                   Yearly
                   <span className="ml-1.5 text-xs px-2 py-0.5 rounded-full" style={{ background: '#5BD6BD', color: '#FFF' }}>Save 20%</span>
@@ -525,14 +525,14 @@ export default function Home() {
                 key={name}
                 className="glass-card p-8 flex flex-col gap-6 relative"
                 style={highlight ? {
-                  border: '1.5px solid #5B8CFF',
-                  boxShadow: '0 8px 40px rgba(91,140,255,0.20)',
+                  border: '1.5px solid var(--color-primary)',
+                  boxShadow: '0 8px 40px color-mix(in srgb, var(--color-primary) 20%, transparent)',
                 } : {}}
               >
                 {badge && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                     <span className="px-4 py-1 rounded-full text-xs font-semibold text-white"
-                      style={{ background: '#5B8CFF' }}>{badge}</span>
+                      style={{ background: 'var(--color-primary)' }}>{badge}</span>
                   </div>
                 )}
                 <div>
