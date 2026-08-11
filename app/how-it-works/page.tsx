@@ -48,8 +48,8 @@ const whoFor = [
     desc: 'Parents assign chores, kids earn rewards. Everyone sees what is fair. Less arguing, more done.',
   },
   {
-    label: 'Roommates',
-    desc: 'Share household work without resentment. Clear expectations, transparent completion.',
+    label: 'Helpers',
+    desc: 'Grandparents and caregivers join with clear roles — help without taking over.',
   },
   {
     label: 'Blended households',

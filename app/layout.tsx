@@ -10,6 +10,7 @@ const SITE_URL = 'https://www.choremaxx.app';
  * bootstrap script below, before first paint. See app/globals.css for the
  * color tokens each palette maps to, and lib/palettes.ts for reference. */
 const PALETTES = ['sky', 'citrus', 'coral', 'berry'] as const;
+const DEFAULT_PALETTE = 'coral';
 
 export const metadata: Metadata = {
   title: 'ChoreMaxx — AI Household Operating System',
@@ -63,14 +64,14 @@ const PALETTE_BOOTSTRAP_SCRIPT = `(function(){
     }
     document.documentElement.setAttribute('data-palette', current);
   } catch (e) {
-    document.documentElement.setAttribute('data-palette', 'sky');
+    document.documentElement.setAttribute('data-palette', '${DEFAULT_PALETTE}');
   }
 })();`;
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#5B8CFF',
+  themeColor: '#D85A30',
   userScalable: true,
 };
 
@@ -83,7 +84,7 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth" style={{ background: '#F6F5FA' }}>
       <head>
         <link rel="canonical" href={SITE_URL} />
-        <meta name="theme-color" content="#5B8CFF" />
+        <meta name="theme-color" content="#D85A30" />
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script dangerouslySetInnerHTML={{ __html: PALETTE_BOOTSTRAP_SCRIPT }} />
         <script type="application/ld+json">

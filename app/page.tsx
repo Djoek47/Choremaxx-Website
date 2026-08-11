@@ -79,12 +79,11 @@ const featureItems = [
 ];
 
 const householdModes = [
-  { label: 'Parents',    sub: 'For families with kids',       iconPath: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0' },
-  { label: 'Roommates',  sub: 'Share and split tasks',        iconPath: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z' },
-  { label: 'Couples',    sub: 'Build better habits together', iconPath: 'M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z' },
-  { label: 'Caretakers', sub: 'Care made simple',             iconPath: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z' },
-  { label: 'Students',   sub: 'Stay on top of tasks',         iconPath: 'M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5' },
-  { label: 'Kids',       sub: 'Fun & responsibility',         iconPath: 'M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z' },
+  { label: 'Parents',   sub: 'For families with kids',       iconPath: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0' },
+  { label: 'Helpers',   sub: 'Grandparents & caregivers',    iconPath: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z' },
+  { label: 'Couples',   sub: 'Build better habits together', iconPath: 'M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z' },
+  { label: 'Blended',   sub: 'Multiple homes, one system',   iconPath: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z' },
+  { label: 'Kids',      sub: 'Fun & responsibility',         iconPath: 'M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z' },
 ];
 
 const timelineItems = [
@@ -102,53 +101,57 @@ const testimonials = [
     role: 'Mom of 3',
   },
   {
-    quote: '"As roommates, this app is a game changer. No more awkward reminders!"',
+    quote: '"Poppins bundles our after-school run so we stop doing three separate trips."',
     name: 'Daniel K.',
-    role: 'College Student',
+    role: 'Dad of 2',
   },
   {
     quote: '"The AI suggestions are incredibly helpful. It knows what we need."',
     name: 'Alex T.',
-    role: 'Working Professional',
+    role: 'Working parent',
   },
 ];
 
 const pricingPlans = [
   {
-    name: 'Free',
-    price: '$0',
-    period: '/month',
-    desc: 'For small households getting started.',
-    features: ['Up to 5 members', 'Basic task management', 'Grocery list', 'Mobile app access'],
-    cta: 'Get Started',
-    highlight: false,
-  },
-  {
-    name: 'Premium',
+    name: 'Monthly',
     price: '$4.99',
     period: '/month',
-    desc: 'Advanced features for growing homes.',
-    features: ['Unlimited members', 'Poppins AI', 'Advanced scheduling', 'Rewards & XP', 'Priority support'],
-    cta: 'Start Free Trial',
-    highlight: true,
-    badge: 'Most Popular',
+    desc: '7-day free trial, then billed monthly via Apple.',
+    features: [
+      'Unlimited family members',
+      'Home, Tasks, Plan, Groceries',
+      'Rewards, rankings & streaks',
+      'Poppins AI co-manager',
+      'Cancel anytime',
+    ],
+    cta: 'Start 7-day free trial',
+    highlight: false,
   },
   {
-    name: 'Family',
-    price: '$8.99',
-    period: '/month',
-    desc: 'Everything in Premium, plus more.',
-    features: ['Multi-home management', 'Advanced insights', 'Custom rewards', 'Early access to new features'],
-    cta: 'Start Free Trial',
-    highlight: false,
+    name: 'Yearly',
+    price: '$48',
+    period: '/year',
+    desc: '7-day free trial. Save 20% vs. monthly ($60).',
+    features: [
+      'Everything in Monthly',
+      'Best value for families',
+      'Poppins smart trip bundling',
+      'Priority support',
+      'Cancel anytime',
+    ],
+    cta: 'Start 7-day free trial',
+    highlight: true,
+    badge: 'Save 20%',
   },
 ];
 
 const faqItems = [
-  { q: 'How does Poppins work?',     a: 'Poppins uses advanced AI to understand your household patterns, bundle trips, suggest optimal task assignments, and proactively remind members — all through natural conversation. You always approve changes.' },
-  { q: 'Can I use ChoreMaxx with roommates?', a: 'Absolutely. ChoreMaxx has a dedicated Roommates mode with equal role management, fair task distribution tracking, and split-responsibility tools.' },
-  { q: 'Is my data secure?',                  a: 'Yes. All household data is encrypted end-to-end. We never sell your data. You can export or delete everything at any time from within the app.' },
-  { q: 'Can I customize tasks and rewards?',  a: 'Yes — create any task with custom names, difficulty, frequency, and XP value. Rewards are fully configurable by household admins.' },
+  { q: 'How does Poppins work?', a: 'Poppins uses advanced AI to understand your household patterns, bundle trips, suggest optimal task assignments, and proactively remind members — all through natural conversation. You always approve changes.' },
+  { q: 'Who is ChoreMaxx for?', a: 'Families — parents, kids, helpers, and blended households. Shipping product is families-only.' },
+  { q: 'How much does it cost?', a: '7-day free trial, then $4.99/month or $48/year (+ tax via Apple). Pricing and renewal terms are shown in-app before purchase.' },
+  { q: 'Is my data secure?', a: 'Yes. All household data is encrypted. We never sell your data. You can export or delete everything at any time from within the app.' },
+  { q: 'Can I customize tasks and rewards?', a: 'Yes — create any task with custom names, difficulty, frequency, and XP value. Rewards are fully configurable by household admins. Allowance tracking never sends money — parents use Mark as paid.' },
 ];
 
 /* ═══════════════════════════════════════════════════════════ */
@@ -346,10 +349,12 @@ export default function Home() {
       <Section style={{ background: '#FFFFFF' }}>
         <div className="container-page">
           <div className="section-heading">
-            <h2 className="text-balance">Built For Every Type of Home</h2>
-            <p className="text-base" style={{ color: '#8B8AA0' }}>Choose the mode that fits your household.</p>
+            <h2 className="text-balance">Built For Families</h2>
+            <p className="text-base" style={{ color: '#8B8AA0' }}>
+              Parents, kids, helpers, and blended households — one calm system.
+            </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
             {householdModes.map(({ label, sub, iconPath }, i) => (
               <div
                 key={label}
@@ -504,22 +509,12 @@ export default function Home() {
         <div className="container-page">
           <div className="section-heading">
             <h2>Simple Pricing, For Every Home</h2>
-            {/* Monthly / Yearly toggle */}
-            <div className="flex items-center gap-2 mt-2">
-              <div
-                className="flex items-center gap-1 p-1 rounded-full"
-                style={{ background: 'color-mix(in srgb, var(--color-primary) 8%, transparent)', border: '1px solid color-mix(in srgb, var(--color-primary) 20%, transparent)' }}
-              >
-                <span className="px-4 py-1.5 rounded-full text-sm font-semibold" style={{ background: 'var(--color-primary)', color: '#FFF' }}>Monthly</span>
-                <span className="px-4 py-1.5 rounded-full text-sm font-medium" style={{ color: '#8B8AA0' }}>
-                  Yearly
-                  <span className="ml-1.5 text-xs px-2 py-0.5 rounded-full" style={{ background: '#5BD6BD', color: '#FFF' }}>Save 20%</span>
-                </span>
-              </div>
-            </div>
+            <p className="text-base" style={{ color: '#8B8AA0' }}>
+              7-day free trial · then $4.99/mo or $48/yr via Apple
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {pricingPlans.map(({ name, price, period, desc, features, cta, highlight, badge }) => (
               <div
                 key={name}

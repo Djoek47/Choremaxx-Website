@@ -8,11 +8,12 @@
   --color-bg-card:          #FFFFFF;
   --color-bg-card-glass:    rgba(255, 255, 255, 0.70);
 
-  /* Brand — overridden per-session by the active house palette (see [data-palette] below) */
-  --color-primary:          #5B8CFF;
-  --color-primary-dark:     #4A6FE0;
-  --color-primary-light:    #E8EEFF;
-  --color-secondary:        #1B2A4A;
+  /* Brand — overridden per-session by the active house palette (see [data-palette] below).
+     Defaults match Orbit Coral (App Store / default accent). */
+  --color-primary:          #D85A30;
+  --color-primary-dark:     #B84722;
+  --color-primary-light:    #FDE8DF;
+  --color-secondary:        #C4922A;
 
   /* Accents */
   --color-success:          #5BD6BD;
@@ -50,39 +51,43 @@
    script in app/layout.tsx) and applied via [data-palette] on
    <html>, re-tinting the primary brand color, the wordmark, and
    the logo mark without touching layout or copy.               */
+/* Official Orbit accent packs (constants/accent-themes.ts + brand-lockup.ts).
+   --color-secondary is the wordmark “chore” color (LOCKUPS.chore), not the
+   accent secondary used for sparkle/UI fills. */
 html[data-palette='sky'] {
-  --color-primary:       #4C8DFF;
-  --color-primary-dark:  #2F6FE0;
-  --color-primary-light: #E7EFFF;
-  --color-secondary:     #143C7A;
+  --color-primary:       #378ADD;
+  --color-primary-dark:  #2A6FB5;
+  --color-primary-light: #E5F2FB;
+  --color-secondary:     #C4922A;
 }
 html[data-palette='citrus'] {
-  --color-primary:       #F5B400;
-  --color-primary-dark:  #D89A00;
-  --color-primary-light: #FFF3D6;
-  --color-secondary:     #7A4B00;
+  --color-primary:       #EF9F27;
+  --color-primary-dark:  #C47F1A;
+  --color-primary-light: #FDF3E0;
+  --color-secondary:     #712B13;
 }
 html[data-palette='coral'] {
-  --color-primary:       #FF6B4A;
-  --color-primary-dark:  #E24A2A;
-  --color-primary-light: #FFE3D9;
-  --color-secondary:     #7A1F12;
+  --color-primary:       #D85A30;
+  --color-primary-dark:  #B84722;
+  --color-primary-light: #FDE8DF;
+  --color-secondary:     #C4922A;
 }
 html[data-palette='berry'] {
-  --color-primary:       #B23AD1;
-  --color-primary-dark:  #8F1FAE;
-  --color-primary-light: #F4DFFB;
-  --color-secondary:     #3D1049;
+  --color-primary:       #7F77DD;
+  --color-primary-dark:  #6259C4;
+  --color-primary-light: #EEEBFB;
+  --color-secondary:     #C4789A;
 }
 
-/* Logo mark — swaps house-mark artwork to match the active palette */
+/* Logo mark — official Orbit house marks (sparkle + roof + wave body) */
 .brand-logo {
   display: inline-block;
-  background-image: url('/brand/choremaxx-logo-mark-sky.png');
+  background-image: url('/brand/choremaxx-logo-mark-coral.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 }
+html[data-palette='sky']    .brand-logo { background-image: url('/brand/choremaxx-logo-mark-sky.png');    }
 html[data-palette='citrus'] .brand-logo { background-image: url('/brand/choremaxx-logo-mark-citrus.png'); }
 html[data-palette='coral']  .brand-logo { background-image: url('/brand/choremaxx-logo-mark-coral.png');  }
 html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremaxx-logo-mark-berry.png');  }

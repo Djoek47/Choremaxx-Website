@@ -1,14 +1,13 @@
 /**
- * ChoreMaxx house palettes.
+ * ChoreMaxx house palettes — synced with Orbit
+ * (`constants/accent-themes.ts` + `constants/brand-lockup.ts`).
  *
  * Four official brand looks — Sky, Citrus, Coral, and Berry — each pairing a
- * primary/secondary color duo with a recolored house-mark logo. One palette
- * is chosen per browsing session (see the bootstrap script in
- * app/layout.tsx) and applied to the page via a `data-palette` attribute on
- * `<html>`, which the CSS custom-property overrides in app/globals.css read
- * from. This file is the single source of truth for the palette names/colors
- * so design and code never drift apart — the CSS values below must match
- * app/globals.css exactly.
+ * primary (“maxx”) / secondary (“chore”) wordmark duo with an official house
+ * mark. One palette is chosen per browsing session (see the bootstrap script
+ * in app/layout.tsx) and applied via `data-palette` on `<html>`.
+ *
+ * Default = Coral (App Store / Orbit DEFAULT_ACCENT_THEME_ID).
  */
 
 export type PaletteName = 'sky' | 'citrus' | 'coral' | 'berry';
@@ -16,9 +15,11 @@ export type PaletteName = 'sky' | 'citrus' | 'coral' | 'berry';
 export interface Palette {
   name: PaletteName;
   label: string;
+  /** “maxx” + buttons / accents — Orbit accent.primary */
   primary: string;
   primaryDark: string;
   primaryLight: string;
+  /** “chore” wordmark — Orbit LOCKUPS.chore */
   secondary: string;
   logo: string;
 }
@@ -27,54 +28,51 @@ export const PALETTES: Record<PaletteName, Palette> = {
   sky: {
     name: 'sky',
     label: 'Sky',
-    primary: '#4C8DFF',
-    primaryDark: '#2F6FE0',
-    primaryLight: '#E7EFFF',
-    secondary: '#143C7A',
+    primary: '#378ADD',
+    primaryDark: '#2A6FB5',
+    primaryLight: '#E5F2FB',
+    secondary: '#C4922A',
     logo: '/brand/choremaxx-logo-mark-sky.png',
   },
   citrus: {
     name: 'citrus',
     label: 'Citrus',
-    primary: '#F5B400',
-    primaryDark: '#D89A00',
-    primaryLight: '#FFF3D6',
-    secondary: '#7A4B00',
+    primary: '#EF9F27',
+    primaryDark: '#C47F1A',
+    primaryLight: '#FDF3E0',
+    secondary: '#712B13',
     logo: '/brand/choremaxx-logo-mark-citrus.png',
   },
   coral: {
     name: 'coral',
     label: 'Coral',
-    primary: '#FF6B4A',
-    primaryDark: '#E24A2A',
-    primaryLight: '#FFE3D9',
-    secondary: '#7A1F12',
+    primary: '#D85A30',
+    primaryDark: '#B84722',
+    primaryLight: '#FDE8DF',
+    secondary: '#C4922A',
     logo: '/brand/choremaxx-logo-mark-coral.png',
   },
   berry: {
     name: 'berry',
     label: 'Berry',
-    primary: '#B23AD1',
-    primaryDark: '#8F1FAE',
-    primaryLight: '#F4DFFB',
-    secondary: '#3D1049',
+    primary: '#7F77DD',
+    primaryDark: '#6259C4',
+    primaryLight: '#EEEBFB',
+    secondary: '#C4789A',
     logo: '/brand/choremaxx-logo-mark-berry.png',
   },
 };
 
 export const PALETTE_NAMES = Object.keys(PALETTES) as PaletteName[];
 
-export const DEFAULT_PALETTE: PaletteName = 'sky';
+export const DEFAULT_PALETTE: PaletteName = 'coral';
 
 const SESSION_KEY = 'cm-palette';
 const LAST_VISIT_KEY = 'cm-last-palette';
 
 /**
  * Picks the palette for the current browsing session, mirroring the inline
- * bootstrap script in app/layout.tsx. New tab/session → random palette that
- * excludes the visitor's previous-visit pick; returning within the same
- * session reuses that session's palette. Safe to call from client code
- * that needs to know the active palette (e.g. to read palette.label).
+ * bootstrap script in app/layout.tsx.
  */
 export function getSessionPalette(): PaletteName {
   if (typeof window === 'undefined') return DEFAULT_PALETTE;

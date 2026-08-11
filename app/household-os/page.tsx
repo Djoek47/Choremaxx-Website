@@ -39,7 +39,7 @@ const modules = [
 const whoFor = [
   { label: 'Parents', desc: 'Stop nagging. Assign once, track always. See what is getting done.' },
   { label: 'Kids', desc: 'Clear expectations, fair rewards, friendly competition.' },
-  { label: 'Roommates', desc: 'Shared household, clear responsibilities, no resentment.' },
+  { label: 'Helpers', desc: 'Grandparents and caregivers with clear, limited roles.' },
   {
     label: 'Blended families',
     desc: 'Multiple kids, schedules, expectations all in one system.',

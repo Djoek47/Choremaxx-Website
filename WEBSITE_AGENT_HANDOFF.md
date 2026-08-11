@@ -1,0 +1,76 @@
+# Website agent handoff — ChoreMaxx
+
+**Repo:** [Djoek47/Choremaxx-Website](https://github.com/Djoek47/Choremaxx-Website)  
+**Working branch:** `cursor/website-brand-palettes-9ecd` → [PR #1](https://github.com/Djoek47/Choremaxx-Website/pull/1)  
+**Live domain:** https://www.choremaxx.app  
+**Sibling app (Orbit):** [Djoek47/Orbit](https://github.com/Djoek47/Orbit) @ `cursor/choremaxx-make-v10-5f8f` ([PR #29](https://github.com/Djoek47/Orbit/pull/29))
+
+This file is the checklist for finishing / maintaining the marketing site. Read Orbit’s playbooks when product copy or legal must stay in sync:
+
+- `docs/weekend-ship-automation.md` — **A1 / B4** website items
+- `docs/site-copy-a1-patch.md` — Poppins, families-only, pricing, legal re-host
+- `docs/legal/privacy-policy.md` + `docs/legal/terms-of-service.md`
+- `constants/accent-themes.ts` + `constants/brand-lockup.ts` + `assets/brand/marks/`
+
+---
+
+## Done on this branch
+
+| Area | Status |
+|------|--------|
+| Official house marks (Sky/Citrus/Coral/Berry) from Orbit `assets/brand/marks/` | ✅ |
+| App icon plates in `public/brand/icons/` + coral `apple-icon.png` / `og.png` | ✅ |
+| Email logo `public/emails/logo-mark.png` from Orbit | ✅ |
+| Per-session palette pick (sessionStorage + avoid last visit) | ✅ |
+| Wordmark chore=secondary / maxx=primary via CSS vars | ✅ |
+| Palette hex tokens synced to Orbit accent + LOCKUPS.chore | ✅ |
+| Canonical / OG / sitemap / robots → `https://www.choremaxx.app` | ✅ |
+| Invisible white-on-light text fixed on unfinished pages | ✅ |
+| Poppins naming (not Nova) | ✅ |
+| Families-only (roommate mode removed from marketing) | ✅ |
+| Pricing: 7-day trial · $4.99/mo · $48/yr | ✅ |
+| Privacy / Terms re-hosted from Orbit legal (2026-08-10) | ✅ |
+| Vercel missing `.v0/inject-built-with-v0.mjs` stub + `vercel.json` | ✅ |
+| Readable how-it-works / support / features / download / SEO landings | ✅ |
+
+---
+
+## Still TODO (human or next agent)
+
+1. **App screenshots** — User will supply iOS captures (Home, Groceries, Plan, Rankings, Rewards, Poppins Activity, Shopping). Drop into `public/screenshots/` and replace the homepage hero phone `src` (currently a Vercel blob `IMG_6631-…`).
+2. **Merge + redeploy** — Merge PR #1 to `main`; confirm Vercel production on www.choremaxx.app (privacy/terms must be live for ASC).
+3. **Optional Vercel cleanup** — Clear custom Build Command so it is just `next build` / `pnpm build`.
+4. **iOS accent prefs** — Leave app-side accent prefs alone; site only mirrors the four logo packs for marketing.
+
+---
+
+## How palette pick works
+
+1. Blocking script in `app/layout.tsx` reads `sessionStorage.cm-palette`.
+2. If missing, picks random from `sky|citrus|coral|berry` excluding `localStorage.cm-last-palette`.
+3. Sets `data-palette` on `<html>` before paint.
+4. `app/globals.css` overrides `--color-primary` / `--color-secondary` and `.brand-logo` background-image.
+
+Default / fallback = **coral** (Orbit `DEFAULT_ACCENT_THEME_ID`).
+
+---
+
+## Do not
+
+- Invent roommate mode or Free / $8.99 Family plans
+- Rename Poppins back to Nova
+- Recreate the house mark as SVG/emoji — always use Orbit plated PNGs
+- Change iOS in-app theme prefs from this repo
+- Push product features that are not in Orbit Master Brief §3
+
+---
+
+## Verify before ship
+
+```bash
+pnpm install
+pnpm build
+pnpm start   # spot-check /, /how-it-works, /support, /features, /privacy, /terms
+```
+
+Confirm: readable dark text on light cards, palette swaps logo+wordmark on new session, pricing shows trial + $4.99 / $48, no “roommate” promises, canonical tags use www.choremaxx.app.
