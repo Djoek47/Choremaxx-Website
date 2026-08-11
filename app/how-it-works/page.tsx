@@ -78,10 +78,10 @@ export default function HowItWorks() {
             >
               {n}
             </span>
-            <h3 className="font-bold text-base" style={{ color: '#0F0E17' }}>
+            <h3 className="font-bold text-base" style={{ color: 'var(--color-text-primary)' }}>
               {title}
             </h3>
-            <p className="text-sm leading-relaxed" style={{ color: '#3D3A4E' }}>
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
               {body}
             </p>
           </div>
@@ -89,16 +89,16 @@ export default function HowItWorks() {
       </div>
 
       {/* Who it's for */}
-      <h2 className="text-2xl font-bold mb-6" style={{ color: '#0F0E17' }}>
+      <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--color-text-primary)' }}>
         Who is it for?
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-16">
         {whoFor.map(({ label, desc }) => (
           <div key={label} className="glass-tile p-6 flex flex-col gap-3">
-            <h3 className="font-semibold" style={{ color: '#0F0E17' }}>
+            <h3 className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
               {label}
             </h3>
-            <p className="text-sm leading-relaxed" style={{ color: '#3D3A4E' }}>
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
               {desc}
             </p>
           </div>
@@ -107,10 +107,10 @@ export default function HowItWorks() {
 
       {/* Goal card */}
       <div className="glass-card p-10 flex flex-col gap-4">
-        <h2 className="text-2xl font-bold" style={{ color: '#0F0E17' }}>
+        <h2 className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
           The goal
         </h2>
-        <p className="leading-relaxed max-w-2xl" style={{ color: '#3D3A4E' }}>
+        <p className="leading-relaxed max-w-2xl" style={{ color: 'var(--color-text-secondary)' }}>
           ChoreMaxx is not about perfection. It is about bringing clarity and fairness to household
           work so no one person carries it all. Less arguing. More time together.
         </p>

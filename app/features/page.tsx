@@ -119,8 +119,8 @@ export default function Features() {
         {features.map(({ label, desc, details }) => (
           <div key={label} className="glass-card p-8 flex flex-col md:flex-row gap-8">
             <div className="flex-1 flex flex-col gap-3">
-              <h2 style={{ color: '#0F0E17', fontSize: '1.2rem', fontWeight: 700 }}>{label}</h2>
-              <p className="text-sm leading-relaxed" style={{ color: '#8B8AA0' }}>
+              <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.2rem', fontWeight: 700 }}>{label}</h2>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
                 {desc}
               </p>
             </div>
@@ -130,7 +130,7 @@ export default function Features() {
             >
               <p
                 className="text-xs font-semibold uppercase tracking-widest mb-4"
-                style={{ color: '#8B8AA0' }}
+                style={{ color: 'var(--color-text-muted)' }}
               >
                 What you get
               </p>
@@ -139,7 +139,7 @@ export default function Features() {
                   <li
                     key={d}
                     className="flex items-center gap-2 text-sm"
-                    style={{ color: '#3D3A4E' }}
+                    style={{ color: 'var(--color-text-secondary)' }}
                   >
                     <span
                       style={{
@@ -162,7 +162,7 @@ export default function Features() {
                 <li
                   key={d}
                   className="flex items-center gap-2 text-sm"
-                  style={{ color: '#3D3A4E' }}
+                  style={{ color: 'var(--color-text-secondary)' }}
                 >
                   <span
                     style={{
@@ -182,13 +182,13 @@ export default function Features() {
         ))}
       </div>
 
-      <h2 className="text-2xl font-bold mb-6" style={{ color: '#0F0E17' }}>
+      <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--color-text-primary)' }}>
         Roles & permissions
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-16">
         {roles.map(({ role, perms }) => (
           <div key={role} className="glass-tile p-6 flex flex-col gap-4">
-            <h3 className="font-semibold text-sm" style={{ color: '#0F0E17' }}>
+            <h3 className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>
               {role}
             </h3>
             <ul className="flex flex-col gap-2">
@@ -196,7 +196,7 @@ export default function Features() {
                 <li
                   key={p}
                   className="flex items-start gap-2 text-xs"
-                  style={{ color: '#3D3A4E' }}
+                  style={{ color: 'var(--color-text-secondary)' }}
                 >
                   <span style={{ color: 'var(--color-primary)', fontWeight: 700 }}>✓</span>
                   {p}
@@ -208,7 +208,7 @@ export default function Features() {
       </div>
 
       <div className="glass-card p-10 flex flex-col md:flex-row items-center justify-between gap-6">
-        <p className="text-lg font-semibold" style={{ color: '#0F0E17' }}>
+        <p className="text-lg font-semibold" style={{ color: 'var(--color-text-primary)' }}>
           Ready to try ChoreMaxx?
         </p>
         <div className="flex flex-wrap gap-3">

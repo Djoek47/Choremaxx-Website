@@ -4,7 +4,7 @@ export default function NotFound() {
   return (
     <div
       className="min-h-[70vh] flex items-center justify-center"
-      style={{ background: '#F6F5FA' }}
+      style={{ background: 'var(--color-bg)' }}
     >
       <div className="container-page text-center flex flex-col items-center gap-6 max-w-md">
         <div>
@@ -20,10 +20,10 @@ export default function NotFound() {
           >
             404
           </h1>
-          <h2 className="text-2xl font-bold mb-2" style={{ color: '#0F0E17' }}>
+          <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text-primary)' }}>
             Page not found
           </h2>
-          <p style={{ color: '#8B8AA0' }}>
+          <p style={{ color: 'var(--color-text-muted)' }}>
             Sorry, we couldn&apos;t find the page you&apos;re looking for.
           </p>
         </div>

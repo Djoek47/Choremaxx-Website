@@ -8,8 +8,9 @@ Production marketing & legal companion for **ChoreMaxx** — an AI household ope
 
 ## Overview
 
-- Per-session house palette (Sky / Citrus / Coral / Berry) with official Orbit house marks
-- Wordmark: **chore** = secondary, **maxx** = primary
+- Per-session house palette (Sky / Citrus / Coral / Berry) with official Orbit icon plates
+- System day/night via `prefers-color-scheme` (`data-appearance`)
+- Wordmark: **chore** = secondary (brightens at night), **maxx** = primary
 - Poppins AI naming (not Nova)
 - Families-only positioning (no roommate mode)
 - Pricing: **7-day trial · $4.99/mo · $48/yr**
@@ -46,18 +47,27 @@ Email logo: `https://www.choremaxx.app/emails/logo-mark.png`
 
 ## Brand (synced with Orbit)
 
-| Palette | Primary (maxx) | Secondary (chore) | Logo |
-|---------|----------------|-------------------|------|
-| Coral (default) | `#D85A30` | `#C4922A` | `public/brand/choremaxx-logo-mark-coral.png` |
-| Sky | `#378ADD` | `#C4922A` | `…-sky.png` |
-| Citrus | `#EF9F27` | `#712B13` | `…-citrus.png` |
-| Berry | `#7F77DD` | `#C4789A` | `…-berry.png` |
+`choremaxx_logo_color_directions` — four palettes × day/night:
 
-Source of truth in the app: Orbit `constants/accent-themes.ts` + `constants/brand-lockup.ts` + `assets/brand/marks/`.
+| Asset | Role |
+|-------|------|
+| `icon-{p}.png` | App / tab — day |
+| `icon-{p}-dark.png` | App / tab — night |
+| `icon-{p}-foreground.png` | **Website** logo — day |
+| `icon-{p}-tinted.png` | **Website** logo — night (contrast with fonts) |
 
-Session pick: bootstrap script in `app/layout.tsx` sets `data-palette` on `<html>` (sessionStorage, excludes last visit via localStorage). CSS overrides + `.brand-logo` swap in `app/globals.css`.
+| Palette | maxx (primary) | chore day | chore night |
+|---------|----------------|-----------|-------------|
+| Coral (default) | `#D85A30` | `#C4922A` | `#FAC775` |
+| Sky | `#378ADD` | `#C4922A` | `#FAC775` |
+| Citrus | `#EF9F27` | `#712B13` | `#F0DCC8` |
+| Berry | `#7F77DD` | `#C4789A` | `#F4C0D1` |
 
-**Do not** recreate the house mark as SVG/emoji. Use the plated PNGs from Orbit.
+Source of truth: Orbit `constants/accent-themes.ts` + `constants/brand-lockup.ts` + `constants/color-palettes.ts` + `assets/brand/icons/`.
+
+Bootstrap in `app/layout.tsx` sets `data-palette` (session) + `data-appearance` (system). `app/globals.css` remaps tokens and `.brand-logo`.
+
+**Do not** recreate the house mark as SVG/emoji. Use Orbit PNGs; website chrome uses **foreground** / **tinted**, not plated marks.
 
 ## Project structure
 

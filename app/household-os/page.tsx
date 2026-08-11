@@ -52,21 +52,21 @@ export default function HouseholdOS() {
       heading="The Household Operating System"
       sub="Coordinates work, schedules, rewards, and communication — like an OS for your home."
     >
-      <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: '#3D3A4E' }}>
+      <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: 'var(--color-text-secondary)' }}>
         ChoreMaxx brings clarity, fairness, and momentum to every household. One system, one source
         of truth, everyone coordinated.
       </p>
 
-      <h2 className="font-bold text-2xl mb-5" style={{ color: '#0F0E17' }}>
+      <h2 className="font-bold text-2xl mb-5" style={{ color: 'var(--color-text-primary)' }}>
         Core modules
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-14">
         {modules.map(({ title, desc }) => (
           <div key={title} className="glass-tile p-6 flex flex-col gap-2">
-            <h3 className="font-semibold text-sm" style={{ color: '#0F0E17' }}>
+            <h3 className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>
               {title}
             </h3>
-            <p className="text-xs leading-relaxed" style={{ color: '#3D3A4E' }}>
+            <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
               {desc}
             </p>
           </div>
@@ -74,7 +74,7 @@ export default function HouseholdOS() {
       </div>
 
       <div className="glass-card p-8 mb-10">
-        <h2 className="font-bold text-xl mb-5" style={{ color: '#0F0E17' }}>
+        <h2 className="font-bold text-xl mb-5" style={{ color: 'var(--color-text-primary)' }}>
           Why it is an OS
         </h2>
         <ul className="flex flex-col gap-3">
@@ -93,7 +93,7 @@ export default function HouseholdOS() {
             <li
               key={strong}
               className="text-sm flex items-start gap-2"
-              style={{ color: '#3D3A4E' }}
+              style={{ color: 'var(--color-text-secondary)' }}
             >
               <span
                 style={{ color: 'var(--color-primary)', fontWeight: 700, flexShrink: 0 }}
@@ -106,16 +106,16 @@ export default function HouseholdOS() {
         </ul>
       </div>
 
-      <h2 className="font-bold text-2xl mb-5" style={{ color: '#0F0E17' }}>
+      <h2 className="font-bold text-2xl mb-5" style={{ color: 'var(--color-text-primary)' }}>
         Who benefits
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-14">
         {whoFor.map(({ label, desc }) => (
           <div key={label} className="glass-tile p-6 flex flex-col gap-2">
-            <h3 className="font-semibold text-sm" style={{ color: '#0F0E17' }}>
+            <h3 className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>
               {label}
             </h3>
-            <p className="text-xs leading-relaxed" style={{ color: '#3D3A4E' }}>
+            <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
               {desc}
             </p>
           </div>
@@ -123,7 +123,7 @@ export default function HouseholdOS() {
       </div>
 
       <div className="glass-card p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-        <p className="font-semibold" style={{ color: '#0F0E17' }}>
+        <p className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
           Ready to upgrade your household?
         </p>
         <div className="flex flex-wrap gap-3">

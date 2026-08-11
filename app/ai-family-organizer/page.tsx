@@ -45,13 +45,13 @@ export default function AIFamilyOrganizer() {
       heading="Poppins: Your AI Family Organizer"
       sub="Smart trip bundling, task suggestions, and household insights that keep everyone coordinated."
     >
-      <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: '#3D3A4E' }}>
+      <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: 'var(--color-text-secondary)' }}>
         Poppins monitors schedules, GPS patterns, streaks, and rewards in the background. It notices
         when someone is overloaded, bundles errands into smarter trips, and learns your household
         patterns. You stay in control — the mental load gets lighter.
       </p>
 
-      <h2 className="font-bold text-2xl mb-5" style={{ color: '#0F0E17' }}>
+      <h2 className="font-bold text-2xl mb-5" style={{ color: 'var(--color-text-primary)' }}>
         What Poppins does
       </h2>
       <div className="glass-card p-8 mb-10">
@@ -60,7 +60,7 @@ export default function AIFamilyOrganizer() {
             <li
               key={strong}
               className="flex items-start gap-3 text-sm"
-              style={{ color: '#3D3A4E' }}
+              style={{ color: 'var(--color-text-secondary)' }}
             >
               <span
                 style={{
@@ -87,7 +87,7 @@ export default function AIFamilyOrganizer() {
                 </svg>
               </span>
               <span>
-                <strong className="font-semibold" style={{ color: '#0F0E17' }}>
+                <strong className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
                   {strong}:
                 </strong>{' '}
                 {rest}
@@ -102,15 +102,15 @@ export default function AIFamilyOrganizer() {
         >
           <p
             className="text-xs uppercase tracking-widest mb-3"
-            style={{ color: '#8B8AA0' }}
+            style={{ color: 'var(--color-text-muted)' }}
           >
             Sample from Poppins
           </p>
           <p
             className="text-sm italic leading-relaxed p-4 rounded-xl"
             style={{
-              color: '#3D3A4E',
-              background: 'color-mix(in srgb, var(--color-primary) 6%, #FFFFFF)',
+              color: 'var(--color-text-secondary)',
+              background: 'color-mix(in srgb, var(--color-primary) 6%, var(--color-bg-card))',
               border: '1px solid color-mix(in srgb, var(--color-primary) 18%, transparent)',
             }}
           >
@@ -121,16 +121,16 @@ export default function AIFamilyOrganizer() {
         </div>
       </div>
 
-      <h2 className="font-bold text-2xl mb-5" style={{ color: '#0F0E17' }}>
+      <h2 className="font-bold text-2xl mb-5" style={{ color: 'var(--color-text-primary)' }}>
         How it works
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-14">
         {howItWorks.map(({ title, body }) => (
           <div key={title} className="glass-tile p-6 flex flex-col gap-2">
-            <h3 className="font-semibold text-sm" style={{ color: '#0F0E17' }}>
+            <h3 className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>
               {title}
             </h3>
-            <p className="text-xs leading-relaxed" style={{ color: '#3D3A4E' }}>
+            <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
               {body}
             </p>
           </div>
@@ -139,10 +139,10 @@ export default function AIFamilyOrganizer() {
 
       <div className="glass-card p-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
-          <p className="font-semibold mb-1" style={{ color: '#0F0E17' }}>
+          <p className="font-semibold mb-1" style={{ color: 'var(--color-text-primary)' }}>
             Not a replacement. An assistant.
           </p>
-          <p className="text-sm" style={{ color: '#8B8AA0' }}>
+          <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
             Privacy-first · Bias-aware · Transparent
           </p>
         </div>

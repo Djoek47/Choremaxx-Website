@@ -32,6 +32,9 @@ This file is the checklist for finishing / maintaining the marketing site. Read 
 | Privacy / Terms re-hosted from Orbit legal (2026-08-10) | ✅ |
 | Vercel missing `.v0/inject-built-with-v0.mjs` stub + `vercel.json` | ✅ |
 | Readable how-it-works / support / features / download / SEO landings | ✅ |
+| System day/night (`data-appearance`) from prefers-color-scheme | ✅ |
+| Website logos: foreground (day) / tinted (night) per palette | ✅ |
+| Wordmark night chore from Orbit NIGHT_CHORE; surfaces from color-palettes | ✅ |
 
 ---
 
@@ -44,12 +47,27 @@ This file is the checklist for finishing / maintaining the marketing site. Read 
 
 ---
 
-## How palette pick works
+## How palette + appearance work
 
 1. Blocking script in `app/layout.tsx` reads `sessionStorage.cm-palette`.
 2. If missing, picks random from `sky|citrus|coral|berry` excluding `localStorage.cm-last-palette`.
 3. Sets `data-palette` on `<html>` before paint.
-4. `app/globals.css` overrides `--color-primary` / `--color-secondary` and `.brand-logo` background-image.
+4. Sets `data-appearance` to `day`|`night` from `prefers-color-scheme` and listens for OS changes.
+5. `app/globals.css` remaps brand + surface tokens and `.brand-logo`:
+   - Day → `icon-{palette}-foreground.png`
+   - Night → `icon-{palette}-tinted.png`
+6. Wordmark: `chore` = `--color-secondary` (day lockup / night bright), `maxx` = `--color-primary`.
+
+### Logo pack map (choremaxx_logo_color_directions)
+
+| File | Use |
+|------|-----|
+| `icon-{p}.png` | App tab — day |
+| `icon-{p}-dark.png` | App tab — night |
+| `icon-{p}-foreground.png` | Website — day |
+| `icon-{p}-tinted.png` | Website — night (font contrast) |
+
+Plated `choremaxx-logo-mark-*.png` remain for favicon / OG / email — not header chrome.
 
 Default / fallback = **coral** (Orbit `DEFAULT_ACCENT_THEME_ID`).
 
@@ -59,7 +77,8 @@ Default / fallback = **coral** (Orbit `DEFAULT_ACCENT_THEME_ID`).
 
 - Invent roommate mode or Free / $8.99 Family plans
 - Rename Poppins back to Nova
-- Recreate the house mark as SVG/emoji — always use Orbit plated PNGs
+- Recreate the house mark as SVG/emoji — always use Orbit PNGs
+- Put plated marks back in `.brand-logo` (use foreground/tinted)
 - Change iOS in-app theme prefs from this repo
 - Push product features that are not in Orbit Master Brief §3
 
@@ -73,4 +92,4 @@ pnpm build
 pnpm start   # spot-check /, /how-it-works, /support, /features, /privacy, /terms
 ```
 
-Confirm: readable dark text on light cards, palette swaps logo+wordmark on new session, pricing shows trial + $4.99 / $48, no “roommate” promises, canonical tags use www.choremaxx.app.
+Confirm: day + night both readable, palette swaps logo+wordmark on new session, night uses tinted logo + bright chore, pricing shows trial + $4.99 / $48, no “roommate” promises, canonical tags use www.choremaxx.app.

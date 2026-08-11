@@ -41,12 +41,12 @@ export default function FamilyChoreApp() {
       heading="Family Chore App for Modern Households"
       sub="Transforms household work into a fair, transparent, and rewarding experience."
     >
-      <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: '#3D3A4E' }}>
+      <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: 'var(--color-text-secondary)' }}>
         Assign chores, track who completes them, award points, and unlock real rewards your family
         actually wants. No more sticky notes, forgotten tasks, or arguments about fairness.
       </p>
 
-      <h2 className="font-bold text-2xl mb-5" style={{ color: '#0F0E17' }}>
+      <h2 className="font-bold text-2xl mb-5" style={{ color: 'var(--color-text-primary)' }}>
         Why families love ChoreMaxx
       </h2>
       <div className="glass-card p-8 mb-10">
@@ -55,7 +55,7 @@ export default function FamilyChoreApp() {
             <li
               key={strong}
               className="flex items-start gap-3 text-sm"
-              style={{ color: '#3D3A4E' }}
+              style={{ color: 'var(--color-text-secondary)' }}
             >
               <span
                 style={{
@@ -82,7 +82,7 @@ export default function FamilyChoreApp() {
                 </svg>
               </span>
               <span>
-                <strong className="font-semibold" style={{ color: '#0F0E17' }}>
+                <strong className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
                   {strong}:
                 </strong>{' '}
                 {rest}
@@ -92,7 +92,7 @@ export default function FamilyChoreApp() {
         </ul>
       </div>
 
-      <h2 className="font-bold text-2xl mb-5" style={{ color: '#0F0E17' }}>
+      <h2 className="font-bold text-2xl mb-5" style={{ color: 'var(--color-text-primary)' }}>
         How it works
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-14">
@@ -108,10 +108,10 @@ export default function FamilyChoreApp() {
             >
               {n}
             </span>
-            <h3 className="font-semibold text-sm" style={{ color: '#0F0E17' }}>
+            <h3 className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>
               {title}
             </h3>
-            <p className="text-xs leading-relaxed" style={{ color: '#3D3A4E' }}>
+            <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
               {body}
             </p>
           </div>
@@ -119,7 +119,7 @@ export default function FamilyChoreApp() {
       </div>
 
       <div className="glass-card p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-        <p className="font-semibold max-w-sm" style={{ color: '#0F0E17' }}>
+        <p className="font-semibold max-w-sm" style={{ color: 'var(--color-text-primary)' }}>
           Better than sticky notes and allowance lists.
         </p>
         <div className="flex flex-wrap gap-3">

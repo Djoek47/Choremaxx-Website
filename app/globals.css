@@ -1,38 +1,36 @@
 @import 'tailwindcss';
 
 @theme {
-  /* ─── ChoreMaxx light lavender / iOS 27 glass system ─── */
+  /* ─── ChoreMaxx brand tokens (Coral day defaults; overridden by
+     data-palette × data-appearance below — synced with Orbit lockups /
+     color-palettes). ─── */
 
-  /* Background */
-  --color-bg:               #F6F5FA;
-  --color-bg-card:          #FFFFFF;
+  --color-bg:               #FAF0EB;
+  --color-bg-soft:          #E4EBF2;
+  --color-bg-card:          rgba(255, 255, 255, 0.78);
   --color-bg-card-glass:    rgba(255, 255, 255, 0.70);
 
-  /* Brand — overridden per-session by the active house palette (see [data-palette] below).
-     Defaults match Orbit Coral (App Store / default accent). */
   --color-primary:          #D85A30;
   --color-primary-dark:     #B84722;
   --color-primary-light:    #FDE8DF;
+  /* Wordmark “chore” — LOCKUPS.chore (day) / NIGHT_CHORE (night) */
   --color-secondary:        #C4922A;
 
-  /* Accents */
   --color-success:          #5BD6BD;
   --color-rewards:          #FFD166;
   --color-danger:           #FF6B81;
   --color-lavender:         #C986FF;
   --color-cyan:             #9EE7FF;
 
-  /* Text */
-  --color-text-primary:     #0F0E17;
-  --color-text-secondary:   #3D3A4E;
-  --color-text-muted:       #8B8AA0;
+  --color-text-primary:     #0F1C2A;
+  --color-text-secondary:   #2A3A4C;
+  --color-text-muted:       #5A6E82;
 
-  /* Glass / surfaces */
   --color-glass:            rgba(255, 255, 255, 0.65);
   --color-glass-border:     rgba(255, 255, 255, 0.80);
   --color-glass-dark:       rgba(200, 190, 230, 0.18);
+  --color-border:           rgba(20, 40, 60, 0.1);
 
-  /* Misc */
   --radius-sm:  12px;
   --radius-md:  18px;
   --radius-lg:  24px;
@@ -46,62 +44,189 @@
   color-scheme: light;
 }
 
-/* ─── House palettes ───────────────────────────────────────────
-   One of these is chosen per browsing session (see the bootstrap
-   script in app/layout.tsx) and applied via [data-palette] on
-   <html>, re-tinting the primary brand color, the wordmark, and
-   the logo mark without touching layout or copy.               */
-/* Official Orbit accent packs (constants/accent-themes.ts + brand-lockup.ts).
-   --color-secondary is the wordmark “chore” color (LOCKUPS.chore), not the
-   accent secondary used for sparkle/UI fills. */
+html[data-appearance='night'] {
+  color-scheme: dark;
+}
+
+/* ─── Brand primary (maxx) — same day and night ─────────────── */
 html[data-palette='sky'] {
   --color-primary:       #378ADD;
   --color-primary-dark:  #2A6FB5;
   --color-primary-light: #E5F2FB;
-  --color-secondary:     #C4922A;
 }
 html[data-palette='citrus'] {
   --color-primary:       #EF9F27;
   --color-primary-dark:  #C47F1A;
   --color-primary-light: #FDF3E0;
-  --color-secondary:     #712B13;
 }
 html[data-palette='coral'] {
   --color-primary:       #D85A30;
   --color-primary-dark:  #B84722;
   --color-primary-light: #FDE8DF;
-  --color-secondary:     #C4922A;
 }
 html[data-palette='berry'] {
   --color-primary:       #7F77DD;
   --color-primary-dark:  #6259C4;
   --color-primary-light: #EEEBFB;
-  --color-secondary:     #C4789A;
 }
 
-/* Logo mark — official Orbit house marks (sparkle + roof + wave body) */
+/* ─── Day surfaces + chore wordmark ─────────────────────────── */
+html[data-palette='sky'][data-appearance='day'],
+html[data-palette='sky']:not([data-appearance]) {
+  --color-secondary:      #C4922A;
+  --color-bg:             #EAF3FB;
+  --color-bg-soft:        #E4EBF2;
+  --color-bg-card:        rgba(255, 255, 255, 0.78);
+  --color-text-primary:   #0F1C2A;
+  --color-text-secondary: #2A3A4C;
+  --color-text-muted:     #5A6E82;
+  --color-border:         rgba(20, 40, 60, 0.1);
+  --color-glass:          rgba(255, 255, 255, 0.65);
+  --color-glass-border:   rgba(255, 255, 255, 0.80);
+}
+html[data-palette='citrus'][data-appearance='day'],
+html[data-palette='citrus']:not([data-appearance]) {
+  --color-secondary:      #712B13;
+  --color-bg:             #FBF4E8;
+  --color-bg-soft:        #E4EBF2;
+  --color-bg-card:        rgba(255, 255, 255, 0.78);
+  --color-text-primary:   #712B13;
+  --color-text-secondary: #8A4A28;
+  --color-text-muted:     #9A6A48;
+  --color-border:         rgba(20, 40, 60, 0.1);
+  --color-glass:          rgba(255, 255, 255, 0.65);
+  --color-glass-border:   rgba(255, 255, 255, 0.80);
+}
+html[data-palette='coral'][data-appearance='day'],
+html[data-palette='coral']:not([data-appearance]),
+html:not([data-palette]) {
+  --color-secondary:      #C4922A;
+  --color-bg:             #FAF0EB;
+  --color-bg-soft:        #E4EBF2;
+  --color-bg-card:        rgba(255, 255, 255, 0.78);
+  --color-text-primary:   #0F1C2A;
+  --color-text-secondary: #2A3A4C;
+  --color-text-muted:     #5A6E82;
+  --color-border:         rgba(20, 40, 60, 0.1);
+  --color-glass:          rgba(255, 255, 255, 0.65);
+  --color-glass-border:   rgba(255, 255, 255, 0.80);
+}
+html[data-palette='berry'][data-appearance='day'],
+html[data-palette='berry']:not([data-appearance]) {
+  --color-secondary:      #C4789A;
+  --color-bg:             #F4F0FA;
+  --color-bg-soft:        #EBE4F5;
+  --color-bg-card:        rgba(255, 255, 255, 0.78);
+  --color-text-primary:   #1A1230;
+  --color-text-secondary: #3A2E55;
+  --color-text-muted:     #6B5F88;
+  --color-border:         rgba(90, 60, 140, 0.12);
+  --color-glass:          rgba(255, 255, 255, 0.65);
+  --color-glass-border:   rgba(255, 255, 255, 0.80);
+}
+
+/* ─── Night surfaces + bright chore wordmark ────────────────── */
+html[data-palette='sky'][data-appearance='night'] {
+  --color-secondary:      #FAC775;
+  --color-bg:             #07121F;
+  --color-bg-soft:        #0A1525;
+  --color-bg-card:        rgba(255, 255, 255, 0.05);
+  --color-text-primary:   #EEF2FF;
+  --color-text-secondary: #C8D8F0;
+  --color-text-muted:     #7C9CC0;
+  --color-border:         rgba(55, 138, 221, 0.2);
+  --color-glass:          rgba(255, 255, 255, 0.06);
+  --color-glass-border:   rgba(255, 255, 255, 0.12);
+  --color-primary-light:  rgba(55, 138, 221, 0.18);
+}
+html[data-palette='citrus'][data-appearance='night'] {
+  --color-secondary:      #F0DCC8;
+  --color-bg:             #1A1208;
+  --color-bg-soft:        #0A1525;
+  --color-bg-card:        rgba(255, 255, 255, 0.05);
+  --color-text-primary:   #EEF2FF;
+  --color-text-secondary: #C8D8F0;
+  --color-text-muted:     #7C9CC0;
+  --color-border:         rgba(239, 159, 39, 0.22);
+  --color-glass:          rgba(255, 255, 255, 0.06);
+  --color-glass-border:   rgba(255, 255, 255, 0.12);
+  --color-primary-light:  rgba(239, 159, 39, 0.18);
+}
+html[data-palette='coral'][data-appearance='night'] {
+  --color-secondary:      #FAC775;
+  --color-bg:             #1A0C08;
+  --color-bg-soft:        #0A1525;
+  --color-bg-card:        rgba(255, 255, 255, 0.05);
+  --color-text-primary:   #EEF2FF;
+  --color-text-secondary: #C8D8F0;
+  --color-text-muted:     #7C9CC0;
+  --color-border:         rgba(216, 90, 48, 0.22);
+  --color-glass:          rgba(255, 255, 255, 0.06);
+  --color-glass-border:   rgba(255, 255, 255, 0.12);
+  --color-primary-light:  rgba(216, 90, 48, 0.18);
+}
+html[data-palette='berry'][data-appearance='night'] {
+  --color-secondary:      #F4C0D1;
+  --color-bg:             #100A1C;
+  --color-bg-soft:        #1A1628;
+  --color-bg-card:        rgba(255, 255, 255, 0.06);
+  --color-text-primary:   #F5F0FF;
+  --color-text-secondary: #D4CBE8;
+  --color-text-muted:     #9B8FBF;
+  --color-border:         rgba(127, 119, 221, 0.2);
+  --color-glass:          rgba(255, 255, 255, 0.06);
+  --color-glass-border:   rgba(255, 255, 255, 0.12);
+  --color-primary-light:  rgba(127, 119, 221, 0.18);
+}
+
+/* Logo mark — website day = foreground, night = tinted (contrast) */
 .brand-logo {
   display: inline-block;
-  background-image: url('/brand/choremaxx-logo-mark-coral.png');
+  background-image: url('/brand/icons/icon-coral-foreground.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 }
-html[data-palette='sky']    .brand-logo { background-image: url('/brand/choremaxx-logo-mark-sky.png');    }
-html[data-palette='citrus'] .brand-logo { background-image: url('/brand/choremaxx-logo-mark-citrus.png'); }
-html[data-palette='coral']  .brand-logo { background-image: url('/brand/choremaxx-logo-mark-coral.png');  }
-html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremaxx-logo-mark-berry.png');  }
+html[data-palette='sky'][data-appearance='day'] .brand-logo,
+html[data-palette='sky']:not([data-appearance]) .brand-logo {
+  background-image: url('/brand/icons/icon-sky-foreground.png');
+}
+html[data-palette='citrus'][data-appearance='day'] .brand-logo,
+html[data-palette='citrus']:not([data-appearance]) .brand-logo {
+  background-image: url('/brand/icons/icon-citrus-foreground.png');
+}
+html[data-palette='coral'][data-appearance='day'] .brand-logo,
+html[data-palette='coral']:not([data-appearance]) .brand-logo,
+html:not([data-palette]) .brand-logo {
+  background-image: url('/brand/icons/icon-coral-foreground.png');
+}
+html[data-palette='berry'][data-appearance='day'] .brand-logo,
+html[data-palette='berry']:not([data-appearance]) .brand-logo {
+  background-image: url('/brand/icons/icon-berry-foreground.png');
+}
+html[data-palette='sky'][data-appearance='night'] .brand-logo {
+  background-image: url('/brand/icons/icon-sky-tinted.png');
+}
+html[data-palette='citrus'][data-appearance='night'] .brand-logo {
+  background-image: url('/brand/icons/icon-citrus-tinted.png');
+}
+html[data-palette='coral'][data-appearance='night'] .brand-logo {
+  background-image: url('/brand/icons/icon-coral-tinted.png');
+}
+html[data-palette='berry'][data-appearance='night'] .brand-logo {
+  background-image: url('/brand/icons/icon-berry-tinted.png');
+}
 
 /* ─── Base ─────────────────────────────────────────────────── */
 @layer base {
   html {
-    background: #F6F5FA;
+    background: var(--color-bg);
   }
 
   body {
     @apply font-sans antialiased;
-    background-color: #F6F5FA;
-    color: #0F0E17;
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
     min-height: 100vh;
   }
 
@@ -110,7 +235,7 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
     font-weight: 800;
     line-height: 1.04;
     letter-spacing: -0.03em;
-    color: #0F0E17;
+    color: var(--color-text-primary);
   }
 
   h2 {
@@ -118,31 +243,30 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
     font-weight: 700;
     line-height: 1.15;
     letter-spacing: -0.02em;
-    color: #0F0E17;
+    color: var(--color-text-primary);
   }
 
   h3 {
     font-size: 1.0625rem;
     font-weight: 600;
     line-height: 1.3;
-    color: #0F0E17;
+    color: var(--color-text-primary);
   }
 
   p {
     line-height: 1.65;
-    color: #3D3A4E;
+    color: var(--color-text-secondary);
   }
 }
 
 /* ─── Components ───────────────────────────────────────────── */
 @layer components {
 
-  /* White glass card — core building block */
   .glass-card {
-    background: rgba(255, 255, 255, 0.70);
+    background: var(--color-glass);
     backdrop-filter: blur(35px) saturate(180%);
     -webkit-backdrop-filter: blur(35px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.80);
+    border: 1px solid var(--color-glass-border);
     border-radius: var(--radius-lg);
     box-shadow: 0 4px 24px rgba(100, 80, 180, 0.07), 0 1px 3px rgba(0,0,0,0.04);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
@@ -152,12 +276,11 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
     transform: translateY(-2px);
   }
 
-  /* Smaller glass tile */
   .glass-tile {
-    background: rgba(255, 255, 255, 0.65);
+    background: var(--color-glass);
     backdrop-filter: blur(20px) saturate(160%);
     -webkit-backdrop-filter: blur(20px) saturate(160%);
-    border: 1px solid rgba(255, 255, 255, 0.75);
+    border: 1px solid var(--color-glass-border);
     border-radius: var(--radius-md);
     box-shadow: 0 2px 12px rgba(100, 80, 180, 0.06);
     transition: box-shadow 0.25s ease, transform 0.25s ease;
@@ -167,15 +290,13 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
     transform: translateY(-1px);
   }
 
-  /* Section card (white, very slight shadow) */
   .section-card {
-    background: #FFFFFF;
+    background: var(--color-bg-card);
     border-radius: var(--radius-xl);
     box-shadow: 0 2px 20px rgba(100, 80, 180, 0.06);
-    border: 1px solid rgba(200, 190, 230, 0.25);
+    border: 1px solid var(--color-border);
   }
 
-  /* Primary pill button */
   .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -200,7 +321,6 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
     box-shadow: 0 8px 28px color-mix(in srgb, var(--color-primary) 55%, transparent);
   }
 
-  /* Ghost/outline pill button */
   .btn-ghost,
   .btn-outline {
     display: inline-flex;
@@ -209,11 +329,11 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
     gap: 0.5rem;
     padding: 0.75rem 1.75rem;
     background: transparent;
-    color: #3D3A4E;
+    color: var(--color-text-secondary);
     font-weight: 600;
     font-size: 0.9375rem;
     border-radius: 9999px;
-    border: 1.5px solid rgba(150, 140, 200, 0.35);
+    border: 1.5px solid var(--color-border);
     transition: background 0.2s ease, border-color 0.2s ease;
     text-decoration: none;
     white-space: nowrap;
@@ -226,7 +346,6 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
     color: var(--color-primary);
   }
 
-  /* Small label chip */
   .chip {
     display: inline-flex;
     align-items: center;
@@ -240,7 +359,6 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
     color: var(--color-primary);
   }
 
-  /* Page max-width container */
   .container-page {
     max-width: 1280px;
     margin: 0 auto;
@@ -248,7 +366,6 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
     padding-right: 2rem;
   }
 
-  /* Section vertical rhythm */
   .section {
     padding-top: 6rem;
     padding-bottom: 6rem;
@@ -260,7 +377,6 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
     }
   }
 
-  /* Section heading block */
   .section-heading {
     display: flex;
     flex-direction: column;
@@ -270,7 +386,6 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
     text-align: center;
   }
 
-  /* Eyebrow label above headings */
   .eyebrow {
     font-size: 0.8rem;
     font-weight: 600;
@@ -280,7 +395,7 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
   }
 }
 
-/* ─── Ambient blobs (light pastel) ────────────────────────── */
+/* ─── Ambient blobs ───────────────────────────────────────── */
 .blob {
   position: absolute;
   border-radius: 50%;
@@ -288,7 +403,7 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
   filter: blur(70px);
 }
 .blob-purple {
-  background: radial-gradient(circle, rgba(181, 150, 255, 0.30) 0%, transparent 70%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-primary) 30%, transparent) 0%, transparent 70%);
 }
 .blob-blue {
   background: radial-gradient(circle, rgba(148, 195, 255, 0.28) 0%, transparent 70%);
@@ -299,6 +414,12 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
 .blob-teal {
   background: radial-gradient(circle, rgba(91, 214, 189, 0.20) 0%, transparent 70%);
 }
+html[data-appearance='night'] .blob-purple {
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-primary) 22%, transparent) 0%, transparent 70%);
+}
+html[data-appearance='night'] .blob-blue {
+  background: radial-gradient(circle, rgba(55, 138, 221, 0.18) 0%, transparent 70%);
+}
 
 /* ─── Floating glass ring decorations ─────────────────────── */
 .ring-deco {
@@ -307,12 +428,12 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
   pointer-events: none;
 }
 
-/* ─── Nav pill (floats centered) ──────────────────────────── */
+/* ─── Nav pill ─────────────────────────────────────────────── */
 .nav-pill {
-  background: rgba(255, 255, 255, 0.80);
+  background: var(--color-glass);
   backdrop-filter: blur(30px) saturate(180%);
   -webkit-backdrop-filter: blur(30px) saturate(180%);
-  border: 1px solid rgba(200, 195, 230, 0.45);
+  border: 1px solid var(--color-glass-border);
   border-radius: 9999px;
   box-shadow: 0 4px 24px rgba(100, 80, 160, 0.10);
 }
@@ -322,9 +443,9 @@ html[data-palette='berry']  .brand-logo { background-image: url('/brand/choremax
   .text-balance  { text-wrap: balance; }
   .text-pretty   { text-wrap: pretty; }
   .text-primary  { color: var(--color-primary); }
-  .text-muted    { color: #8B8AA0; }
-  .text-dark     { color: #0F0E17; }
-  .text-body     { color: #3D3A4E; }
+  .text-muted    { color: var(--color-text-muted); }
+  .text-dark     { color: var(--color-text-primary); }
+  .text-body     { color: var(--color-text-secondary); }
 
-  .bg-page       { background-color: #F6F5FA; }
+  .bg-page       { background-color: var(--color-bg); }
 }

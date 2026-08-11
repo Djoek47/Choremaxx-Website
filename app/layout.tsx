@@ -7,8 +7,8 @@ const SITE_URL = 'https://www.choremaxx.app';
 
 /* One of these is picked at random each browsing session (never repeating
  * the palette from the visitor's last visit) and applied via a blocking
- * bootstrap script below, before first paint. See app/globals.css for the
- * color tokens each palette maps to, and lib/palettes.ts for reference. */
+ * bootstrap script below, before first paint. Day/night follows
+ * prefers-color-scheme. See app/globals.css + lib/palettes.ts. */
 const PALETTES = ['sky', 'citrus', 'coral', 'berry'] as const;
 const DEFAULT_PALETTE = 'coral';
 
@@ -45,13 +45,22 @@ export const metadata: Metadata = {
   robots: 'index, follow',
 };
 
-/* Picks a session palette on the client before first paint, so the header/
- * footer logo mark and wordmark never flash the wrong colors. New tab or
- * browser session → new random palette, excluding whichever one was shown
- * on the visitor's previous visit (tracked in localStorage). Returning to a
- * page within the same session reuses that session's palette. */
+/* Picks a session palette + system appearance before first paint so the
+ * header/footer logo mark and wordmark never flash the wrong colors.
+ * New tab/session → new random palette (excluding last visit). Appearance
+ * follows prefers-color-scheme and updates live when the OS theme flips. */
 const PALETTE_BOOTSTRAP_SCRIPT = `(function(){
   var palettes = ${JSON.stringify(PALETTES)};
+  var root = document.documentElement;
+  function applyAppearance() {
+    var night = false;
+    try {
+      night = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    } catch (e) {}
+    var appearance = night ? 'night' : 'day';
+    root.setAttribute('data-appearance', appearance);
+    root.style.colorScheme = night ? 'dark' : 'light';
+  }
   try {
     var current = sessionStorage.getItem('cm-palette');
     if (!current || palettes.indexOf(current) === -1) {
@@ -62,17 +71,30 @@ const PALETTE_BOOTSTRAP_SCRIPT = `(function(){
       sessionStorage.setItem('cm-palette', current);
       localStorage.setItem('cm-last-palette', current);
     }
-    document.documentElement.setAttribute('data-palette', current);
+    root.setAttribute('data-palette', current);
   } catch (e) {
-    document.documentElement.setAttribute('data-palette', '${DEFAULT_PALETTE}');
+    root.setAttribute('data-palette', '${DEFAULT_PALETTE}');
   }
+  applyAppearance();
+  try {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mq.addEventListener) {
+      mq.addEventListener('change', applyAppearance);
+    } else if (mq.addListener) {
+      mq.addListener(applyAppearance);
+    }
+  } catch (e) {}
 })();`;
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#D85A30',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#D85A30' },
+    { media: '(prefers-color-scheme: dark)', color: '#1A0C08' },
+  ],
   userScalable: true,
+  colorScheme: 'light dark',
 };
 
 export default function RootLayout({
@@ -81,10 +103,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth" style={{ background: '#F6F5FA' }}>
+    <html
+      lang="en"
+      className="scroll-smooth"
+      data-palette={DEFAULT_PALETTE}
+      data-appearance="day"
+      style={{ background: 'var(--color-bg)' }}
+    >
       <head>
         <link rel="canonical" href={SITE_URL} />
-        <meta name="theme-color" content="#D85A30" />
+        <meta name="theme-color" content="#D85A30" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#1A0C08" media="(prefers-color-scheme: dark)" />
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script dangerouslySetInnerHTML={{ __html: PALETTE_BOOTSTRAP_SCRIPT }} />
         <script type="application/ld+json">
@@ -99,7 +128,7 @@ export default function RootLayout({
           })}
         </script>
       </head>
-      <body className="antialiased bg-background text-foreground">
+      <body className="antialiased" style={{ background: 'var(--color-bg)', color: 'var(--color-text-primary)' }}>
         <Header />
         <main>{children}</main>
         <Footer />

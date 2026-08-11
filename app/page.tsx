@@ -157,14 +157,14 @@ const faqItems = [
 /* ═══════════════════════════════════════════════════════════ */
 export default function Home() {
   return (
-    <div style={{ background: '#F6F5FA' }}>
+    <div style={{ background: 'var(--color-bg)' }}>
 
       {/* ── 1. HERO ─────────────────────────────────────── */}
       <section
         className="relative overflow-hidden"
         style={{
           minHeight: '100vh',
-          background: 'linear-gradient(160deg, #EDE9FB 0%, #F6F5FA 40%, #EAF0FF 100%)',
+          background: 'linear-gradient(160deg, color-mix(in srgb, var(--color-primary) 12%, var(--color-bg)) 0%, var(--color-bg) 45%, color-mix(in srgb, var(--color-primary) 8%, var(--color-bg)) 100%)',
         }}
       >
         {/* Ambient blobs */}
@@ -198,7 +198,7 @@ export default function Home() {
                 <span style={{ color: 'var(--color-primary)' }}>Itself.</span>
               </h1>
 
-              <p className="text-lg" style={{ color: '#3D3A4E', maxWidth: 440 }}>
+              <p className="text-lg" style={{ color: 'var(--color-text-secondary)', maxWidth: 440 }}>
                 AI organizes chores, shopping, schedules and responsibilities so everyone knows exactly what to do.
               </p>
 
@@ -227,7 +227,7 @@ export default function Home() {
                 </div>
                 <div>
                   <span style={{ color: '#FFD166', fontSize: '0.875rem', fontWeight: 700 }}>4.9 ★★★★★</span>
-                  <span className="text-sm ml-2" style={{ color: '#8B8AA0' }}>Loved by 50,000+ families</span>
+                  <span className="text-sm ml-2" style={{ color: 'var(--color-text-muted)' }}>Loved by 50,000+ families</span>
                 </div>
               </div>
             </div>
@@ -240,11 +240,11 @@ export default function Home() {
                 className="relative z-10"
                 style={{
                   width: 280,
-                  background: 'rgba(255,255,255,0.65)',
+                  background: 'var(--color-glass)',
                   backdropFilter: 'blur(35px)',
                   WebkitBackdropFilter: 'blur(35px)',
                   borderRadius: 40,
-                  border: '1px solid rgba(255,255,255,0.85)',
+                  border: '1px solid var(--color-glass-border)',
                   boxShadow: '0 24px 80px rgba(100,80,200,0.18), 0 4px 16px rgba(0,0,0,0.08)',
                   overflow: 'hidden',
                 }}
@@ -261,14 +261,14 @@ export default function Home() {
 
               {/* Floating widget: Grocery List */}
               <div className="glass-card p-4 absolute left-0 top-8" style={{ width: 165, zIndex: 20 }}>
-                <p className="text-xs font-semibold mb-2" style={{ color: '#0F0E17' }}>Grocery List</p>
+                <p className="text-xs font-semibold mb-2" style={{ color: 'var(--color-text-primary)' }}>Grocery List</p>
                 {['Milk', 'Eggs', 'Bread', 'Bananas'].map((item, i) => (
                   <div key={item} className="flex items-center gap-2 py-0.5">
                     <div className="w-4 h-4 rounded-full border flex items-center justify-center flex-shrink-0"
                       style={{ borderColor: i < 2 ? '#5BD6BD' : '#C986FF', background: i < 2 ? 'rgba(91,214,189,0.15)' : 'transparent' }}>
                       {i < 2 && <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#5BD6BD" strokeWidth="3"><path d="M5 13l4 4L19 7" /></svg>}
                     </div>
-                    <span className="text-xs" style={{ color: i < 2 ? '#8B8AA0' : '#0F0E17', textDecoration: i < 2 ? 'line-through' : 'none' }}>{item}</span>
+                    <span className="text-xs" style={{ color: i < 2 ? 'var(--color-text-muted)' : 'var(--color-text-primary)', textDecoration: i < 2 ? 'line-through' : 'none' }}>{item}</span>
                   </div>
                 ))}
               </div>
@@ -282,22 +282,22 @@ export default function Home() {
                     </svg>
                   </div>
                   <span className="text-xs font-semibold" style={{ color: 'var(--color-primary)' }}>Poppins</span>
-                  <span className="text-xs ml-auto" style={{ color: '#8B8AA0' }}>now</span>
+                  <span className="text-xs ml-auto" style={{ color: 'var(--color-text-muted)' }}>now</span>
                 </div>
-                <p className="text-xs" style={{ color: '#0F0E17' }}>Laundry completed!</p>
+                <p className="text-xs" style={{ color: 'var(--color-text-primary)' }}>Laundry completed!</p>
                 <p className="text-xs" style={{ color: '#5BD6BD', fontWeight: 600 }}>Sarah earned +80 XP</p>
               </div>
 
               {/* Floating widget: Kids XP */}
               <div className="glass-card p-4 absolute left-0 bottom-20" style={{ width: 160, zIndex: 20 }}>
-                <p className="text-xs font-semibold mb-1" style={{ color: '#8B8AA0' }}>Kids XP</p>
-                <p className="text-3xl font-bold" style={{ color: '#0F0E17', letterSpacing: '-0.03em' }}>1,250</p>
-                <p className="text-xs" style={{ color: '#8B8AA0' }}>Total XP</p>
+                <p className="text-xs font-semibold mb-1" style={{ color: 'var(--color-text-muted)' }}>Kids XP</p>
+                <p className="text-3xl font-bold" style={{ color: 'var(--color-text-primary)', letterSpacing: '-0.03em' }}>1,250</p>
+                <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Total XP</p>
               </div>
 
               {/* Floating widget: Energy Harmony */}
               <div className="glass-card p-4 absolute right-0 bottom-16" style={{ width: 170, zIndex: 20 }}>
-                <p className="text-xs font-semibold mb-1" style={{ color: '#0F0E17' }}>Energy Harmony</p>
+                <p className="text-xs font-semibold mb-1" style={{ color: 'var(--color-text-primary)' }}>Energy Harmony</p>
                 <p className="text-sm font-bold" style={{ color: '#5BD6BD' }}>High</p>
                 <svg width="130" height="40" viewBox="0 0 130 40" fill="none" className="mt-1">
                   <path d="M0 25 Q25 10 50 20 T100 15 T130 22" stroke="#5BD6BD" strokeWidth="2" fill="none" />
@@ -309,9 +309,9 @@ export default function Home() {
       </section>
 
       {/* ── 2. TRUST LOGOS ──────────────────────────────── */}
-      <section style={{ background: '#FFFFFF', borderTop: '1px solid rgba(200,190,230,0.20)', borderBottom: '1px solid rgba(200,190,230,0.20)' }}>
+      <section style={{ background: 'var(--color-bg-soft)', borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}>
         <div className="container-page py-10">
-          <p className="text-center text-xs font-semibold uppercase tracking-widest mb-8" style={{ color: '#8B8AA0' }}>
+          <p className="text-center text-xs font-semibold uppercase tracking-widest mb-8" style={{ color: 'var(--color-text-muted)' }}>
             Trusted by families worldwide
           </p>
           <div className="flex items-center justify-center flex-wrap gap-10">
@@ -337,8 +337,8 @@ export default function Home() {
                 >
                   <Icon d={icon} size={22} />
                 </div>
-                <p className="text-sm font-semibold" style={{ color: '#0F0E17' }}>{label}</p>
-                <p className="text-xs leading-snug" style={{ color: '#8B8AA0' }}>{sub}</p>
+                <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{label}</p>
+                <p className="text-xs leading-snug" style={{ color: 'var(--color-text-muted)' }}>{sub}</p>
               </div>
             ))}
           </div>
@@ -346,11 +346,11 @@ export default function Home() {
       </Section>
 
       {/* ── 4. HOUSEHOLD MODES ──────────────────────────── */}
-      <Section style={{ background: '#FFFFFF' }}>
+      <Section style={{ background: 'var(--color-bg-soft)' }}>
         <div className="container-page">
           <div className="section-heading">
             <h2 className="text-balance">Built For Families</h2>
-            <p className="text-base" style={{ color: '#8B8AA0' }}>
+            <p className="text-base" style={{ color: 'var(--color-text-muted)' }}>
               Parents, kids, helpers, and blended households — one calm system.
             </p>
           </div>
@@ -367,8 +367,8 @@ export default function Home() {
                 >
                   <Icon d={iconPath} size={20} />
                 </div>
-                <p className="text-sm font-semibold" style={{ color: '#0F0E17' }}>{label}</p>
-                <p className="text-xs" style={{ color: '#8B8AA0' }}>{sub}</p>
+                <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{label}</p>
+                <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{sub}</p>
               </div>
             ))}
           </div>
@@ -381,7 +381,7 @@ export default function Home() {
           <div className="flex flex-col lg:flex-row items-start lg:items-center gap-12">
             <div className="lg:w-72 flex-shrink-0">
               <h2 className="text-balance mb-4">See Your Day, Stay In Sync</h2>
-              <p className="text-base mb-6" style={{ color: '#8B8AA0' }}>
+              <p className="text-base mb-6" style={{ color: 'var(--color-text-muted)' }}>
                 A beautiful timeline everyone can follow and update.
               </p>
               <Link href="/features" className="btn-ghost text-sm px-5 py-2.5 inline-flex items-center gap-2">
@@ -397,7 +397,7 @@ export default function Home() {
                     className="flex flex-col items-center gap-3"
                     style={{ width: 130 }}
                   >
-                    <p className="text-xs font-semibold" style={{ color: active ? 'var(--color-primary)' : '#8B8AA0' }}>{time}</p>
+                    <p className="text-xs font-semibold" style={{ color: active ? 'var(--color-primary)' : 'var(--color-text-muted)' }}>{time}</p>
                     <div
                       className="w-full rounded-2xl p-4 flex flex-col items-center gap-2 text-center"
                       style={{
@@ -406,8 +406,8 @@ export default function Home() {
                         boxShadow: active ? '0 8px 32px color-mix(in srgb, var(--color-primary) 30%, transparent)' : '0 2px 12px rgba(100,80,180,0.06)',
                       }}
                     >
-                      <p className="text-sm font-semibold" style={{ color: active ? '#FFF' : '#0F0E17' }}>{label}</p>
-                      <p className="text-xs" style={{ color: active ? 'rgba(255,255,255,0.75)' : '#8B8AA0' }}>{person}</p>
+                      <p className="text-sm font-semibold" style={{ color: active ? '#FFF' : 'var(--color-text-primary)' }}>{label}</p>
+                      <p className="text-xs" style={{ color: active ? 'rgba(255,255,255,0.75)' : 'var(--color-text-muted)' }}>{person}</p>
                     </div>
                     {/* Timeline dot */}
                     <div className="w-3 h-3 rounded-full" style={{ background: active ? 'var(--color-primary)' : '#C0BBDA' }} />
@@ -422,14 +422,14 @@ export default function Home() {
       </Section>
 
       {/* ── 6. REWARDS / XP ─────────────────────────────── */}
-      <Section style={{ background: '#FFFFFF' }}>
+      <Section style={{ background: 'var(--color-bg-soft)' }}>
         <div className="container-page">
           <div className="flex flex-col lg:flex-row items-center gap-12">
 
             {/* Left text */}
             <div className="lg:w-80 flex-shrink-0">
               <h2 className="text-balance mb-4">Make Chores Worth It</h2>
-              <p className="text-base mb-6" style={{ color: '#8B8AA0' }}>
+              <p className="text-base mb-6" style={{ color: 'var(--color-text-muted)' }}>
                 Positive habits. Real rewards. A happier home.
               </p>
               <Link href="/features" className="btn-ghost text-sm px-5 py-2.5 inline-flex items-center gap-2">
@@ -444,12 +444,12 @@ export default function Home() {
                 className="glass-card p-7 flex flex-col gap-4"
                 style={{ minWidth: 260 }}
               >
-                <p className="text-sm" style={{ color: '#8B8AA0' }}>You earned</p>
+                <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>You earned</p>
                 <p className="text-5xl font-extrabold" style={{ color: 'var(--color-primary)', letterSpacing: '-0.04em' }}>+120 XP</p>
                 <p className="text-sm font-semibold" style={{ color: '#5BD6BD' }}>Great job!</p>
                 <div>
                   <div className="flex justify-between text-xs mb-1.5">
-                    <span style={{ color: '#8B8AA0' }}>1,250 / 2,000 XP</span>
+                    <span style={{ color: 'var(--color-text-muted)' }}>1,250 / 2,000 XP</span>
                   </div>
                   <div className="h-2 rounded-full overflow-hidden" style={{ background: 'color-mix(in srgb, var(--color-primary) 12%, transparent)' }}>
                     <div className="h-full rounded-full" style={{ width: '62.5%', background: 'linear-gradient(90deg, var(--color-primary), #C986FF)' }} />
@@ -467,8 +467,8 @@ export default function Home() {
                   <div key={label} className="glass-tile px-5 py-3 flex items-center gap-4" style={{ minWidth: 200 }}>
                     <span style={{ fontSize: '1.25rem' }}>{icon}</span>
                     <div>
-                      <p className="text-sm font-semibold" style={{ color: '#0F0E17' }}>{label}</p>
-                      <p className="text-xs" style={{ color: '#8B8AA0' }}>{val}</p>
+                      <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{label}</p>
+                      <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{val}</p>
                     </div>
                   </div>
                 ))}
@@ -490,12 +490,12 @@ export default function Home() {
                 <svg width="28" height="20" viewBox="0 0 28 20" fill="none">
                   <path d="M0 20V12C0 5.373 4.477 1.12 13.43 0l1.14 2.286C9.143 3.428 6.857 6.095 6.286 10H12V20H0zm16 0V12C16 5.373 20.477 1.12 29.43 0L30.57 2.286C25.143 3.428 22.857 6.095 22.286 10H28V20H16z" fill="var(--color-primary)" opacity="0.20" />
                 </svg>
-                <p className="text-base leading-relaxed" style={{ color: '#3D3A4E' }}>{quote}</p>
+                <p className="text-base leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>{quote}</p>
                 <div className="flex items-center gap-3 mt-auto">
                   <div className="w-10 h-10 rounded-full" style={{ background: 'linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 27%, transparent), #C986FF44)' }} />
                   <div>
-                    <p className="text-sm font-semibold" style={{ color: '#0F0E17' }}>{name}</p>
-                    <p className="text-xs" style={{ color: '#8B8AA0' }}>{role}</p>
+                    <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{name}</p>
+                    <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{role}</p>
                   </div>
                 </div>
               </div>
@@ -505,11 +505,11 @@ export default function Home() {
       </Section>
 
       {/* ── 8. PRICING ──────────────────────────────────── */}
-      <Section id="pricing" style={{ background: '#FFFFFF' }}>
+      <Section id="pricing" style={{ background: 'var(--color-bg-soft)' }}>
         <div className="container-page">
           <div className="section-heading">
             <h2>Simple Pricing, For Every Home</h2>
-            <p className="text-base" style={{ color: '#8B8AA0' }}>
+            <p className="text-base" style={{ color: 'var(--color-text-muted)' }}>
               7-day free trial · then $4.99/mo or $48/yr via Apple
             </p>
           </div>
@@ -531,16 +531,16 @@ export default function Home() {
                   </div>
                 )}
                 <div>
-                  <p className="text-sm font-semibold mb-1" style={{ color: '#8B8AA0' }}>{name}</p>
+                  <p className="text-sm font-semibold mb-1" style={{ color: 'var(--color-text-muted)' }}>{name}</p>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-extrabold" style={{ color: '#0F0E17', letterSpacing: '-0.03em' }}>{price}</span>
-                    <span className="text-sm" style={{ color: '#8B8AA0' }}>{period}</span>
+                    <span className="text-4xl font-extrabold" style={{ color: 'var(--color-text-primary)', letterSpacing: '-0.03em' }}>{price}</span>
+                    <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{period}</span>
                   </div>
-                  <p className="text-sm mt-2" style={{ color: '#8B8AA0' }}>{desc}</p>
+                  <p className="text-sm mt-2" style={{ color: 'var(--color-text-muted)' }}>{desc}</p>
                 </div>
                 <ul className="flex flex-col gap-2.5 flex-1">
                   {features.map(f => (
-                    <li key={f} className="flex items-center gap-2.5 text-sm" style={{ color: '#3D3A4E' }}>
+                    <li key={f} className="flex items-center gap-2.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5BD6BD" strokeWidth="2.5" strokeLinecap="round">
                         <path d="M5 13l4 4L19 7" />
                       </svg>
@@ -573,13 +573,13 @@ export default function Home() {
                 className="glass-card px-7 py-5 cursor-pointer group"
                 style={{ listStyle: 'none' }}
               >
-                <summary className="flex items-center justify-between text-sm font-semibold list-none" style={{ color: '#0F0E17' }}>
+                <summary className="flex items-center justify-between text-sm font-semibold list-none" style={{ color: 'var(--color-text-primary)' }}>
                   {q}
-                  <svg className="w-5 h-5 flex-shrink-0 ml-4 transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" stroke="#8B8AA0" strokeWidth="2">
+                  <svg className="w-5 h-5 flex-shrink-0 ml-4 transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" strokeWidth="2">
                     <path d="M12 5v14M5 12h14" strokeLinecap="round" />
                   </svg>
                 </summary>
-                <p className="text-sm mt-4 leading-relaxed" style={{ color: '#8B8AA0' }}>{a}</p>
+                <p className="text-sm mt-4 leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>{a}</p>
               </details>
             ))}
           </div>
@@ -589,7 +589,7 @@ export default function Home() {
       {/* ── 10. FINAL CTA ───────────────────────────────── */}
       <section
         className="relative overflow-hidden py-28"
-        style={{ background: 'linear-gradient(160deg, #EDE9FB 0%, #F0F4FF 60%, #EAF5F2 100%)' }}
+        style={{ background: 'linear-gradient(160deg, color-mix(in srgb, var(--color-primary) 14%, var(--color-bg)) 0%, var(--color-bg) 55%, color-mix(in srgb, var(--color-primary) 8%, var(--color-bg)) 100%)' }}
       >
         <div className="blob blob-purple" style={{ width: 500, height: 500, top: -100, left: -100, opacity: 0.50 }} />
         <div className="blob blob-blue"   style={{ width: 400, height: 400, bottom: -80, right: -80, opacity: 0.45 }} />
@@ -599,7 +599,7 @@ export default function Home() {
           <h2 className="text-balance text-5xl md:text-6xl" style={{ maxWidth: 620 }}>
             Ready For A Better Home?
           </h2>
-          <p className="text-lg" style={{ color: '#8B8AA0', maxWidth: 400 }}>
+          <p className="text-lg" style={{ color: 'var(--color-text-muted)', maxWidth: 400 }}>
             Join thousands of families getting organized with ChoreMaxx today.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">

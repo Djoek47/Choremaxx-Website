@@ -10,7 +10,7 @@ export default function PageShell({
   sub?: string;
 }) {
   return (
-    <div style={{ background: '#F6F5FA', minHeight: '100vh' }}>
+    <div style={{ background: 'var(--color-bg)', minHeight: '100vh' }}>
       {/* Decorative blobs */}
       <div
         aria-hidden
@@ -29,9 +29,9 @@ export default function PageShell({
         style={{ paddingTop: '5.5rem', paddingBottom: '2.5rem', zIndex: 1 }}
       >
         <div className="flex flex-col gap-3 max-w-3xl">
-          <h1 className="text-balance" style={{ color: '#0F0E17' }}>{heading}</h1>
+          <h1 className="text-balance" style={{ color: 'var(--color-text-primary)' }}>{heading}</h1>
           {sub && (
-            <p className="text-lg leading-relaxed max-w-2xl" style={{ color: '#8B8AA0' }}>{sub}</p>
+            <p className="text-lg leading-relaxed max-w-2xl" style={{ color: 'var(--color-text-muted)' }}>{sub}</p>
           )}
         </div>
       </div>
