@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Family Chore App — ChoreMaxx',
   description:
     'ChoreMaxx is the modern family chore app. Assign tasks, track completion, reward good behavior, and keep the household running smoothly.',
-  canonical: 'https://mytikas73.com/family-chore-app',
+  alternates: { canonical: 'https://www.choremaxx.app/family-chore-app' },
 };
 
 const whyLoveIt = [

@@ -4,7 +4,7 @@ import LegalDocument from '@/components/LegalDocument';
 export const metadata: Metadata = {
   title: 'Terms of Service — ChoreMaxx',
   description: 'ChoreMaxx terms of service.',
-  canonical: 'https://mytikas73.com/terms',
+  alternates: { canonical: 'https://www.choremaxx.app/terms' },
   robots: 'index, follow',
 };
 
@@ -46,7 +46,7 @@ export default function Terms() {
 
       <h2>Subscriptions & billing</h2>
       <p>
-        If paid plans are offered, pricing and renewal terms will be shown in-app or on mytikas73.com before purchase.
+        If paid plans are offered, pricing and renewal terms will be shown in-app or on choremaxx.app before purchase.
         App Store purchases follow Apple's refund policies.
       </p>
 

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'AI Family Organizer — ChoreMaxx with Nova',
   description:
     'Nova is your AI family organizer. Daily briefings, smart task suggestions, and household insights.',
-  canonical: 'https://mytikas73.com/ai-family-organizer',
+  alternates: { canonical: 'https://www.choremaxx.app/ai-family-organizer' },
 };
 
 const novaFeatures = [

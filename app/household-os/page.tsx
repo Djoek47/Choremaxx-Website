@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'AI Household Operating System — ChoreMaxx',
   description:
     'ChoreMaxx is an AI household OS that coordinates tasks, schedules, rewards, and family communication in one app.',
-  canonical: 'https://mytikas73.com/household-os',
+  alternates: { canonical: 'https://www.choremaxx.app/household-os' },
 };
 
 const modules = [

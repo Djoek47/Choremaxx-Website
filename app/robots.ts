@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://mytikas73.com/sitemap.xml',
+    sitemap: 'https://www.choremaxx.app/sitemap.xml',
   };
 }
