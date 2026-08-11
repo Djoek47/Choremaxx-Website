@@ -58,6 +58,10 @@ This file is the checklist for finishing / maintaining the marketing site. Read 
    - Day → `icon-{palette}-foreground.png`
    - Night → `icon-{palette}-tinted.png`
 6. Wordmark: `chore` = `--color-secondary` (day lockup / night bright), `maxx` = `--color-primary`.
+7. Browser **tab favicon** swaps with the session palette:
+   - Day → `icon-{palette}.png`
+   - Night → `icon-{palette}-dark.png`
+   (`theme-color` also follows palette primary / night tint.)
 
 ### Logo pack map (choremaxx_logo_color_directions)
 
