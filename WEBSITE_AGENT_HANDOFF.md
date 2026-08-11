@@ -60,7 +60,10 @@ This file is the checklist for finishing / maintaining the marketing site. Read 
 6. Wordmark: `chore` = `--color-secondary` (day lockup / night bright), `maxx` = `--color-primary`.
 7. Browser **tab favicon** always matches the session palette color (day/night ignored):
    - Berry → purple `icon-berry.png`, Sky → blue, Citrus → orange, Coral → coral
-   - File: `icon-{palette}.png` only (not `-dark`)
+   - File: `icon-{palette}.png?p={palette}` (cache-bust; favicons are **not** cookies —
+     browsers cache them hard. We remove/recreate the `<link rel="icon">` node.)
+   - Limitation: some browsers still keep the first favicon for the tab until a full
+     reload or new tab; header/wordmark will always match immediately.
 
 ### Logo pack map (choremaxx_logo_color_directions)
 
