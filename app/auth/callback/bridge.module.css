@@ -1,0 +1,161 @@
+.bridge {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px 56px;
+  background: #f7f4f2;
+  overflow: hidden;
+}
+
+.wash {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(216, 90, 48, 0.14), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 80%, rgba(196, 146, 42, 0.1), transparent 50%),
+    linear-gradient(180deg, #faf8f6 0%, #f7f4f2 45%, #f3eeea 100%);
+  pointer-events: none;
+}
+
+.blobA,
+.blobB {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(60px);
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.blobA {
+  width: 280px;
+  height: 280px;
+  top: -60px;
+  right: -40px;
+  background: rgba(216, 90, 48, 0.18);
+}
+
+.blobB {
+  width: 220px;
+  height: 220px;
+  bottom: 8%;
+  left: -50px;
+  background: rgba(15, 14, 23, 0.06);
+}
+
+.main {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: authBridgeIn 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.mark {
+  border-radius: 18px;
+  display: block;
+}
+
+.wordmark {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.chore {
+  color: #c4922a;
+}
+
+.maxx {
+  color: #d85a30;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.75rem, 5vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: #0f0e17;
+}
+
+.sub {
+  margin: 12px 0 0;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #8b8aa0;
+  max-width: 28ch;
+}
+
+.actions {
+  margin-top: 36px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.primary,
+.secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 22px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.primary:active,
+.secondary:active {
+  transform: scale(0.985);
+}
+
+.primary {
+  background: #d85a30;
+  color: #ffffff;
+}
+
+.secondary {
+  background: transparent;
+  color: #0f0e17;
+  border: 1px solid rgba(15, 14, 23, 0.12);
+}
+
+.help {
+  margin: 28px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #8b8aa0;
+  max-width: 34ch;
+}
+
+@keyframes authBridgeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

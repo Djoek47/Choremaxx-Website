@@ -1,10 +1,17 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Header() {
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Auth / invite bridges — full-bleed Apple-calm pages without marketing chrome.
+  if (pathname?.startsWith('/auth') || pathname?.startsWith('/join')) {
+    return null;
+  }
 
   const navLinks = [
     { label: 'Features',     href: '/features'     },

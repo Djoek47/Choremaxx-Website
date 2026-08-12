@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const columns = [
   {
@@ -33,6 +34,11 @@ const columns = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname?.startsWith('/auth') || pathname?.startsWith('/join')) {
+    return null;
+  }
+
   return (
     <footer style={{ background: 'var(--color-bg)', borderTop: '1px solid var(--color-border)' }}>
       <div className="container-page py-16">
