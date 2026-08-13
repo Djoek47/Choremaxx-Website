@@ -27,7 +27,17 @@ curl -sL "https://www.choremaxx.app/" | rg -o 'D85A30|5B8CFF|FAF0EB|data-palette
 curl -sI "https://www.choremaxx.app/auth/callback?token_hash=test&type=signup" | head -3
 ```
 
+## Contact / Resend
+
+Website support + suggestion forms POST to `/api/contact` and send via Resend.
+
+Required Vercel env (once): `RESEND_API_KEY`  
+Optional: `RESEND_FROM_EMAIL`, `CONTACT_TO_EMAIL` (default `support@choremaxx.app`)
+
+From address must be on a Resend-verified domain (`choremaxx.app`).
+
 ## Related PRs
 
 - Brand + bridge continuous line: keep `cursor/website-brand-v2-9ecd` updated
 - Feature PRs should target `main` **only after** brand V2 is merged, or target brand V2 until then
+- Push **once** when ready — never sync the same tip to multiple branches (burns Preview builds)

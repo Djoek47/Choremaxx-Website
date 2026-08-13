@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+
+import ContactForm from '@/components/ContactForm';
 import PageShell from '@/components/PageShell';
 
 export const metadata: Metadata = {
   title: 'ChoreMaxx Support & Help Center',
-  description: 'Get help with ChoreMaxx. FAQ, contact, and troubleshooting.',
+  description: 'Get help with ChoreMaxx. FAQ, contact form, and troubleshooting.',
   alternates: { canonical: 'https://www.choremaxx.app/support' },
 };
 
@@ -47,60 +49,42 @@ export default function Support() {
   return (
     <PageShell heading="Support & help" sub="We read every message and respond within 24 hours.">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-        {/* Contact card */}
         <div className="glass-card p-8 flex flex-col gap-5 lg:col-span-1">
           <h2 className="font-bold text-xl" style={{ color: 'var(--color-text-primary)' }}>
             Contact us
           </h2>
-          <div className="flex flex-col gap-4">
-            <div>
-              <p
-                className="text-xs uppercase tracking-widest mb-1"
-                style={{ color: 'var(--color-text-muted)' }}
-              >
-                General
-              </p>
-              <a
-                href="mailto:support@choremaxx.app"
-                className="text-sm font-medium transition-colors"
-                style={{ color: 'var(--color-primary)' }}
-              >
-                support@choremaxx.app
-              </a>
-            </div>
-            <div>
-              <p
-                className="text-xs uppercase tracking-widest mb-1"
-                style={{ color: 'var(--color-text-muted)' }}
-              >
-                Privacy & data
-              </p>
-              <a
-                href="mailto:privacy@choremaxx.app"
-                className="text-sm font-medium transition-colors"
-                style={{ color: 'var(--color-primary)' }}
-              >
-                privacy@choremaxx.app
-              </a>
-            </div>
-          </div>
+          <ContactForm
+            kind="support"
+            submitLabel="Send message"
+            messageLabel="How can we help?"
+            messagePlaceholder="Describe the issue — app version or device helps."
+          />
           <div
-            style={{ borderTop: '1px solid rgba(200,190,230,0.35)' }}
+            style={{ borderTop: '1px solid var(--color-border)' }}
             className="pt-5 flex flex-col gap-3"
           >
+            <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+              Or email{' '}
+              <a href="mailto:support@choremaxx.app" style={{ color: 'var(--color-primary)' }}>
+                support@choremaxx.app
+              </a>
+              {' · '}
+              <a href="mailto:privacy@choremaxx.app" style={{ color: 'var(--color-primary)' }}>
+                privacy@choremaxx.app
+              </a>
+            </p>
+            <Link href="/suggest" className="chip self-start">
+              Share a suggestion
+            </Link>
             <Link href="/privacy" className="chip self-start">
               Privacy Policy
             </Link>
             <Link href="/terms" className="chip self-start">
               Terms of Service
             </Link>
-            <Link href="/kids" className="chip self-start">
-              Kids & parental controls
-            </Link>
           </div>
         </div>
 
-        {/* FAQ */}
         <div className="flex flex-col gap-3 lg:col-span-2">
           <h2 className="font-bold text-xl mb-2" style={{ color: 'var(--color-text-primary)' }}>
             Frequently asked questions
@@ -133,16 +117,6 @@ export default function Support() {
             </details>
           ))}
         </div>
-      </div>
-
-      {/* Bottom CTA */}
-      <div className="glass-card p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-        <p className="text-sm leading-relaxed max-w-lg" style={{ color: 'var(--color-text-secondary)' }}>
-          Still need help? Send us a message. We are real people who care about your experience.
-        </p>
-        <a href="mailto:support@choremaxx.app" className="btn-primary flex-shrink-0">
-          Email support
-        </a>
       </div>
     </PageShell>
   );

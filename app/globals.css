@@ -320,6 +320,33 @@ html[data-palette='berry'][data-appearance='night'] .brand-logo {
     transform: translateY(-1px);
     box-shadow: 0 8px 28px color-mix(in srgb, var(--color-primary) 55%, transparent);
   }
+  .btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .contact-input {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-bg-card) 90%, transparent);
+    color: var(--color-text-primary);
+    font-size: 0.975rem;
+    line-height: 1.4;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .contact-input::placeholder {
+    color: var(--color-text-muted);
+  }
+  .contact-input:focus {
+    border-color: color-mix(in srgb, var(--color-primary) 55%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 18%, transparent);
+  }
 
   .btn-ghost,
   .btn-outline {
