@@ -21,7 +21,7 @@ const howSteps = [
   {
     n: '01',
     title: 'Create tasks',
-    body: 'Choose from 100+ pre-built chores or create your own. Set points, due dates, and assignee.',
+    body: 'Choose from 150 pre-built chores across 15 domains, or create your own. Set XP, due dates, and assignee.',
   },
   {
     n: '02',

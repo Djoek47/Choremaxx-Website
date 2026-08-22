@@ -262,32 +262,66 @@ html[data-palette='berry'][data-appearance='night'] .brand-logo {
 /* ─── Components ───────────────────────────────────────────── */
 @layer components {
 
+  /* Liquid Glass — translucent surface + inner specular edge that catches
+     light along the top, the way iOS 26/27 glass controls render. Layered
+     as two shadows: the soft ambient drop shadow, then an inset highlight. */
   .glass-card {
+    position: relative;
     background: var(--color-glass);
-    backdrop-filter: blur(35px) saturate(180%);
-    -webkit-backdrop-filter: blur(35px) saturate(180%);
+    backdrop-filter: blur(38px) saturate(190%);
+    -webkit-backdrop-filter: blur(38px) saturate(190%);
     border: 1px solid var(--color-glass-border);
     border-radius: var(--radius-lg);
-    box-shadow: 0 4px 24px rgba(100, 80, 180, 0.07), 0 1px 3px rgba(0,0,0,0.04);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    box-shadow:
+      0 1px 0 color-mix(in srgb, #fff 55%, transparent) inset,
+      0 -1px 0 color-mix(in srgb, var(--color-text-primary) 4%, transparent) inset,
+      0 4px 24px rgba(100, 80, 180, 0.07),
+      0 1px 3px rgba(0,0,0,0.04);
+    transition: box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1), transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .glass-card:hover {
-    box-shadow: 0 12px 40px rgba(100, 80, 180, 0.14), 0 2px 8px rgba(0,0,0,0.06);
+    box-shadow:
+      0 1px 0 color-mix(in srgb, #fff 60%, transparent) inset,
+      0 -1px 0 color-mix(in srgb, var(--color-text-primary) 4%, transparent) inset,
+      0 16px 44px rgba(100, 80, 180, 0.15),
+      0 2px 8px rgba(0,0,0,0.06);
     transform: translateY(-2px);
   }
 
   .glass-tile {
+    position: relative;
     background: var(--color-glass);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    backdrop-filter: blur(22px) saturate(170%);
+    -webkit-backdrop-filter: blur(22px) saturate(170%);
     border: 1px solid var(--color-glass-border);
     border-radius: var(--radius-md);
-    box-shadow: 0 2px 12px rgba(100, 80, 180, 0.06);
-    transition: box-shadow 0.25s ease, transform 0.25s ease;
+    box-shadow:
+      0 1px 0 color-mix(in srgb, #fff 50%, transparent) inset,
+      0 2px 12px rgba(100, 80, 180, 0.06);
+    transition: box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1), transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .glass-tile:hover {
-    box-shadow: 0 6px 24px rgba(100, 80, 180, 0.12);
+    box-shadow:
+      0 1px 0 color-mix(in srgb, #fff 55%, transparent) inset,
+      0 8px 28px rgba(100, 80, 180, 0.13);
     transform: translateY(-1px);
+  }
+
+  html[data-appearance='night'] .glass-card,
+  html[data-appearance='night'] .glass-tile {
+    box-shadow:
+      0 1px 0 color-mix(in srgb, #fff 10%, transparent) inset,
+      0 4px 24px rgba(0, 0, 0, 0.28);
+  }
+  html[data-appearance='night'] .glass-card:hover {
+    box-shadow:
+      0 1px 0 color-mix(in srgb, #fff 14%, transparent) inset,
+      0 16px 44px rgba(0, 0, 0, 0.4);
+  }
+  html[data-appearance='night'] .glass-tile:hover {
+    box-shadow:
+      0 1px 0 color-mix(in srgb, #fff 12%, transparent) inset,
+      0 8px 28px rgba(0, 0, 0, 0.34);
   }
 
   .section-card {
@@ -303,22 +337,30 @@ html[data-palette='berry'][data-appearance='night'] .brand-logo {
     justify-content: center;
     gap: 0.5rem;
     padding: 0.8125rem 1.875rem;
-    background: var(--color-primary);
+    background: linear-gradient(180deg, color-mix(in srgb, #fff 18%, var(--color-primary)) 0%, var(--color-primary) 60%);
     color: #fff;
     font-weight: 600;
     font-size: 0.9375rem;
     border-radius: 9999px;
     border: none;
-    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-primary) 40%, transparent);
+    transition: background 0.25s cubic-bezier(0.22, 1, 0.36, 1), transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.35) inset,
+      0 4px 20px color-mix(in srgb, var(--color-primary) 40%, transparent);
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
   }
   .btn-primary:hover {
-    background: var(--color-primary-dark);
+    background: linear-gradient(180deg, color-mix(in srgb, #fff 14%, var(--color-primary-dark)) 0%, var(--color-primary-dark) 60%);
     transform: translateY(-1px);
-    box-shadow: 0 8px 28px color-mix(in srgb, var(--color-primary) 55%, transparent);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.4) inset,
+      0 10px 30px color-mix(in srgb, var(--color-primary) 50%, transparent);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.3) inset, 0 3px 12px color-mix(in srgb, var(--color-primary) 45%, transparent);
   }
   .btn-primary:disabled {
     opacity: 0.55;
@@ -355,22 +397,29 @@ html[data-palette='berry'][data-appearance='night'] .brand-logo {
     justify-content: center;
     gap: 0.5rem;
     padding: 0.75rem 1.75rem;
-    background: transparent;
+    background: color-mix(in srgb, var(--color-glass) 55%, transparent);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
     color: var(--color-text-secondary);
     font-weight: 600;
     font-size: 0.9375rem;
     border-radius: 9999px;
     border: 1.5px solid var(--color-border);
-    transition: background 0.2s ease, border-color 0.2s ease;
+    transition: background 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s cubic-bezier(0.22, 1, 0.36, 1), transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
   }
   .btn-ghost:hover,
   .btn-outline:hover {
-    background: color-mix(in srgb, var(--color-primary) 7%, transparent);
+    background: color-mix(in srgb, var(--color-primary) 9%, transparent);
     border-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
     color: var(--color-primary);
+    transform: translateY(-1px);
+  }
+  .btn-ghost:active,
+  .btn-outline:active {
+    transform: translateY(0);
   }
 
   .chip {
@@ -379,11 +428,14 @@ html[data-palette='berry'][data-appearance='night'] .brand-logo {
     gap: 0.375rem;
     padding: 0.3rem 0.875rem;
     background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
     border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
     border-radius: 9999px;
     font-size: 0.8125rem;
     font-weight: 500;
     color: var(--color-primary);
+    box-shadow: 0 1px 0 color-mix(in srgb, #fff 40%, transparent) inset;
   }
 
   .container-page {
@@ -639,14 +691,21 @@ html[data-appearance='night'] .blob-blue {
   pointer-events: none;
 }
 
-/* ─── Nav pill ─────────────────────────────────────────────── */
+/* ─── Nav pill — floating Liquid Glass toolbar ──────────────── */
 .nav-pill {
   background: var(--color-glass);
-  backdrop-filter: blur(30px) saturate(180%);
-  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(32px) saturate(190%);
+  -webkit-backdrop-filter: blur(32px) saturate(190%);
   border: 1px solid var(--color-glass-border);
   border-radius: 9999px;
-  box-shadow: 0 4px 24px rgba(100, 80, 160, 0.10);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #fff 55%, transparent) inset,
+    0 4px 24px rgba(100, 80, 160, 0.10);
+}
+html[data-appearance='night'] .nav-pill {
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #fff 10%, transparent) inset,
+    0 4px 24px rgba(0, 0, 0, 0.3);
 }
 
 /* ─── Utilities ────────────────────────────────────────────── */
@@ -659,4 +718,25 @@ html[data-appearance='night'] .blob-blue {
   .text-body     { color: var(--color-text-secondary); }
 
   .bg-page       { background-color: var(--color-bg); }
+}
+
+/* ─── Motion & focus polish ──────────────────────────────────── */
+a, button {
+  -webkit-tap-highlight-color: transparent;
+}
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-primary) 60%, transparent);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -18,7 +18,7 @@ const flow = [
   {
     n: '02',
     title: 'Assign today’s work',
-    body: 'Create tasks or pull from 100+ pre-built household chores. Set due dates, assignees, difficulty, and whether photo proof is needed. Repeat daily, weekly, or on a custom schedule.',
+    body: 'Pick from 150 chores across 15 domains, or create your own. Set the due date, assignee, difficulty, and whether photo proof is needed. Repeat daily, weekdays, weekly, or monthly.',
   },
   {
     n: '03',
@@ -37,23 +37,23 @@ const flow = [
   },
   {
     n: '06',
-    title: 'Let Poppins help',
-    body: 'Poppins monitors schedules, GPS patterns, streaks, and rewards in the background. It suggests rebalances and trip bundles — you always approve before anything changes.',
+    title: 'Let Poppins handle the admin',
+    body: 'Poppins is parents-only. Ask it how something works, or tell it what you want — assign Saturday’s yard work, move a task to a different kid, remind everyone before the deadline. It answers, and it acts.',
   },
 ];
 
 const whoFor = [
   {
-    label: 'Families',
-    desc: 'Parents assign chores, kids earn rewards. Everyone sees what is fair. Less arguing, more done.',
+    label: 'Families, full stop',
+    desc: 'Parents assign chores, kids earn rewards. No roommate mode, no coworking mode — just the household you actually live in.',
   },
   {
-    label: 'Helpers',
-    desc: 'Grandparents and caregivers join with clear roles — help without taking over.',
+    label: 'Two admins, max',
+    desc: 'The paying admin decides who the second one is. Authority stays clear — nobody is guessing who is in charge.',
   },
   {
-    label: 'Blended households',
-    desc: 'Multiple kids, multiple homes, different schedules. One calm system to coordinate.',
+    label: 'Sidekicks',
+    desc: 'Each kid joins with a personal invite link — one per kid, expires in a week. Best for kids old enough to be responsible for something.',
   },
 ];
 

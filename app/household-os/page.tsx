@@ -3,9 +3,9 @@ import Link from 'next/link';
 import PageShell from '@/components/PageShell';
 
 export const metadata: Metadata = {
-  title: 'AI Household Operating System — ChoreMaxx',
+  title: 'ChoreMaxx — The Chore App That Runs the Whole House',
   description:
-    'ChoreMaxx is an AI household OS that coordinates tasks, schedules, rewards, and family communication in one app.',
+    'One app for chores, XP, rewards and Poppins — instead of a chart on the fridge and a spreadsheet nobody opens.',
   alternates: { canonical: 'https://www.choremaxx.app/household-os' },
 };
 
@@ -37,20 +37,15 @@ const modules = [
 ];
 
 const whoFor = [
-  { label: 'Parents', desc: 'Stop nagging. Assign once, track always. See what is getting done.' },
-  { label: 'Kids', desc: 'Clear expectations, fair rewards, friendly competition.' },
-  { label: 'Helpers', desc: 'Grandparents and caregivers with clear, limited roles.' },
-  {
-    label: 'Blended families',
-    desc: 'Multiple kids, schedules, expectations all in one system.',
-  },
+  { label: 'Parents (Admins)', desc: 'Assign once, track always. Two admins max, so authority stays clear.' },
+  { label: 'Kids (Sidekicks)', desc: 'A personal invite link per kid. Clear tasks, fair rewards, friendly competition.' },
 ];
 
 export default function HouseholdOS() {
   return (
     <PageShell
-      heading="The Household Operating System"
-      sub="Coordinates work, schedules, rewards, and communication — like an OS for your home."
+      heading="The chore app that runs the whole house"
+      sub="Assign it once. It holds — chores, XP, streaks, rewards and Poppins, all in one place."
     >
       <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: 'var(--color-text-secondary)' }}>
         ChoreMaxx brings clarity, fairness, and momentum to every household. One system, one source
@@ -75,20 +70,20 @@ export default function HouseholdOS() {
 
       <div className="glass-card p-8 mb-10">
         <h2 className="font-bold text-xl mb-5" style={{ color: 'var(--color-text-primary)' }}>
-          Why it is an OS
+          Why one app beats a chart on the fridge
         </h2>
         <ul className="flex flex-col gap-3">
           {[
             ['Centralized', 'No jumping between apps. Everything is here.'],
             [
-              'Interconnected',
-              'Tasks sync to Plan. Rewards connect to XP. Everything flows.',
+              'Connected',
+              'Tasks feed XP. XP feeds streaks and crowns. Rewards spend what was earned.',
             ],
             [
-              'Intelligent',
-              'Poppins learns household patterns and suggests improvements.',
+              'Assisted',
+              'Poppins handles the admin — assign, reassign, remind — when you ask it to.',
             ],
-            ['Fair', 'Rules engine ensures transparent, enforceable expectations.'],
+            ['Fair', 'House Rules make every mechanic transparent and enforceable — same page, admin or kid.'],
           ].map(([strong, rest]) => (
             <li
               key={strong}

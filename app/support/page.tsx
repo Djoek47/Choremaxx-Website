@@ -21,11 +21,11 @@ const faqs = [
   },
   {
     q: 'What is Poppins?',
-    a: 'Poppins is your AI co-manager. It monitors schedules, GPS patterns, streaks, and rewards in the background, then suggests trip bundles and task rebalances. You always approve changes.',
+    a: 'Poppins is the AI built into ChoreMaxx, and it’s parents-only. Ask it how something works, or tell it what you want — assign Saturday’s yard work, move a task, remind everyone before the deadline. It answers, and it acts. Kids don’t get access to it.',
   },
   {
     q: 'How do rewards and rankings work?',
-    a: 'Members earn XP for completed tasks. XP unlocks badges, climbs the rankings, and can be spent in the reward shop on privileges you configure — screen time, outing choices, allowance, and more.',
+    a: 'Members earn XP the moment they tap Complete. XP builds streaks, wins the Week’s Crown and Monthly Sovereign, and can be spent in the reward shop on privileges you configure — screen time, outing choices, allowance, and more.',
   },
   {
     q: 'How do I delete my account?',

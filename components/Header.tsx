@@ -17,7 +17,7 @@ export default function Header() {
     { label: 'Features',     href: '/features'     },
     { label: 'How it works', href: '/how-it-works' },
     { label: 'Pricing',      href: '/#pricing'     },
-    { label: 'About',        href: '/support'      },
+    { label: 'Support',      href: '/support'      },
   ];
 
   return (
@@ -62,7 +62,7 @@ export default function Header() {
         {/* Right CTA — desktop */}
         <div className="hidden md:flex items-center gap-3 flex-shrink-0">
           <Link href="/download" className="btn-primary text-sm py-2.5 px-5">
-            Download on App Store
+            Get it on the App Store
           </Link>
         </div>
 
@@ -115,7 +115,7 @@ export default function Header() {
             className="btn-primary text-sm mt-1"
             onClick={() => setMobileOpen(false)}
           >
-            Download on App Store
+            Get it on the App Store
           </Link>
         </div>
       )}

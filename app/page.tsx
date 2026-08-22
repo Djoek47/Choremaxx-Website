@@ -3,9 +3,14 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'ChoreMaxx — AI Household Operating System',
+  title: 'ChoreMaxx — The chore app for families with standards',
   description:
-    'AI organizes chores, shopping, schedules and responsibilities so everyone knows exactly what to do.',
+    'Assign the work, track who actually did it, and make it worth doing. 150 ready-made chores, XP, streaks and weekly crowns. For families, not roommates.',
+  openGraph: {
+    title: "ChoreMaxx — Everyone knows what's theirs to do",
+    description:
+      'Parents assign. Kids complete. XP, streaks, crowns and rewards keep it honest. Free for 7 days.',
+  },
 };
 
 /* ─── Inline SVG icons ────────────────────────────────────── */
@@ -54,72 +59,70 @@ function Section({
   );
 }
 
-/* ─── Feature icons (thin stroke, primary-colored) ────────── */
-const featureItems = [
+/* ─── What ChoreMaxx actually does ───────────────────────── */
+const doesItems = [
   {
-    icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z',
-    label: 'Poppins AI',
-    sub: 'Natural conversations. Real results.',
+    emoji: '📋',
+    label: 'Pick from 150 chores, not a blank text box',
+    sub: 'Fifteen domains — kitchen, bathroom, laundry, pets, yard, car, homework and the rest. Tap what you want done instead of inventing chore names at 9pm.',
   },
   {
-    icon: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5',
-    label: 'Smart Scheduling',
-    sub: 'Automatically plan the perfect week.',
+    emoji: '⚖️',
+    label: 'Every task carries a weight',
+    sub: "Emptying the dishwasher isn't scrubbing the tub. Harder work is worth more XP, so effort actually shows up in the standings.",
   },
   {
-    icon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z',
-    label: 'Shared Tasks',
-    sub: 'Everyone knows what to do and when.',
+    emoji: '⏱️',
+    label: 'One deadline everyone can see',
+    sub: 'You set the household’s daily deadline. Daily, weekday, weekly and monthly tasks all land against it. Miss it and the task goes late; leave it overnight and it expires.',
   },
   {
-    icon: 'M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z',
-    label: 'Grocery & Lists',
-    sub: 'Smart lists that update themselves.',
+    emoji: '📚',
+    label: "Homework has its own tab",
+    sub: "Because homework isn't a chore, and treating it like one never worked.",
   },
   {
-    icon: 'M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z',
-    label: 'Rewards & XP',
-    sub: 'Motivate with rewards, XP and achievements.',
-  },
-  {
-    icon: 'M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z',
-    label: 'Household Insights',
-    sub: 'Understand your home with powerful insights.',
+    emoji: '🛒',
+    label: 'The grocery list sorts itself',
+    sub: 'Type "milk," it files under Dairy & Eggs. Type "steak," it goes to Meat & Seafood. Shop the list by aisle instead of walking the store three times.',
   },
 ];
 
-const householdModes = [
-  { label: 'Parents',   sub: 'For families with kids',       iconPath: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0' },
-  { label: 'Helpers',   sub: 'Grandparents & caregivers',    iconPath: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z' },
-  { label: 'Couples',   sub: 'Build better habits together', iconPath: 'M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z' },
-  { label: 'Blended',   sub: 'Multiple homes, one system',   iconPath: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z' },
-  { label: 'Kids',      sub: 'Fun & responsibility',         iconPath: 'M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z' },
+/* ─── Points that mean something ─────────────────────────── */
+const pointsItems = [
+  {
+    emoji: '⚡',
+    label: 'Instant XP',
+    sub: 'No waiting on a parent to log in and bless it. The kid finishes, taps, and the points land. You get notified and can ask for a photo afterward if something looks suspiciously clean.',
+  },
+  {
+    emoji: '🔥',
+    label: 'Streaks',
+    sub: 'Daily and weekday tasks build a streak. Personal hygiene is tracked as a streak too, with no points attached, because brushing your teeth shouldn’t be a transaction.',
+  },
+  {
+    emoji: '🌙',
+    label: 'Late Credit',
+    sub: 'Finished after the deadline but before midnight? Reduced XP, streak intact. Late is better than never, and the app says so.',
+  },
+  {
+    emoji: '🛟',
+    label: 'Streak Rescue',
+    sub: "Miss a day and you can pay part of the week's XP to save the streak. Miss three, and it's gone. Nobody gets it back for free.",
+  },
+  {
+    emoji: '🧳',
+    label: 'Recess',
+    sub: 'Going away? Freeze everything. Leave with a 12-day streak, come home with a 12-day streak.',
+  },
 ];
 
-const timelineItems = [
-  { time: '9:00 AM',   label: 'Breakfast',    person: 'Mom',   active: false },
-  { time: '10:30 AM',  label: 'Laundry',      person: 'Sarah', active: false },
-  { time: '1:00 PM',   label: 'Take Garbage', person: 'Alex',  active: true  },
-  { time: '4:30 PM',   label: 'Clean Room',   person: 'Noah',  active: false },
-  { time: '7:00 PM',   label: 'Water Plants', person: 'Emma',  active: false },
-];
-
-const testimonials = [
-  {
-    quote: '"ChoreMaxx made our chaotic house feel calm. Everyone finally pulls their weight!"',
-    name: 'Jessica M.',
-    role: 'Mom of 3',
-  },
-  {
-    quote: '"Poppins bundles our after-school run so we stop doing three separate trips."',
-    name: 'Daniel K.',
-    role: 'Dad of 2',
-  },
-  {
-    quote: '"The AI suggestions are incredibly helpful. It knows what we need."',
-    name: 'Alex T.',
-    role: 'Working parent',
-  },
+/* ─── Rewards library samples ────────────────────────────── */
+const rewardModes = [
+  'XP only',
+  'Allowance only',
+  'XP plus rewards',
+  'The full system',
 ];
 
 const productScreenshots = [
@@ -135,41 +138,69 @@ const pricingPlans = [
     name: 'Monthly',
     price: '$4.99',
     period: '/month',
-    desc: '7-day free trial, then billed monthly via Apple.',
+    desc: '7 days free, then billed monthly through Apple.',
     features: [
-      'Unlimited family members',
-      'Home, Tasks, Plan, Groceries',
-      'Rewards, rankings & streaks',
-      'Poppins AI co-manager',
+      'Every member of the household',
+      'All 150 chores across 15 domains',
+      'XP, streaks, crowns and Streak Rescue',
+      'Rewards, allowance tracking and the grocery list',
+      'Poppins',
       'Cancel anytime',
     ],
-    cta: 'Start 7-day free trial',
+    cta: 'Start 7 days free',
     highlight: false,
   },
   {
     name: 'Yearly',
     price: '$48',
     period: '/year',
-    desc: '7-day free trial. Save 20% vs. monthly ($60).',
+    desc: '7 days free, then billed yearly through Apple. Everything above, two months cheaper.',
     features: [
       'Everything in Monthly',
-      'Best value for families',
-      'Poppins smart trip bundling',
+      'Two months free vs. paying monthly',
+      'Poppins',
       'Priority support',
       'Cancel anytime',
     ],
-    cta: 'Start 7-day free trial',
+    cta: 'Start 7 days free',
     highlight: true,
     badge: 'Save 20%',
   },
 ];
 
 const faqItems = [
-  { q: 'How does Poppins work?', a: 'Poppins uses advanced AI to understand your household patterns, bundle trips, suggest optimal task assignments, and proactively remind members — all through natural conversation. You always approve changes.' },
-  { q: 'Who is ChoreMaxx for?', a: 'Families — parents, kids, helpers, and blended households. Shipping product is families-only.' },
-  { q: 'How much does it cost?', a: '7-day free trial, then $4.99/month or $48/year (+ tax via Apple). Pricing and renewal terms are shown in-app before purchase.' },
-  { q: 'Is my data secure?', a: 'Yes. All household data is encrypted. We never sell your data. You can export or delete everything at any time from within the app.' },
-  { q: 'Can I customize tasks and rewards?', a: 'Yes — create any task with custom names, difficulty, frequency, and XP value. Rewards are fully configurable by household admins. Allowance tracking never sends money — parents use Mark as paid.' },
+  {
+    q: 'Who can assign tasks?',
+    a: 'Admins only — up to two per household. The paying admin decides who the second one is. Sidekicks complete their own tasks; nobody can mark someone else’s work as done.',
+  },
+  {
+    q: 'Can my kid earn a reward without asking me?',
+    a: 'Only if you set that reward to grant instantly, and only after the day’s tasks and homework are finished. Anything set to require approval still comes to you. Sidekicks can also propose a new reward occasionally — you decide whether it becomes real.',
+  },
+  {
+    q: 'Does ChoreMaxx send money?',
+    a: 'No. It’s not a payment platform and it never connects to your bank. Allowance is approved and recorded in the app; you pay your kid however you already do.',
+  },
+  {
+    q: 'What happens if a task gets missed?',
+    a: 'Finished after the deadline but before 11:59pm, it earns reduced XP and keeps the streak. After 11:59pm it expires and can’t be completed. Expired tasks sit in their own tab for a week, then clear out.',
+  },
+  {
+    q: 'Do I have to check every completed chore?',
+    a: 'No. XP lands when the kid taps Complete. If you want to verify, request a photo on that task. Homework proof can be set as required, per child.',
+  },
+  {
+    q: 'Can I turn it off for a vacation?',
+    a: 'Recess pauses tasks and freezes every streak where it stands.',
+  },
+  {
+    q: 'Is my family’s data safe?',
+    a: 'Household data is encrypted, we don’t sell it, and you can export or delete all of it from inside the app.',
+  },
+  {
+    q: 'How much does it cost?',
+    a: '7 days free, then $4.99/month or $48/year through Apple. Pricing and renewal terms are shown in-app before purchase.',
+  },
 ];
 
 /* ═══════════════════════════════════════════════════════════ */
@@ -206,18 +237,18 @@ export default function Home() {
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="2">
                   <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                 </svg>
-                AI Household Operating System
+                Built for real families with high standards
               </div>
 
               <h1 className="text-balance">
-                Finally.<br />
-                A Home That<br />
-                Runs{' '}
-                <span style={{ color: 'var(--color-primary)' }}>Itself.</span>
+                Your house doesn&apos;t<br />
+                run itself.<br />
+                Your <span style={{ color: 'var(--color-primary)' }}>kids</span> do.
               </h1>
 
               <p className="text-lg" style={{ color: 'var(--color-text-secondary)', maxWidth: 440 }}>
-                AI organizes chores, shopping, schedules and responsibilities so everyone knows exactly what to do.
+                ChoreMaxx hands out the work, tracks who actually did it, and makes it worth doing.
+                You stay in charge — the app just stops the arguing.
               </p>
 
               <div className="flex flex-wrap items-center gap-3">
@@ -225,21 +256,19 @@ export default function Home() {
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
                     <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
                   </svg>
-                  Download on App Store
+                  Start 7 days free
                 </Link>
                 <Link href="/how-it-works" className="btn-ghost gap-2">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M8 5v14l11-7z" />
                   </svg>
-                  Watch Demo
+                  See how it works
                 </Link>
               </div>
 
-              {/* Quiet social proof — no avatar clutter */}
+              {/* Honest, small proof line — no invented numbers */}
               <p className="text-sm" style={{ color: 'var(--color-text-muted)', letterSpacing: '-0.01em' }}>
-                <span style={{ color: 'var(--color-text-primary)', fontWeight: 600 }}>4.9</span>
-                <span aria-hidden style={{ margin: '0 0.4em', opacity: 0.35 }}>·</span>
-                Loved by 50,000+ families
+                Built in Montréal. Version 1 is live on the App Store.
               </p>
             </div>
 
@@ -352,8 +381,8 @@ export default function Home() {
                   </div>
                   <div className="hero-metric-divider" aria-hidden />
                   <div>
-                    <p className="hero-float-label">Harmony</p>
-                    <p className="hero-metric-status">High</p>
+                    <p className="hero-float-label">Streak</p>
+                    <p className="hero-metric-status">12 days</p>
                   </div>
                 </div>
               </aside>
@@ -362,37 +391,34 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 2. TRUST LOGOS ──────────────────────────────── */}
-      <section style={{ background: 'var(--color-bg-soft)', borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}>
-        <div className="container-page py-10">
-          <p className="text-center text-xs font-semibold uppercase tracking-widest mb-8" style={{ color: 'var(--color-text-muted)' }}>
-            Trusted by families worldwide
-          </p>
-          <div className="flex items-center justify-center flex-wrap gap-10">
-            {['Forbes', 'TechCrunch', 'Yahoo!', 'Product Hunt', 'The Verge'].map(name => (
-              <span key={name} className="text-base font-bold" style={{ color: '#C0BBDA' }}>{name}</span>
-            ))}
+      {/* ── 2. THE PROBLEM ──────────────────────────────── */}
+      <Section style={{ background: 'var(--color-bg-soft)', borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}>
+        <div className="container-page py-4">
+          <div className="section-heading">
+            <h2 className="text-balance">The chore chart lasted eleven days</h2>
+            <p className="text-base max-w-2xl" style={{ color: 'var(--color-text-muted)' }}>
+              You wrote it out. You taped it to the fridge. Then someone &ldquo;already did that one,&rdquo;
+              someone else swears it wasn&apos;t theirs, and by the second week you&apos;re doing the dishes
+              yourself again. The chart wasn&apos;t the problem. Nothing was keeping score.
+            </p>
           </div>
         </div>
-      </section>
+      </Section>
 
-      {/* ── 3. FEATURES GRID ────────────────────────────── */}
+      {/* ── 3. WHAT CHOREMAXX ACTUALLY DOES ─────────────── */}
       <Section>
         <div className="container-page">
           <div className="section-heading">
-            <h2 className="text-balance">Everything Your Home Needs</h2>
+            <h2 className="text-balance">Assign it once. It holds.</h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
-            {featureItems.map(({ icon, label, sub }) => (
-              <div key={label} className="glass-tile p-5 flex flex-col items-center text-center gap-3">
-                <div
-                  className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                  style={{ background: 'color-mix(in srgb, var(--color-primary) 10%, transparent)', color: 'var(--color-primary)' }}
-                >
-                  <Icon d={icon} size={22} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {doesItems.map(({ emoji, label, sub }) => (
+              <div key={label} className="glass-tile p-6 flex items-start gap-4">
+                <span style={{ fontSize: '1.5rem', lineHeight: 1, flexShrink: 0 }} aria-hidden>{emoji}</span>
+                <div>
+                  <p className="text-sm font-semibold mb-1.5" style={{ color: 'var(--color-text-primary)' }}>{label}</p>
+                  <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>{sub}</p>
                 </div>
-                <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{label}</p>
-                <p className="text-xs leading-snug" style={{ color: 'var(--color-text-muted)' }}>{sub}</p>
               </div>
             ))}
           </div>
@@ -400,7 +426,7 @@ export default function Home() {
       </Section>
 
       {/* ── 3b. APP SURFACES ────────────────────────────── */}
-      <Section>
+      <Section style={{ background: 'var(--color-bg-soft)' }}>
         <div className="container-page">
           <div className="section-heading">
             <h2 className="text-balance">See It In The App</h2>
@@ -429,173 +455,195 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* ── 4. HOUSEHOLD MODES ──────────────────────────── */}
-      <Section style={{ background: 'var(--color-bg-soft)' }}>
+      {/* ── 4. POINTS THAT MEAN SOMETHING ───────────────── */}
+      <Section>
         <div className="container-page">
           <div className="section-heading">
-            <h2 className="text-balance">Built For Families</h2>
-            <p className="text-base" style={{ color: 'var(--color-text-muted)' }}>
-              Parents, kids, helpers, and blended households — one calm system.
+            <h2 className="text-balance">XP hits the second they tap Complete</h2>
+            <p className="text-base max-w-2xl" style={{ color: 'var(--color-text-muted)' }}>
+              No waiting on a parent to log in and bless it. The kid finishes, taps, and the points land.
+              You get notified and can ask for a photo afterward if something looks suspiciously clean.
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-            {householdModes.map(({ label, sub, iconPath }, i) => (
-              <div
-                key={label}
-                className="glass-tile p-5 flex flex-col items-center text-center gap-3 cursor-pointer"
-                style={i === 0 ? { border: '1.5px solid color-mix(in srgb, var(--color-primary) 40%, transparent)', background: 'color-mix(in srgb, var(--color-primary) 6%, transparent)' } : {}}
-              >
-                <div
-                  className="w-11 h-11 rounded-2xl flex items-center justify-center"
-                  style={{ background: i === 0 ? 'color-mix(in srgb, var(--color-primary) 12%, transparent)' : 'rgba(100,80,180,0.07)', color: 'var(--color-primary)' }}
-                >
-                  <Icon d={iconPath} size={20} />
-                </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+            {pointsItems.map(({ emoji, label, sub }) => (
+              <div key={label} className="glass-tile p-5 flex flex-col items-center text-center gap-3">
+                <span style={{ fontSize: '1.5rem' }} aria-hidden>{emoji}</span>
                 <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{label}</p>
-                <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{sub}</p>
+                <p className="text-xs leading-snug" style={{ color: 'var(--color-text-muted)' }}>{sub}</p>
               </div>
             ))}
           </div>
         </div>
       </Section>
 
-      {/* ── 5. CHORE TIMELINE ───────────────────────────── */}
-      <Section>
+      {/* ── 5. COMPETITION ──────────────────────────────── */}
+      <Section style={{ background: 'var(--color-bg-soft)' }}>
         <div className="container-page">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center gap-12">
-            <div className="lg:w-72 flex-shrink-0">
-              <h2 className="text-balance mb-4">See Your Day, Stay In Sync</h2>
+          <div className="flex flex-col lg:flex-row items-center gap-12">
+            <div className="lg:w-80 flex-shrink-0">
+              <h2 className="text-balance mb-4">Somebody wins the week</h2>
               <p className="text-base mb-6" style={{ color: 'var(--color-text-muted)' }}>
-                A beautiful timeline everyone can follow and update.
+                Only one kid? They compete against their own best week. That&apos;s usually harder.
               </p>
               <Link href="/features" className="btn-ghost text-sm px-5 py-2.5 inline-flex items-center gap-2">
-                Explore All Tasks
+                See Rankings
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
               </Link>
             </div>
-            <div className="flex-1 overflow-x-auto">
-              <div className="flex items-start gap-4 min-w-max pb-4">
-                {timelineItems.map(({ time, label, person, active }) => (
-                  <div
-                    key={label}
-                    className="flex flex-col items-center gap-3"
-                    style={{ width: 130 }}
-                  >
-                    <p className="text-xs font-semibold" style={{ color: active ? 'var(--color-primary)' : 'var(--color-text-muted)' }}>{time}</p>
-                    <div
-                      className="w-full rounded-2xl p-4 flex flex-col items-center gap-2 text-center"
-                      style={{
-                        background: active ? 'var(--color-primary)' : 'rgba(255,255,255,0.80)',
-                        border: `1px solid ${active ? 'var(--color-primary)' : 'rgba(200,190,230,0.35)'}`,
-                        boxShadow: active ? '0 8px 32px color-mix(in srgb, var(--color-primary) 30%, transparent)' : '0 2px 12px rgba(100,80,180,0.06)',
-                      }}
-                    >
-                      <p className="text-sm font-semibold" style={{ color: active ? '#FFF' : 'var(--color-text-primary)' }}>{label}</p>
-                      <p className="text-xs" style={{ color: active ? 'rgba(255,255,255,0.75)' : 'var(--color-text-muted)' }}>{person}</p>
-                    </div>
-                    {/* Timeline dot */}
-                    <div className="w-3 h-3 rounded-full" style={{ background: active ? 'var(--color-primary)' : '#C0BBDA' }} />
+            <div className="flex-1 flex flex-wrap gap-4 justify-center">
+              {[
+                { icon: '👑', label: "The Week's Crown", val: 'Highest XP of the week' },
+                { icon: '🏅', label: 'The Monthly Sovereign', val: 'Highest XP of the month' },
+                { icon: '📊', label: "Champion's Record", val: 'Tasks done, on time vs. late' },
+              ].map(({ icon, label, val }) => (
+                <div key={label} className="glass-tile px-5 py-4 flex items-center gap-4" style={{ minWidth: 240 }}>
+                  <span style={{ fontSize: '1.5rem' }}>{icon}</span>
+                  <div>
+                    <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{label}</p>
+                    <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{val}</p>
                   </div>
-                ))}
-              </div>
-              {/* Timeline line */}
-              <div className="h-px mt-1" style={{ background: 'linear-gradient(90deg, var(--color-primary) 28%, #C0BBDA 28%)' }} />
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </Section>
 
-      {/* ── 6. REWARDS / XP ─────────────────────────────── */}
-      <Section style={{ background: 'var(--color-bg-soft)' }}>
+      {/* ── 6. REWARDS & ALLOWANCE ──────────────────────── */}
+      <Section>
         <div className="container-page">
           <div className="flex flex-col lg:flex-row items-center gap-12">
 
             {/* Left text */}
             <div className="lg:w-80 flex-shrink-0">
-              <h2 className="text-balance mb-4">Make Chores Worth It</h2>
-              <p className="text-base mb-6" style={{ color: 'var(--color-text-muted)' }}>
-                Positive habits. Real rewards. A happier home.
+              <h2 className="text-balance mb-4">You decide what the work is worth</h2>
+              <p className="text-base mb-4" style={{ color: 'var(--color-text-muted)' }}>
+                Run it however your house runs. Pick from the reward library or mint your own —
+                extra screen time, choosing dinner, a later bedtime. Set each one to grant instantly
+                or require your approval.
               </p>
-              <Link href="/features" className="btn-ghost text-sm px-5 py-2.5 inline-flex items-center gap-2">
-                See Rewards
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-              </Link>
+              <p className="text-sm leading-relaxed p-4 rounded-xl" style={{
+                color: 'var(--color-text-secondary)',
+                background: 'color-mix(in srgb, var(--color-primary) 6%, var(--color-bg-card))',
+                border: '1px solid color-mix(in srgb, var(--color-primary) 18%, transparent)',
+              }}>
+                <strong style={{ color: 'var(--color-text-primary)' }}>About allowance, plainly:</strong>{' '}
+                ChoreMaxx is not a payment app. It never touches your bank, and no money moves through
+                it. You approve an amount, the app records it, and you settle up the way you already do.
+              </p>
             </div>
 
-            {/* XP card */}
-            <div className="flex-1 flex flex-wrap gap-5 items-center justify-center">
-              <div
-                className="glass-card p-7 flex flex-col gap-4"
-                style={{ minWidth: 260 }}
-              >
-                <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>You earned</p>
-                <p className="text-5xl font-extrabold" style={{ color: 'var(--color-primary)', letterSpacing: '-0.04em' }}>+120 XP</p>
-                <p className="text-sm font-semibold" style={{ color: '#5BD6BD' }}>Great job!</p>
-                <div>
-                  <div className="flex justify-between text-xs mb-1.5">
-                    <span style={{ color: 'var(--color-text-muted)' }}>1,250 / 2,000 XP</span>
-                  </div>
-                  <div className="h-2 rounded-full overflow-hidden" style={{ background: 'color-mix(in srgb, var(--color-primary) 12%, transparent)' }}>
-                    <div className="h-full rounded-full" style={{ width: '62.5%', background: 'linear-gradient(90deg, var(--color-primary), #C986FF)' }} />
-                  </div>
+            {/* Reward modes */}
+            <div className="flex-1 flex flex-wrap gap-4 justify-center">
+              {rewardModes.map(mode => (
+                <div key={mode} className="glass-tile px-6 py-4 text-center" style={{ minWidth: 160 }}>
+                  <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{mode}</p>
                 </div>
-              </div>
-
-              {/* Achievement cards */}
-              <div className="flex flex-col gap-4">
-                {[
-                  { icon: '🔥', label: 'Daily Streak', val: '7 days in a row' },
-                  { icon: '🏆', label: 'Top Contributor', val: 'This week'      },
-                  { icon: '🎯', label: 'Family Goal',     val: '88% completed' },
-                ].map(({ icon, label, val }) => (
-                  <div key={label} className="glass-tile px-5 py-3 flex items-center gap-4" style={{ minWidth: 200 }}>
-                    <span style={{ fontSize: '1.25rem' }}>{icon}</span>
-                    <div>
-                      <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{label}</p>
-                      <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{val}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </Section>
 
-      {/* ── 7. TESTIMONIALS ─────────────────────────────── */}
+      {/* ── 7. POPPINS ───────────────────────────────────── */}
+      <Section style={{ background: 'var(--color-bg-soft)' }}>
+        <div className="container-page">
+          <div className="flex flex-col lg:flex-row items-center gap-12">
+            <div className="flex-1">
+              <h2 className="text-balance mb-4">Poppins does the admin so you don&apos;t</h2>
+              <p className="text-base mb-4 max-w-xl" style={{ color: 'var(--color-text-muted)' }}>
+                Poppins is the AI built into ChoreMaxx, and it&apos;s yours — parents only. Ask it anything
+                about how the app works, or just tell it what you want: assign Saturday&apos;s yard work,
+                move a task to Noah, remind everyone thirty minutes before the deadline.
+              </p>
+              <p className="text-base font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+                It answers, and it acts. Kids don&apos;t get access to it. Kids get their tasks.
+              </p>
+            </div>
+            <div
+              className="glass-card p-7 flex-shrink-0"
+              style={{ width: 320 }}
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <span className="hero-float-mark" aria-hidden>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                  </svg>
+                </span>
+                <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>Poppins</p>
+              </div>
+              <p className="text-sm italic leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+                &ldquo;Assigned Saturday yard work to Noah and moved Sunday dishes to Emma. Reminder set
+                for 30 minutes before tonight&apos;s deadline.&rdquo;
+              </p>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* ── 8. HOUSE RULES ──────────────────────────────── */}
       <Section>
-        <div className="container-page">
-          <div className="section-heading">
-            <h2>What Families Are Saying</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map(({ quote, name, role }) => (
-              <div key={name} className="glass-card p-8 flex flex-col gap-5">
-                <svg width="28" height="20" viewBox="0 0 28 20" fill="none">
-                  <path d="M0 20V12C0 5.373 4.477 1.12 13.43 0l1.14 2.286C9.143 3.428 6.857 6.095 6.286 10H12V20H0zm16 0V12C16 5.373 20.477 1.12 29.43 0L30.57 2.286C25.143 3.428 22.857 6.095 22.286 10H28V20H16z" fill="var(--color-primary)" opacity="0.20" />
-                </svg>
-                <p className="text-base leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>{quote}</p>
-                <div className="flex items-center gap-3 mt-auto">
-                  <div className="w-10 h-10 rounded-full" style={{ background: 'linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 27%, transparent), #C986FF44)' }} />
-                  <div>
-                    <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{name}</p>
-                    <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+        <div className="container-page max-w-3xl mx-auto text-center">
+          <h2 className="text-balance mb-4">The rules are written down, and everyone can read them</h2>
+          <p className="text-base mb-8" style={{ color: 'var(--color-text-muted)' }}>
+            Every mechanic in ChoreMaxx — how XP is earned, when things expire, what breaks a streak,
+            how crowns are won — lives on one screen. Thirty-six rules, seven chapters, no mystery.
+            There are two versions: the Admin version, and a Sidekick version written for a nine-year-old.
+            When your kid says the app cheated them, you both open the same page.
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <span className="chip">Admin version</span>
+            <span className="chip">Sidekick version</span>
           </div>
         </div>
       </Section>
 
-      {/* ── 8. PRICING ──────────────────────────────────── */}
-      <Section id="pricing" style={{ background: 'var(--color-bg-soft)' }}>
+      {/* ── 9. WHO IT'S FOR ─────────────────────────────── */}
+      <Section style={{ background: 'var(--color-bg-soft)' }}>
         <div className="container-page">
           <div className="section-heading">
-            <h2>Simple Pricing, For Every Home</h2>
-            <p className="text-base" style={{ color: 'var(--color-text-muted)' }}>
-              7-day free trial · then $4.99/mo or $48/yr via Apple
+            <h2 className="text-balance">Families. That&apos;s the whole list.</h2>
+            <p className="text-base max-w-2xl" style={{ color: 'var(--color-text-muted)' }}>
+              ChoreMaxx is built for parents and the kids who live with them. We took out the
+              roommate mode, the coworking mode, and everything else that made it a general task app.
             </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-2xl mx-auto">
+            <div className="glass-tile p-6 flex flex-col items-center text-center gap-3" style={{ border: '1.5px solid color-mix(in srgb, var(--color-primary) 40%, transparent)', background: 'color-mix(in srgb, var(--color-primary) 6%, transparent)' }}>
+              <div
+                className="w-11 h-11 rounded-2xl flex items-center justify-center"
+                style={{ background: 'color-mix(in srgb, var(--color-primary) 12%, transparent)', color: 'var(--color-primary)' }}
+              >
+                <Icon d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0" size={20} />
+              </div>
+              <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>Admins</p>
+              <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                Two maximum, so authority is clear. Assign tasks, approve rewards, run the household.
+              </p>
+            </div>
+            <div className="glass-tile p-6 flex flex-col items-center text-center gap-3">
+              <div
+                className="w-11 h-11 rounded-2xl flex items-center justify-center"
+                style={{ background: 'rgba(100,80,180,0.07)', color: 'var(--color-primary)' }}
+              >
+                <Icon d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" size={20} />
+              </div>
+              <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>Sidekicks</p>
+              <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                A personal invite link, one per kid, expires in a week — they&apos;re in the second
+                they tap it. Best for kids old enough to be responsible for something.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* ── 10. PRICING ─────────────────────────────────── */}
+      <Section id="pricing">
+        <div className="container-page">
+          <div className="section-heading">
+            <h2>One price. Everyone in the house.</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
@@ -644,8 +692,8 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* ── 9. FAQ ──────────────────────────────────────── */}
-      <Section>
+      {/* ── 11. FAQ ──────────────────────────────────────── */}
+      <Section style={{ background: 'var(--color-bg-soft)' }}>
         <div className="container-page max-w-3xl mx-auto">
           <div className="section-heading">
             <h2>Frequently Asked Questions</h2>
@@ -670,7 +718,7 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* ── 10. FINAL CTA ───────────────────────────────── */}
+      {/* ── 12. FINAL CTA ───────────────────────────────── */}
       <section
         className="relative overflow-hidden py-28"
         style={{ background: 'linear-gradient(160deg, color-mix(in srgb, var(--color-primary) 14%, var(--color-bg)) 0%, var(--color-bg) 55%, color-mix(in srgb, var(--color-primary) 8%, var(--color-bg)) 100%)' }}
@@ -681,21 +729,21 @@ export default function Home() {
 
         <div className="container-page relative z-10 flex flex-col items-center text-center gap-8">
           <h2 className="text-balance text-5xl md:text-6xl" style={{ maxWidth: 620 }}>
-            Ready For A Better Home?
+            Everyone knows what&apos;s theirs to do.
           </h2>
-          <p className="text-lg" style={{ color: 'var(--color-text-muted)', maxWidth: 400 }}>
-            Join thousands of families getting organized with ChoreMaxx today.
+          <p className="text-lg" style={{ color: 'var(--color-text-muted)', maxWidth: 420 }}>
+            Seven days free. No card until you&apos;ve seen whether it holds.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="/download" className="btn-primary gap-2 px-8 py-4 text-base">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
                 <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
               </svg>
-              Download on App Store
+              Get ChoreMaxx on the App Store
             </Link>
             <Link href="/how-it-works" className="btn-ghost gap-2 px-8 py-4 text-base">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
-              Watch Demo
+              See how it works
             </Link>
           </div>
         </div>

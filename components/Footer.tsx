@@ -10,26 +10,23 @@ const columns = [
       { label: 'Features',     href: '/features'     },
       { label: 'How it works', href: '/how-it-works' },
       { label: 'Pricing',      href: '/#pricing'     },
-      { label: 'Updates',      href: '/features'     },
-    ],
-  },
-  {
-    heading: 'Company',
-    links: [
-      { label: 'About us', href: '/support'  },
-      { label: 'Blog',     href: '/support'  },
-      { label: 'Careers',  href: '/support'  },
-      { label: 'Press',    href: '/support'  },
+      { label: 'Download',     href: '/download'     },
     ],
   },
   {
     heading: 'Support',
     links: [
-      { label: 'Help Center',           href: '/support'   },
-      { label: 'Contact us',            href: '/support'   },
-      { label: 'Suggest an idea',       href: '/suggest'   },
-      { label: 'Privacy',               href: '/privacy'   },
-      { label: 'Terms',                 href: '/terms'     },
+      { label: 'Help Center',     href: '/support' },
+      { label: 'Contact us',      href: '/support' },
+      { label: 'Suggest an idea', href: '/suggest' },
+    ],
+  },
+  {
+    heading: 'Legal',
+    links: [
+      { label: 'Privacy', href: '/privacy' },
+      { label: 'Terms',   href: '/terms'   },
+      { label: 'Cookies', href: '/cookies' },
     ],
   },
 ];
@@ -44,8 +41,8 @@ export default function Footer() {
     <footer style={{ background: 'var(--color-bg)', borderTop: '1px solid var(--color-border)' }}>
       <div className="container-page py-16">
 
-        {/* Main grid: brand + 3 link columns + newsletter */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-10 mb-14">
+        {/* Main grid: brand + link columns */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-14">
 
           {/* Brand column */}
           <div className="md:col-span-1 flex flex-col gap-5">
@@ -55,8 +52,8 @@ export default function Footer() {
                 chore<span style={{ color: 'var(--color-primary)' }}>maxx</span>
               </span>
             </Link>
-            <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)', maxWidth: 180 }}>
-              AI Household Operating System for a better, happier home.
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)', maxWidth: 200 }}>
+              Poppins keeps the whole house in step.
             </p>
             {/* App store badge */}
             <Link href="/download" className="mt-1 inline-block">
@@ -78,26 +75,6 @@ export default function Footer() {
                 </div>
               </div>
             </Link>
-            {/* Social icons */}
-            <div className="flex items-center gap-3 mt-1">
-              {['twitter', 'youtube', 'instagram', 'tiktok'].map(s => (
-                <a
-                  key={s}
-                  href="#"
-                  aria-label={s}
-                  className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-                  style={{
-                    background: 'color-mix(in srgb, var(--color-primary) 12%, transparent)',
-                    color: 'var(--color-text-muted)',
-                  }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <circle cx="12" cy="12" r="10" opacity="0.25" />
-                    <path d="M12 7v5l3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
-                  </svg>
-                </a>
-              ))}
-            </div>
           </div>
 
           {/* Link columns */}
@@ -126,47 +103,6 @@ export default function Footer() {
               </ul>
             </div>
           ))}
-
-          {/* Newsletter column */}
-          <div className="md:col-span-1">
-            <h4
-              className="text-xs font-semibold uppercase tracking-widest mb-5"
-              style={{ color: 'var(--color-text-muted)' }}
-            >
-              Stay in the loop
-            </h4>
-            <p className="text-sm mb-4" style={{ color: 'var(--color-text-secondary)' }}>
-              Get updates and tips for your home.
-            </p>
-            <form
-              onSubmit={e => e.preventDefault()}
-              className="flex items-center gap-2"
-              style={{
-                background: 'var(--color-bg-card)',
-                border: '1px solid var(--color-border)',
-                borderRadius: 9999,
-                padding: '0.375rem 0.375rem 0.375rem 1rem',
-              }}
-            >
-              <input
-                type="email"
-                placeholder="Email address"
-                aria-label="Email address"
-                className="flex-1 bg-transparent text-sm outline-none min-w-0"
-                style={{ color: 'var(--color-text-primary)' }}
-              />
-              <button
-                type="submit"
-                className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{ background: 'var(--color-primary)' }}
-                aria-label="Subscribe"
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
-            </form>
-          </div>
         </div>
 
         {/* Bottom bar */}
@@ -175,26 +111,11 @@ export default function Footer() {
           style={{ borderTop: '1px solid var(--color-border)' }}
         >
           <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-            © 2025 ChoreMaxx. All rights reserved.
+            © 2026 ChoreMaxx. All rights reserved.
           </p>
-          <div className="flex items-center gap-5">
-            {[
-              { label: 'Privacy', href: '/privacy' },
-              { label: 'Terms',   href: '/terms'   },
-              { label: 'Cookies', href: '/cookies' },
-            ].map(({ label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                className="text-xs transition-colors"
-                style={{ color: 'var(--color-text-muted)' }}
-                onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-primary)')}
-                onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text-muted)')}
-              >
-                {label}
-              </Link>
-            ))}
-          </div>
+          <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+            Built in Montréal.
+          </p>
         </div>
 
       </div>

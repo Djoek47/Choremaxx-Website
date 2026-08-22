@@ -12,7 +12,7 @@ export default function PrivacyPolicy() {
   return (
     <LegalDocument title="Privacy Policy" lastUpdated="2026-08-10">
       <p>
-        <strong>Choremaxx (&quot;we&quot;, &quot;our&quot;)</strong> is an AI household operating system for{' '}
+        <strong>Choremaxx (&quot;we&quot;, &quot;our&quot;)</strong> is a chore and rewards app for{' '}
         <strong>families</strong>. This policy explains what we collect and how we use it.
       </p>
 

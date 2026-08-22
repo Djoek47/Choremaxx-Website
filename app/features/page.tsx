@@ -30,11 +30,11 @@ const features = [
     screenshot: null as string | null,
     screenshotAlt: '',
     details: [
-      '100+ pre-built household chores',
+      '150 chores across 15 domains',
       'Custom task creation',
-      'Repeat schedules',
+      'Daily, weekday, weekly & monthly repeats',
       'Photo proof uploads',
-      'Difficulty levels & XP values',
+      'Weighted difficulty & XP values',
     ],
   },
   {
@@ -65,61 +65,48 @@ const features = [
   },
   {
     label: 'Rewards & Rankings',
-    desc: 'XP, streaks, reward shop, and live leaderboards. Motivate without nagging.',
+    desc: 'XP lands the second a task is marked complete — no approval queue. Streaks, Late Credit, Streak Rescue, and Recess keep it fair when life happens; the Week’s Crown and Monthly Sovereign settle who’s on top.',
     screenshot: '/screenshots/rewards.png',
     screenshotAlt: 'ChoreMaxx Rewards — privilege cards',
     details: [
-      'Custom reward shop',
-      'Hold-to-request rewards',
-      'Weekly & all-time rankings',
-      'Streaks and badges',
-      'Allowance tracking',
+      'Instant XP, no approval needed',
+      'Custom reward shop — instant or approval-gated',
+      'Weekly Crown & Monthly Sovereign',
+      'Streaks, Late Credit & Streak Rescue',
+      'Allowance tracking — never a payment app',
     ],
   },
   {
     label: 'Poppins AI',
-    desc: 'Your AI co-manager. Background monitoring, trip suggestions, and rebalance prompts — you always approve.',
+    desc: 'Your household’s AI assistant — parents only. Ask it how something works, or tell it what you want done. It answers, and it acts. Kids don’t get access to it; kids get their tasks.',
     screenshot: '/screenshots/poppins-activity.png',
     screenshotAlt: 'ChoreMaxx Poppins Activity feed',
     details: [
-      'Schedule & GPS awareness',
-      'Smart trip bundling',
-      'Task rebalance suggestions',
-      'Reward & streak nudges',
-      'Privacy-first, approve-first',
+      'Assign or reassign tasks by request',
+      'Set reminders ahead of the deadline',
+      'Answers questions about how ChoreMaxx works',
+      'Admin-only — kids never see it',
+      'You approve everything it changes',
     ],
   },
 ];
 const roles = [
   {
-    role: 'Owner',
-    perms: ['Create household', 'Manage all invites', 'Delete household', 'View all settings'],
-  },
-  {
-    role: 'Admin Parent',
+    role: 'Admin',
     perms: [
+      'Up to two per household',
       'Create & assign tasks',
-      'Manage reward shop',
-      'Approve completions',
-      'Invite new members',
+      'Manage the reward shop',
+      'Invite Sidekicks & approve requests',
     ],
   },
   {
-    role: 'Adult Member',
+    role: 'Sidekick',
     perms: [
-      'See household tasks',
-      'Complete assigned tasks',
-      'Request one-off tasks',
-      'Earn & spend XP',
-    ],
-  },
-  {
-    role: 'Child',
-    perms: [
-      'See your tasks',
-      'Mark tasks complete',
-      'Upload proof photos',
-      'View XP & badges',
+      'Joins via a personal invite link',
+      'Sees and completes their own tasks',
+      'Earns XP the moment they tap Complete',
+      'Can propose a reward for approval',
     ],
   },
 ];
@@ -192,7 +179,10 @@ export default function Features() {
       <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--color-text-primary)' }}>
         Roles & permissions
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-16">
+      <p className="text-sm mb-6 max-w-xl" style={{ color: 'var(--color-text-muted)' }}>
+        Two roles, no confusion. Admins run the household; Sidekicks do the work and earn the XP.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-16 max-w-2xl">
         {roles.map(({ role, perms }) => (
           <div key={role} className="glass-tile p-6 flex flex-col gap-4">
             <h3 className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>
