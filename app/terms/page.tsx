@@ -1,70 +1,53 @@
 import type { Metadata } from 'next';
-import LegalDocument from '@/components/LegalDocument';
 
 export const metadata: Metadata = {
   title: 'Terms of Service — ChoreMaxx',
-  description: 'ChoreMaxx terms of service.',
+  description: 'The agreement that covers your ChoreMaxx account and household.',
   alternates: { canonical: 'https://www.choremaxx.app/terms' },
-  robots: 'index, follow',
 };
 
-export default function Terms() {
+import LegalBody, { LegalFoot, LegalH2, LegalLead, LegalP } from '@/components/site/LegalBody';
+import PageShellV2 from '@/components/site/PageShellV2';
+
+export default function TermsPage() {
   return (
-    <LegalDocument title="Terms of Service" lastUpdated="2026-08-10">
-      <p>By creating a Choremaxx account or using the app, you agree to these Terms.</p>
+    <PageShellV2 kicker="Legal" heading="Terms of Service" sub="The agreement that covers your ChoreMaxx account and household." stamp="Last updated 10 August 2026">
+      <LegalBody>
+        <LegalLead>By creating a Choremaxx account or using the app, you agree to these Terms.</LegalLead>
 
-      <h2>The service</h2>
-      <p>
-        Choremaxx helps <strong>families</strong> coordinate tasks, groceries, calendar events, rewards, and
-        AI briefings through Poppins. Features may change as we ship updates. Shipping product is
-        families-only (no roommate mode).
-      </p>
+        <LegalH2>The service</LegalH2>
+        <LegalP>
+          Choremaxx helps <strong style={{ color: 'var(--tx)', fontWeight: 650 }}>families</strong> coordinate tasks, groceries, calendar events,
+          rewards, and AI briefings through Poppins. Features may change as we ship updates. Shipping product is families-only (no roommate mode).
+        </LegalP>
 
-      <h2>Accounts & households</h2>
-      <ul>
-        <li>You must provide accurate account information.</li>
-        <li>
-          Household Owners and Admins are responsible for invites, roles, and content shared in the
-          household.
-        </li>
-        <li>
-          Children using Choremaxx should do so under an adult guardian who manages permissions.
-        </li>
-      </ul>
+        <LegalH2>Accounts &amp; households</LegalH2>
+        <LegalP>You must provide accurate account information.</LegalP>
+        <LegalP>Household Owners and Admins are responsible for invites, roles, and content shared in the household.</LegalP>
+        <LegalP>Children using Choremaxx should do so under an adult guardian who manages permissions.</LegalP>
 
-      <h2>Acceptable use</h2>
-      <p>
-        Do not misuse Choremaxx to harass others, break the law, attempt unauthorized access, or abuse AI
-        features. We may suspend accounts that violate these Terms.
-      </p>
+        <LegalH2>Acceptable use</LegalH2>
+        <LegalP>Do not misuse Choremaxx to harass others, break the law, attempt unauthorized access, or abuse AI features. We may suspend accounts that violate these Terms.</LegalP>
 
-      <h2>AI / Poppins</h2>
-      <p>
-        Poppins suggestions are assistive. Consequential household changes should be reviewed by humans. AI
-        output may be imperfect.
-      </p>
+        <LegalH2>AI / Poppins</LegalH2>
+        <LegalP>Poppins suggestions are assistive. Consequential household changes should be reviewed by humans. AI output may be imperfect.</LegalP>
 
-      <h2>Subscriptions & billing</h2>
-      <p>
-        Paid plans (when offered): <strong>7-day free trial</strong>, then <strong>$4.99/month</strong> or{' '}
-        <strong>$48/year</strong> (+ tax via Apple). Pricing and renewal terms are shown in-app before
-        purchase. App Store purchases follow Apple&apos;s refund policies. Allowance tracking in Choremaxx
-        never sends or transfers money — parents use <strong>Mark as paid</strong>.
-      </p>
+        <LegalH2>Subscriptions &amp; billing</LegalH2>
+        <LegalP>
+          Paid plans (when offered): <strong style={{ color: 'var(--tx)', fontWeight: 650 }}>7-day free trial</strong>, then{' '}
+          <strong style={{ color: 'var(--tx)', fontWeight: 650 }}>$4.99/month</strong> or <strong style={{ color: 'var(--tx)', fontWeight: 650 }}>$48/year</strong>{' '}
+          (+ tax via Apple). Pricing and renewal terms are shown in-app before purchase. App Store purchases follow Apple&rsquo;s refund policies.
+          Allowance tracking in Choremaxx never sends or transfers money — parents use <strong style={{ color: 'var(--tx)', fontWeight: 650 }}>Mark as paid</strong>.
+        </LegalP>
 
-      <h2>Disclaimer</h2>
-      <p>
-        Choremaxx is provided &quot;as is&quot; without warranties of uninterrupted availability. To the
-        extent permitted by law, liability is limited to amounts paid for the service in the prior 12 months
-        (or zero if free).
-      </p>
+        <LegalH2>Disclaimer</LegalH2>
+        <LegalP>Choremaxx is provided &ldquo;as is&rdquo; without warranties of uninterrupted availability. To the extent permitted by law, liability is limited to amounts paid for the service in the prior 12 months (or zero if free).</LegalP>
 
-      <h2>Contact</h2>
-      <p>
-        <a href="mailto:support@choremaxx.app">support@choremaxx.app</a>
-      </p>
+        <LegalH2>Contact</LegalH2>
+        <LegalP><a href="mailto:support@choremaxx.app">support@choremaxx.app</a></LegalP>
 
-      <p className="mt-8 text-sm text-muted">© 2026 Choremaxx. All rights reserved.</p>
-    </LegalDocument>
+        <LegalFoot />
+      </LegalBody>
+    </PageShellV2>
   );
 }

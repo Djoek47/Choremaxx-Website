@@ -2,13 +2,16 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import PaletteProvider from '@/components/theme/PaletteProvider';
 
 const SITE_URL = 'https://www.choremaxx.app';
 
 /* One of these is picked at random each browsing session (never repeating
  * the palette from the visitor's last visit) and applied via a blocking
  * bootstrap script below, before first paint. Day/night follows
- * prefers-color-scheme. See app/globals.css + lib/palettes.ts. */
+ * prefers-color-scheme. PaletteProvider (client) then hydrates the same values
+ * and exposes the palette/appearance controls used by the V2 redesign chrome.
+ * See app/globals.css + lib/palettes.ts + lib/palette-runtime.ts. */
 const PALETTES = ['sky', 'citrus', 'coral', 'berry'] as const;
 const DEFAULT_PALETTE = 'coral';
 
@@ -156,12 +159,19 @@ export default function RootLayout({
       data-palette={DEFAULT_PALETTE}
       data-appearance="day"
       style={{ background: 'var(--color-bg)' }}
+      suppressHydrationWarning
     >
       <head>
         <link rel="canonical" href={SITE_URL} />
         <link rel="icon" type="image/png" href={TAB_ICON_DAY} />
         <meta name="theme-color" content="#D85A30" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#1A0C08" media="(prefers-color-scheme: dark)" />
+        {/* General Sans powers the V2 redesign typography (falls back to SF Pro). */}
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link
+          rel="stylesheet"
+          href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600,700,800&display=swap"
+        />
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script dangerouslySetInnerHTML={{ __html: PALETTE_BOOTSTRAP_SCRIPT }} />
         <script type="application/ld+json">
@@ -177,9 +187,15 @@ export default function RootLayout({
         </script>
       </head>
       <body className="antialiased" style={{ background: 'var(--color-bg)', color: 'var(--color-text-primary)' }}>
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        {/* PaletteProvider hydrates the session palette/appearance chosen by the
+         * bootstrap script and powers the V2 redesign palette switcher. The
+         * global Header/Footer render only on legacy (non-redesign) routes;
+         * redesign routes ship their own SiteHeader/SiteFooter. */}
+        <PaletteProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </PaletteProvider>
       </body>
     </html>
   );

@@ -34,9 +34,27 @@ const columns = [
   },
 ];
 
+/* V2 redesign routes render their own SiteFooter (directly or via PageShellV2),
+ * so the legacy global footer stays hidden there. */
+const REDESIGN_ROUTES = new Set([
+  '/',
+  '/support',
+  '/contact',
+  '/about',
+  '/privacy',
+  '/terms',
+  '/cookies',
+  '/copyright',
+  '/kids',
+]);
+
 export default function Footer() {
   const pathname = usePathname();
-  if (pathname?.startsWith('/auth') || pathname?.startsWith('/join')) {
+  if (
+    pathname?.startsWith('/auth') ||
+    pathname?.startsWith('/join') ||
+    REDESIGN_ROUTES.has(pathname ?? '')
+  ) {
     return null;
   }
 

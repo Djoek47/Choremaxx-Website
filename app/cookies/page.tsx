@@ -1,31 +1,23 @@
 import type { Metadata } from 'next';
-import LegalDocument from '@/components/LegalDocument';
 
 export const metadata: Metadata = {
   title: 'Cookie Notice — ChoreMaxx',
-  description: 'ChoreMaxx cookie and storage notice.',
+  description: 'What this site stores in your browser, and why.',
   alternates: { canonical: 'https://www.choremaxx.app/cookies' },
-  robots: 'index, follow',
 };
 
-export default function Cookies() {
+import LegalBody, { LegalFoot, LegalH2, LegalLead, LegalP } from '@/components/site/LegalBody';
+import PageShellV2 from '@/components/site/PageShellV2';
+
+export default function CookiesPage() {
   return (
-    <LegalDocument title="Cookie Notice">
-      <p>
-        We use essential cookies and local storage needed to run this site—things like session management, theme
-        preferences, and authentication tokens.
-      </p>
-
-      <p>
-        If we add analytics or other non-essential tracking tools in the future, we will disclose them here and ask
-        for your consent first.
-      </p>
-
-      <p>
-        For privacy questions, contact <a href="mailto:privacy@choremaxx.app">privacy@choremaxx.app</a>.
-      </p>
-
-      <p className="mt-8 text-sm text-muted">© 2026 ChoreMaxx. All rights reserved.</p>
-    </LegalDocument>
+    <PageShellV2 kicker="Legal" heading="Cookie Notice" sub="What this site stores in your browser, and why.">
+      <LegalBody>
+        <LegalLead>We use essential cookies and local storage needed to run this site—things like session management, theme preferences, and authentication tokens.</LegalLead>
+        <LegalP>If we add analytics or other non-essential tracking tools in the future, we will disclose them here and ask for your consent first.</LegalP>
+        <LegalP>For privacy questions, contact <a href="mailto:privacy@choremaxx.app">privacy@choremaxx.app</a>.</LegalP>
+        <LegalFoot />
+      </LegalBody>
+    </PageShellV2>
   );
 }

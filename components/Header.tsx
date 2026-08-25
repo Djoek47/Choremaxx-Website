@@ -4,12 +4,31 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
+/* Routes shipped in the V2 redesign — they render their own SiteHeader/SiteFooter
+ * (directly or via PageShellV2), so the legacy global chrome must stay hidden. */
+const REDESIGN_ROUTES = new Set([
+  '/',
+  '/support',
+  '/contact',
+  '/about',
+  '/privacy',
+  '/terms',
+  '/cookies',
+  '/copyright',
+  '/kids',
+]);
+
 export default function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   // Auth / invite bridges — full-bleed Apple-calm pages without marketing chrome.
-  if (pathname?.startsWith('/auth') || pathname?.startsWith('/join')) {
+  // V2 redesign routes render their own <SiteHeader>, so suppress this one there.
+  if (
+    pathname?.startsWith('/auth') ||
+    pathname?.startsWith('/join') ||
+    REDESIGN_ROUTES.has(pathname ?? '')
+  ) {
     return null;
   }
 

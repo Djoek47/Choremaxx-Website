@@ -1,80 +1,52 @@
 import type { Metadata } from 'next';
-import LegalDocument from '@/components/LegalDocument';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy — ChoreMaxx',
-  description: 'ChoreMaxx privacy policy. Your data, your control.',
+  description: 'Your data, your control.',
   alternates: { canonical: 'https://www.choremaxx.app/privacy' },
-  robots: 'index, follow',
 };
 
-export default function PrivacyPolicy() {
+import LegalBody, { LegalFoot, LegalH2, LegalLead, LegalP } from '@/components/site/LegalBody';
+import PageShellV2 from '@/components/site/PageShellV2';
+
+export default function PrivacyPage() {
   return (
-    <LegalDocument title="Privacy Policy" lastUpdated="2026-08-10">
-      <p>
-        <strong>Choremaxx (&quot;we&quot;, &quot;our&quot;)</strong> is an AI household operating system for{' '}
-        <strong>families</strong>. This policy explains what we collect and how we use it.
-      </p>
+    <PageShellV2 kicker="Legal" heading="Privacy Policy" sub="Your data, your control." stamp="Last updated 10 August 2026">
+      <LegalBody>
+        <LegalLead>
+          <strong style={{ color: 'var(--tx)', fontWeight: 700 }}>Choremaxx (&ldquo;we&rdquo;, &ldquo;our&rdquo;)</strong> is a chore and rewards app for{' '}
+          <strong style={{ color: 'var(--tx)', fontWeight: 700 }}>families</strong>. This policy explains what we collect and how we use it.
+        </LegalLead>
 
-      <h2>What we collect</h2>
-      <ul>
-        <li>
-          <strong>Account data:</strong> email, display name, authentication identifiers (including Apple
-          Sign-In subject when used).
-        </li>
-        <li>
-          <strong>Household data:</strong> household name, memberships, roles, tasks, groceries, calendar
-          events, rewards, XP, badges, Momentum scores.
-        </li>
-        <li>
-          <strong>Device data:</strong> push notification tokens, approximate location when you enable
-          grocery suggestions, voice audio temporarily when you use Talk to Poppins.
-        </li>
-        <li>
-          <strong>Usage analytics:</strong> feature events that help improve Choremaxx (task completion,
-          Poppins interactions).
-        </li>
-      </ul>
+        <LegalH2>What we collect</LegalH2>
+        <LegalP><strong style={{ color: 'var(--tx)', fontWeight: 650 }}>Account data:</strong> email, display name, authentication identifiers (including Apple Sign-In subject when used).</LegalP>
+        <LegalP><strong style={{ color: 'var(--tx)', fontWeight: 650 }}>Household data:</strong> household name, memberships, roles, tasks, groceries, calendar events, rewards, XP, badges, Momentum scores.</LegalP>
+        <LegalP><strong style={{ color: 'var(--tx)', fontWeight: 650 }}>Device data:</strong> push notification tokens, approximate location when you enable grocery suggestions, voice audio temporarily when you use Talk to Poppins.</LegalP>
+        <LegalP><strong style={{ color: 'var(--tx)', fontWeight: 650 }}>Usage analytics:</strong> feature events that help improve Choremaxx (task completion, Poppins interactions).</LegalP>
 
-      <h2>How we use data</h2>
-      <ul>
-        <li>Provide household coordination features and realtime sync.</li>
-        <li>Generate Poppins briefings and recommendations.</li>
-        <li>Send notifications you request or that household rules allow.</li>
-        <li>Maintain security, prevent abuse, and meet legal obligations.</li>
-      </ul>
+        <LegalH2>How we use data</LegalH2>
+        <LegalP>Provide household coordination features and realtime sync.</LegalP>
+        <LegalP>Generate Poppins briefings and recommendations.</LegalP>
+        <LegalP>Send notifications you request or that household rules allow.</LegalP>
+        <LegalP>Maintain security, prevent abuse, and meet legal obligations.</LegalP>
 
-      <h2>Children</h2>
-      <p>
-        Choremaxx supports a Child role under parental/admin supervision. We do not knowingly sell
-        children&apos;s personal information. Parents/admins control invites, rewards approvals, and access.
-      </p>
+        <LegalH2>Children</LegalH2>
+        <LegalP>Choremaxx supports a Child role under parental/admin supervision. We do not knowingly sell children&rsquo;s personal information. Parents/admins control invites, rewards approvals, and access.</LegalP>
 
-      <h2>Sharing</h2>
-      <p>
-        We use infrastructure processors such as Supabase (database/auth/storage), Expo/Apple/Google for app
-        delivery and push, and OpenAI (or equivalent) for Poppins when enabled. We do not sell personal data.
-      </p>
+        <LegalH2>Sharing</LegalH2>
+        <LegalP>We use infrastructure processors such as Supabase (database/auth/storage), Expo/Apple/Google for app delivery and push, and OpenAI (or equivalent) for Poppins when enabled. We do not sell personal data.</LegalP>
 
-      <h2>Retention & deletion</h2>
-      <p>
-        You may export or delete your account from Settings. Deletion removes your profile and associated
-        personal account records; household-shared content may remain for other members until the household
-        is deleted by an owner.
-      </p>
+        <LegalH2>Retention &amp; deletion</LegalH2>
+        <LegalP>You may export or delete your account from Settings. Deletion removes your profile and associated personal account records; household-shared content may remain for other members until the household is deleted by an owner.</LegalP>
 
-      <h2>Your rights</h2>
-      <p>
-        Depending on your region, you may request access, correction, export, or deletion by contacting{' '}
-        <a href="mailto:privacy@choremaxx.app">privacy@choremaxx.app</a> or using in-app Settings.
-      </p>
+        <LegalH2>Your rights</LegalH2>
+        <LegalP>Depending on your region, you may request access, correction, export, or deletion by contacting <a href="mailto:privacy@choremaxx.app">privacy@choremaxx.app</a> or using in-app Settings.</LegalP>
 
-      <h2>Contact</h2>
-      <p>
-        Choremaxx — <a href="mailto:privacy@choremaxx.app">privacy@choremaxx.app</a>
-      </p>
+        <LegalH2>Contact</LegalH2>
+        <LegalP>Choremaxx — <a href="mailto:privacy@choremaxx.app">privacy@choremaxx.app</a></LegalP>
 
-      <p className="mt-8 text-sm text-muted">© 2026 Choremaxx. All rights reserved.</p>
-    </LegalDocument>
+        <LegalFoot />
+      </LegalBody>
+    </PageShellV2>
   );
 }
