@@ -12,11 +12,35 @@ handoff/
 └── lib/               ← utilities, tokens, helpers
 ```
 
-Drop the contents of **“Chore Maxx website redesign”** (from your design export) so those three directories are populated before integrating.
+Drop the v0 export so `handoff/app`, `handoff/components`, and `handoff/lib` contain real source files.
+
+### Windows download layout (important)
+
+The zip **“Chore Maxx website redesign”** unpacks like this:
+
+```
+Downloads/Chore Maxx website redesign/
+└── handoff/
+    ├── app/
+    ├── components/
+    └── lib/
+```
+
+There is **no** `app/` at the redesign folder root — copy from the **inner** `handoff\` folder:
+
+```cmd
+cd "C:\Users\Ben Beckman\Choremaxx-Website"
+
+xcopy "C:\Users\Ben Beckman\Downloads\Chore Maxx website redesign\handoff\app\*" "handoff\app\" /E /I /Y
+xcopy "C:\Users\Ben Beckman\Downloads\Chore Maxx website redesign\handoff\components\*" "handoff\components\" /E /I /Y
+xcopy "C:\Users\Ben Beckman\Downloads\Chore Maxx website redesign\handoff\lib\*" "handoff\lib\" /E /I /Y
+```
+
+Verify you see `.tsx` / `.ts` files (not just `.gitkeep`) before committing.
 
 ## Add the bundle to git
 
-From the repo root (after copying the downloaded folder in as `handoff/`):
+From the repo root:
 
 ```bash
 git checkout cursor/website-brand-v2-9ecd
