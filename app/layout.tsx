@@ -4,6 +4,14 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 const SITE_URL = 'https://www.choremaxx.app';
+const APP_STORE_URL = 'https://apps.apple.com/app/id6796850110';
+
+/* Google Search Console ownership. Set GOOGLE_SITE_VERIFICATION in Vercel
+ * (Project → Settings → Environment Variables) to the token from the
+ * "HTML tag" verification method. Rendered as a durable
+ * <meta name="google-site-verification"> so ownership survives redeploys even
+ * if the one-off HTML-file method is ever removed. */
+const GOOGLE_SITE_VERIFICATION = process.env.GOOGLE_SITE_VERIFICATION?.trim();
 
 /* One of these is picked at random each browsing session (never repeating
  * the palette from the visitor's last visit) and applied via a blocking
@@ -46,7 +54,17 @@ export const metadata: Metadata = {
     description: 'Run your household together.',
     images: [`${SITE_URL}/og.png`],
   },
-  robots: 'index, follow',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
 };
 
 /* Picks a session palette + system appearance before first paint so the
@@ -159,6 +177,13 @@ export default function RootLayout({
     >
       <head>
         <link rel="canonical" href={SITE_URL} />
+        {/* Google Search Console ownership — rendered on every route (the manual
+         * <head> is more reliable than metadata inheritance on the statically
+         * prerendered homepage). Token comes from GOOGLE_SITE_VERIFICATION at
+         * build time; omitted entirely when unset. */}
+        {GOOGLE_SITE_VERIFICATION ? (
+          <meta name="google-site-verification" content={GOOGLE_SITE_VERIFICATION} />
+        ) : null}
         <link rel="icon" type="image/png" href={TAB_ICON_DAY} />
         <meta name="theme-color" content="#D85A30" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#1A0C08" media="(prefers-color-scheme: dark)" />
@@ -173,6 +198,46 @@ export default function RootLayout({
             logo: `${SITE_URL}/brand/choremaxx-logo-mark.png`,
             email: 'support@choremaxx.app',
             description: 'AI Household Operating System',
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'ChoreMaxx',
+            url: SITE_URL,
+            inLanguage: 'en',
+            publisher: { '@type': 'Organization', name: 'ChoreMaxx', url: SITE_URL },
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'MobileApplication',
+            name: 'ChoreMaxx',
+            operatingSystem: 'iOS',
+            applicationCategory: 'LifestyleApplication',
+            url: SITE_URL,
+            downloadUrl: APP_STORE_URL,
+            installUrl: APP_STORE_URL,
+            image: `${SITE_URL}/og.png`,
+            description:
+              'AI organizes chores, shopping, schedules and responsibilities so everyone in the family knows exactly what to do.',
+            publisher: { '@type': 'Organization', name: 'ChoreMaxx', url: SITE_URL },
+            offers: [
+              {
+                '@type': 'Offer',
+                price: '4.99',
+                priceCurrency: 'USD',
+                category: 'Monthly subscription',
+              },
+              {
+                '@type': 'Offer',
+                price: '48',
+                priceCurrency: 'USD',
+                category: 'Annual subscription',
+              },
+            ],
           })}
         </script>
       </head>
