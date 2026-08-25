@@ -45,14 +45,40 @@ This file is the checklist for finishing / maintaining the marketing site. Read 
 
 ---
 
+## Redesign handoff bundle (`handoff/`)
+
+The v0 / design export lives at repo root in `handoff/` (`app/`, `components/`, `lib/`). See `handoff/README.md`.
+
+**Add bundle (local):** copy `Chore Maxx website redesign` into `handoff/`, then:
+
+```bash
+git checkout cursor/website-brand-v2-9ecd
+git add handoff
+git commit -m "Add website redesign handoff bundle"
+git push -u origin cursor/website-brand-v2-9ecd
+```
+
+**Apply onto site:**
+
+```bash
+pnpm run integrate-handoff   # cp handoff/* → app/, components/, lib/
+pnpm dev                     # spot-check
+pnpm build
+```
+
+After integrate, **re-merge** protected paths: `lib/palettes.ts`, `app/layout.tsx`, `app/globals.css`, `/auth/callback`, `/join/[code]`, `/api/contact`, Resend libs — do not ship a blind overwrite.
+
+---
+
 ## Still TODO (human or next agent)
 
-1. **Ship `/auth/callback`** — Implement per `docs/auth-callback-bridge-for-website-agent.md` (deep-link bridge + AASA). Critical for email confirm CTAs.
-2. **Tasks screenshot** — Drop `public/screenshots/tasks.png` when available; Features Tasks row will pick it up when wired.
-3. **Merge + redeploy** — Merge brand V2 to `main`; confirm Vercel production on www.choremaxx.app (privacy/terms must be live for ASC).
-4. **Optional Vercel cleanup** — Clear custom Build Command so it is just `next build` / `pnpm build`.
-5. **iOS accent prefs** — Leave app-side accent prefs alone; site only mirrors the four logo packs for marketing.
-6. **Orbit agent** — Apply `docs/orbit-handoff/orbit-email-confirm-deletion-ux-3686.patch` per `APP_AGENT_INSTRUCTIONS.md` (separate repo).
+1. **Populate `handoff/`** — Commit the full redesign export from Downloads (placeholder dirs exist until then).
+2. **Integrate redesign** — Run `pnpm run integrate-handoff`; merge UI with brand V2 palette + auth bridge locks.
+3. **Tasks screenshot** — Drop `public/screenshots/tasks.png` when available; Features Tasks row will pick it up when wired.
+4. **Merge + redeploy** — Merge brand V2 to `main`; confirm Vercel production on www.choremaxx.app (privacy/terms must be live for ASC).
+5. **Optional Vercel cleanup** — Clear custom Build Command so it is just `next build` / `pnpm build`.
+6. **iOS accent prefs** — Leave app-side accent prefs alone; site only mirrors the four logo packs for marketing.
+7. **Orbit agent** — Apply `docs/orbit-handoff/orbit-email-confirm-deletion-ux-3686.patch` per `APP_AGENT_INSTRUCTIONS.md` (separate repo).
 
 ---
 
