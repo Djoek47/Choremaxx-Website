@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "node --experimental-strip-types lib/auth-bridge.test.ts",
+    "test": "node --experimental-strip-types --no-warnings lib/auth-bridge.test.ts",
     "integrate-handoff": "bash scripts/integrate-redesign-handoff.sh"
   },
   "dependencies": {

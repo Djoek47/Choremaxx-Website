@@ -1,19 +1,31 @@
 import type { Metadata } from 'next';
 
+import { authFlowType, bridgeCopy } from '@/lib/auth-bridge';
+
 import AuthCallbackClient from './AuthCallbackClient';
 
-export const metadata: Metadata = {
-  title: 'Opening Choremaxx…',
-  description: 'Confirming your email and opening the Choremaxx app.',
-  robots: {
-    index: false,
-    follow: false,
-    googleBot: {
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}): Promise<Metadata> {
+  const params = await searchParams;
+  const raw = params.type;
+  const type = Array.isArray(raw) ? raw[0] : raw;
+  const copy = bridgeCopy(authFlowType(new URLSearchParams(type ? { type } : {})));
+  return {
+    title: copy.title,
+    description: `${copy.sub} and opening the Choremaxx app.`,
+    robots: {
       index: false,
       follow: false,
+      googleBot: {
+        index: false,
+        follow: false,
+      },
     },
-  },
-};
+  };
+}
 
 const AUTH_KEYS = [
   'token_hash',

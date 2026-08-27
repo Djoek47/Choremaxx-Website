@@ -9,7 +9,7 @@ import {
   hasAuthPayload,
   normalizeJoinCode,
   parseHashParams,
-} from './auth-bridge';
+} from './auth-bridge.ts';
 
 const q = new URLSearchParams('token_hash=abc123&type=signup');
 assert.equal(
