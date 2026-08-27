@@ -4,17 +4,20 @@ Do this in the **Supabase Dashboard** for the Choremaxx **app** project (the Orb
 
 ### Which Supabase project?
 
-The name is **not** in GitHub. It lives in EAS / local `.env` as `EXPO_PUBLIC_SUPABASE_URL` (`https://<project-ref>.supabase.co`).
+**This is it:** `https://dejrbyufotcvcillnneo.supabase.co`  
+Project ref: `dejrbyufotcvcillnneo`
 
-1. Open [supabase.com/dashboard](https://supabase.com/dashboard) signed in as the Choremaxx owner (`theredforce47@gmail.com` / whatever you used for this product).
-2. If you have several projects, open each until you see **all** of these:
-   - Tables like `households` / `household_members`
-   - Edge function `send-auth-email` (may already be deployed)
-   - Authentication → URL Configuration already listing `choremaxx://` or `www.choremaxx.app`
-3. Or open [expo.dev](https://expo.dev) → the **Orbit / ChoreMaxx** project → **Environment variables / Secrets** → `EXPO_PUBLIC_SUPABASE_URL`. The host is the project ref.
-4. Dashboard URL once you have the ref: `https://supabase.com/dashboard/project/<project-ref>/auth/templates`
+Open these while signed in:
 
-The website (this repo / Vercel) is **not** a Supabase project. Only the iOS app talks to Supabase.
+| Step | Link |
+| --- | --- |
+| Project home | https://supabase.com/dashboard/project/dejrbyufotcvcillnneo |
+| Email templates (paste HTML here) | https://supabase.com/dashboard/project/dejrbyufotcvcillnneo/auth/templates |
+| URL configuration (redirect allow list) | https://supabase.com/dashboard/project/dejrbyufotcvcillnneo/auth/url-configuration |
+| Auth hooks (check Send Email) | https://supabase.com/dashboard/project/dejrbyufotcvcillnneo/auth/hooks |
+| SMTP | https://supabase.com/dashboard/project/dejrbyufotcvcillnneo/auth/smtp |
+
+The website (this repo / Vercel) is **not** a Supabase project. Only the iOS app talks to this backend.
 
 The website already hosts the logo and the HTTPS bridge. Supabase is what **sends** the mail.
 
