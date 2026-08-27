@@ -19,18 +19,7 @@ The website forwards into the iOS app (`choremaxx://auth/callback`). OTP `verify
 
 ## Connect in Supabase
 
-Dashboard → **Authentication** → **Email Templates**:
-
-1. **Confirm signup** → paste `confirm-email.supabase.html` (subject: `Confirm your email`)
-2. **Reset password** → paste `reset-password.supabase.html` (subject: `Reset your password`)
-3. **Change email address** → paste `change-email.supabase.html` (subject: `Confirm your new email`)
-
-Site URL / redirect allow list must include:
-
-- `https://www.choremaxx.app/auth/callback`
-- `https://choremaxx.app/auth/callback`
-
-Do **not** use `choremaxx://` as the primary CTA. Mail clients often strip custom-scheme buttons.
+Full operator steps: **[SUPABASE-SETUP.md](./SUPABASE-SETUP.md)** (URL allow list, paste the three templates, SMTP, hook warning, TestFlight checks).
 
 ## Live checks (already on production)
 
