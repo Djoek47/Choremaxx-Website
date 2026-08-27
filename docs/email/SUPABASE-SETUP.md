@@ -1,6 +1,22 @@
 # Supabase setup — branded auth emails
 
-Do this in the **Supabase Dashboard** for the Choremaxx project. The website already hosts the logo and the HTTPS bridge. Supabase is what **sends** the mail.
+Do this in the **Supabase Dashboard** for the Choremaxx **app** project (the Orbit / TestFlight backend). The website repo does not store the project name or ref.
+
+### Which Supabase project?
+
+The name is **not** in GitHub. It lives in EAS / local `.env` as `EXPO_PUBLIC_SUPABASE_URL` (`https://<project-ref>.supabase.co`).
+
+1. Open [supabase.com/dashboard](https://supabase.com/dashboard) signed in as the Choremaxx owner (`theredforce47@gmail.com` / whatever you used for this product).
+2. If you have several projects, open each until you see **all** of these:
+   - Tables like `households` / `household_members`
+   - Edge function `send-auth-email` (may already be deployed)
+   - Authentication → URL Configuration already listing `choremaxx://` or `www.choremaxx.app`
+3. Or open [expo.dev](https://expo.dev) → the **Orbit / ChoreMaxx** project → **Environment variables / Secrets** → `EXPO_PUBLIC_SUPABASE_URL`. The host is the project ref.
+4. Dashboard URL once you have the ref: `https://supabase.com/dashboard/project/<project-ref>/auth/templates`
+
+The website (this repo / Vercel) is **not** a Supabase project. Only the iOS app talks to Supabase.
+
+The website already hosts the logo and the HTTPS bridge. Supabase is what **sends** the mail.
 
 Open the HTML from this branch (`cursor/v1-90ad`):
 
