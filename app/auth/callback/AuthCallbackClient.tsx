@@ -5,6 +5,8 @@ import { useEffect, useMemo, useState } from 'react';
 
 import {
   APP_STORE_URL,
+  authFlowType,
+  bridgeCopy,
   buildAppConfirmUrl,
   hasAuthError,
   hasAuthPayload,
@@ -46,6 +48,7 @@ export default function AuthCallbackClient({ initialQuery }: Props) {
   }, [search, hashParams]);
 
   const authError = hasAuthError(mergedForError);
+  const copy = bridgeCopy(authFlowType(mergedForError));
   const deepLink = useMemo(
     () => buildAppConfirmUrl(search, hashParams ?? undefined),
     [search, hashParams]
@@ -88,14 +91,13 @@ export default function AuthCallbackClient({ initialQuery }: Props) {
           <>
             <h1 className={styles.title}>Couldn’t open the link</h1>
             <p className={styles.sub}>
-              {authError.description ||
-                'This confirmation link is invalid or expired. Open Choremaxx and enter the code from your email.'}
+              {authError.description || copy.errorFallback}
             </p>
           </>
         ) : (
           <>
-            <h1 className={styles.title}>Opening Choremaxx…</h1>
-            <p className={styles.sub}>Confirming your email</p>
+            <h1 className={styles.title}>{copy.title}</h1>
+            <p className={styles.sub}>{copy.sub}</p>
           </>
         )}
 
@@ -110,9 +112,7 @@ export default function AuthCallbackClient({ initialQuery }: Props) {
           </a>
         </div>
 
-        <p className={styles.help}>
-          Or open Choremaxx → Confirm your email → enter the code from this email.
-        </p>
+        <p className={styles.help}>{copy.help}</p>
       </main>
     </div>
   );

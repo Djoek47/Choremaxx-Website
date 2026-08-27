@@ -75,3 +75,50 @@ export function normalizeJoinCode(raw: string): string {
 export function buildAppJoinUrl(code: string): string {
   return `${APP_SCHEME_JOIN}/${normalizeJoinCode(code)}`;
 }
+
+export function authFlowType(params: URLSearchParams): string {
+  return (params.get('type') || 'signup').toLowerCase();
+}
+
+export function bridgeCopy(type: string): {
+  title: string;
+  sub: string;
+  help: string;
+  errorFallback: string;
+} {
+  switch (type) {
+    case 'recovery':
+      return {
+        title: 'Opening Choremaxx…',
+        sub: 'Resetting your password',
+        help: 'Or open Choremaxx → Forgot password → enter the code from this email.',
+        errorFallback:
+          'This reset link is invalid or expired. Open Choremaxx and enter the code from your email.',
+      };
+    case 'email_change':
+      return {
+        title: 'Opening Choremaxx…',
+        sub: 'Confirming your new email',
+        help: 'Or open Choremaxx → Confirm your email → enter the code from this email.',
+        errorFallback:
+          'This email-change link is invalid or expired. Open Choremaxx and enter the code from your email.',
+      };
+    case 'magiclink':
+    case 'invite':
+      return {
+        title: 'Opening Choremaxx…',
+        sub: 'Signing you in',
+        help: 'Or open Choremaxx and enter the code from this email.',
+        errorFallback:
+          'This sign-in link is invalid or expired. Open Choremaxx and enter the code from your email.',
+      };
+    default:
+      return {
+        title: 'Opening Choremaxx…',
+        sub: 'Confirming your email',
+        help: 'Or open Choremaxx → Confirm your email → enter the code from this email.',
+        errorFallback:
+          'This confirmation link is invalid or expired. Open Choremaxx and enter the code from your email.',
+      };
+  }
+}
