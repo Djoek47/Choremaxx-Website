@@ -15,7 +15,8 @@ The website forwards into the iOS app (`choremaxx://auth/callback`). OTP `verify
 | `confirm-email.html` | Preview of the uploaded signup email (example token / “Hi Jason”) |
 | `reset-password.html` | Preview — forgot password, same chrome, `type=recovery` |
 | `change-email.html` | Preview — confirm new email, same chrome, `type=email_change` |
-| `*.supabase.html` | Paste into Supabase Auth → Email Templates (`{{ .TokenHash }}` / `{{ .Token }}`) |
+| `*.supabase.html` | Paste into Supabase Auth → Email Templates only if the Send Email hook is **off** |
+| `orbit-hook/branded-html.ts` | Live mail: copy into Orbit `supabase/functions/send-auth-email/` and redeploy the hook |
 
 ## Connect in Supabase
 
