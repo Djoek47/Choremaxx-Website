@@ -1,16 +1,18 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
-import DeadlineDemo from '@/components/home/DeadlineDemo';
 import HeroPhone from '@/components/home/HeroPhone';
 import Reveal from '@/components/home/Reveal';
-import SupportFaq from '@/components/support/SupportFaq';
 import {
   MarkBolt, MarkBook, MarkCart, MarkChart, MarkClipboard, MarkClock, MarkCrown, MarkFlame,
   MarkMedal, MarkMoon, MarkPause, MarkScales, MarkShield, MarkTile,
 } from '@/components/marks/Marks';
 import SiteFooter from '@/components/site/SiteFooter';
 import SiteHeader from '@/components/site/SiteHeader';
+
+const DeadlineDemo = dynamic(() => import('@/components/home/DeadlineDemo'));
+const SupportFaq = dynamic(() => import('@/components/support/SupportFaq'));
 
 export const metadata: Metadata = {
   title: 'ChoreMaxx — The chore app for families with standards',
@@ -50,6 +52,10 @@ const glass: React.CSSProperties = {
   backdropFilter: 'blur(22px) saturate(170%)', boxShadow: 'var(--shadow)',
 };
 
+const sectionPad: React.CSSProperties = {
+  padding: 'var(--cm-section-y) var(--cm-page-x)',
+};
+
 const h2: React.CSSProperties = {
   margin: 0, fontSize: 'clamp(34px,4.2vw,58px)', fontWeight: 700,
   letterSpacing: '-.04em', lineHeight: 1.04, color: 'var(--tx)', textWrap: 'balance',
@@ -61,21 +67,24 @@ const kicker: React.CSSProperties = {
 
 export default function HomePage() {
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+    <div style={{ minHeight: '100dvh', background: 'var(--bg)' }}>
       <SiteHeader />
 
       {/* ── HERO ── */}
       <section
         id="top"
+        className="cm-section"
         style={{
-          position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '150px 32px 90px',
+          position: 'relative', minHeight: '100dvh', display: 'flex', alignItems: 'center',
+          paddingTop: 'calc(120px + var(--cm-header-y))',
+          paddingBottom: 'var(--cm-section-y)',
           background: 'linear-gradient(160deg, color-mix(in srgb,var(--p) 12%,var(--bg)) 0%, var(--bg) 45%, color-mix(in srgb,var(--p) 8%,var(--bg)) 100%)',
         }}
       >
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: -220, right: -160, width: 720, height: 720, borderRadius: '50%', filter: 'blur(90px)', animation: 'cmDrift 26s ease-in-out infinite alternate', background: 'radial-gradient(circle, color-mix(in srgb,var(--p) 30%,transparent) 0%, transparent 70%)' }} />
-          <div style={{ position: 'absolute', bottom: -180, left: -140, width: 520, height: 520, borderRadius: '50%', filter: 'blur(80px)', animation: 'cmDrift 34s ease-in-out infinite alternate-reverse', background: 'radial-gradient(circle, color-mix(in srgb,var(--sec) 22%,transparent) 0%, transparent 70%)' }} />
-          <div style={{ position: 'absolute', top: -160, right: -190, width: 600, height: 600, borderRadius: '50%', border: '9px solid color-mix(in srgb,var(--p) 15%,transparent)', animation: 'cmSpin 120s linear infinite' }} />
+          <div className="cm-hero-blob" style={{ position: 'absolute', top: -220, right: -160, width: 720, height: 720, borderRadius: '50%', filter: 'blur(90px)', animation: 'cmDrift 26s ease-in-out infinite alternate', background: 'radial-gradient(circle, color-mix(in srgb,var(--p) 30%,transparent) 0%, transparent 70%)' }} />
+          <div className="cm-hero-blob" style={{ position: 'absolute', bottom: -180, left: -140, width: 520, height: 520, borderRadius: '50%', filter: 'blur(80px)', animation: 'cmDrift 34s ease-in-out infinite alternate-reverse', background: 'radial-gradient(circle, color-mix(in srgb,var(--sec) 22%,transparent) 0%, transparent 70%)' }} />
+          <div className="cm-hero-blob" style={{ position: 'absolute', top: -160, right: -190, width: 600, height: 600, borderRadius: '50%', border: '9px solid color-mix(in srgb,var(--p) 15%,transparent)', animation: 'cmSpin 120s linear infinite' }} />
         </div>
 
         <div className="cm-hero-grid" style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', width: '100%', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,540px)', gap: 48, alignItems: 'center' }}>
@@ -84,10 +93,8 @@ export default function HomePage() {
               Built for real families with high standards
             </div>
 
-            {/* Each sentence is its own nowrap block — the break is always between them. */}
-            <h1 style={{ margin: 0, fontSize: 'clamp(26px,3.5vw,51px)', fontWeight: 700, lineHeight: 1.06, letterSpacing: '-.045em', color: 'var(--tx)' }}>
-              <span style={{ display: 'block', whiteSpace: 'nowrap' }}>Your house. Your <span style={{ color: 'var(--p)' }}>rules</span>.</span>
-              <span style={{ display: 'block', whiteSpace: 'nowrap' }}>Actually followed.</span>
+            <h1 style={{ margin: 0, fontSize: 'clamp(26px,3.5vw,51px)', fontWeight: 700, lineHeight: 1.06, letterSpacing: '-.045em', color: 'var(--tx)', textWrap: 'balance' }}>
+              Your house. Your <span style={{ color: 'var(--p)' }}>rules</span>. Actually followed.
             </h1>
 
             <p style={{ margin: 0, maxWidth: 470, fontSize: 19, lineHeight: 1.6, color: 'var(--txs)', animation: 'cmRise .9s cubic-bezier(.22,1,.36,1) .62s both' }}>
@@ -109,7 +116,7 @@ export default function HomePage() {
       </section>
 
       {/* ── PROBLEM ── */}
-      <section style={{ padding: '110px 32px', background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
+      <section className="cm-section" style={{ ...sectionPad, background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
         <Reveal style={{ maxWidth: 820, margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ ...h2, fontSize: 'clamp(32px,4vw,54px)', marginBottom: 20 }}>The chore chart lasted eleven days</h2>
           <p style={{ margin: 0, fontSize: 18, lineHeight: 1.65, color: 'var(--txm)' }}>
@@ -120,16 +127,16 @@ export default function HomePage() {
       </section>
 
       {/* ── WHAT IT DOES ── */}
-      <section id="does" style={{ padding: '120px 32px' }}>
+      <section id="does" className="cm-section" style={sectionPad}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <Reveal style={{ maxWidth: 620, marginBottom: 52 }}>
             <p style={{ ...kicker, margin: '0 0 14px' }}>What ChoreMaxx does</p>
             <h2 style={h2}>Assign it once. It holds.</h2>
           </Reveal>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(340px,1fr))', gap: 18 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,280px),1fr))', gap: 18 }}>
             {DOES.map(({ Mark, label, sub }) => (
               <Reveal key={label}>
-                <div style={{ ...glass, display: 'flex', alignItems: 'flex-start', gap: 16, padding: 26, borderRadius: 24, height: '100%' }}>
+                <div className="cm-glass" style={{ ...glass, display: 'flex', alignItems: 'flex-start', gap: 16, padding: 26, borderRadius: 24, height: '100%' }}>
                   <MarkTile><Mark /></MarkTile>
                   <div>
                     <p style={{ margin: '0 0 7px', fontSize: 16, fontWeight: 650, letterSpacing: '-.02em', color: 'var(--tx)' }}>{label}</p>
@@ -143,7 +150,7 @@ export default function HomePage() {
       </section>
 
       {/* ── DEADLINE ── */}
-      <section id="deadline" style={{ padding: '120px 32px', background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
+      <section id="deadline" className="cm-section" style={{ ...sectionPad, background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <Reveal style={{ maxWidth: 660, marginBottom: 52 }}>
             <p style={{ ...kicker, margin: '0 0 14px' }}>Try it right here</p>
@@ -158,7 +165,7 @@ export default function HomePage() {
       </section>
 
       {/* ── POINTS ── */}
-      <section style={{ padding: '120px 32px' }}>
+      <section className="cm-section" style={sectionPad}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <Reveal style={{ maxWidth: 660, marginBottom: 52 }}>
             <p style={{ ...kicker, margin: '0 0 14px' }}>Points that mean something</p>
@@ -182,8 +189,8 @@ export default function HomePage() {
       </section>
 
       {/* ── TROPHIES (halo, colourless) ── */}
-      <section style={{ padding: '120px 32px', background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
-        <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 56, alignItems: 'center' }}>
+      <section className="cm-section" style={{ ...sectionPad, background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,280px),1fr))', gap: 56, alignItems: 'center' }}>
           <Reveal>
             <h2 style={{ ...h2, fontSize: 'clamp(34px,4.2vw,54px)', marginBottom: 16 }}>Somebody wins the week</h2>
             <p style={{ margin: 0, fontSize: 17.5, lineHeight: 1.6, color: 'var(--txm)' }}>
@@ -208,7 +215,7 @@ export default function HomePage() {
       </section>
 
       {/* ── REWARDS ── */}
-      <section style={{ padding: '120px 32px' }}>
+      <section className="cm-section" style={sectionPad}>
         <div style={{ maxWidth: 820, margin: '0 auto' }}>
           <Reveal>
             <p style={{ ...kicker, margin: '0 0 14px' }}>Rewards &amp; allowance</p>
@@ -230,8 +237,8 @@ export default function HomePage() {
       </section>
 
       {/* ── POPPINS ── */}
-      <section id="poppins" style={{ padding: '130px 32px' }}>
-        <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: 56, alignItems: 'center' }}>
+      <section id="poppins" className="cm-section" style={{ ...sectionPad, paddingTop: 'clamp(80px, 14vw, 130px)' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,280px),1fr))', gap: 56, alignItems: 'center' }}>
           <Reveal>
             <p style={{ ...kicker, margin: '0 0 16px' }}>Poppins</p>
             <h2 style={{ ...h2, marginBottom: 18 }}>Poppins does the admin so you don&rsquo;t</h2>
@@ -261,7 +268,7 @@ export default function HomePage() {
       </section>
 
       {/* ── HOUSE RULES ── */}
-      <section style={{ padding: '120px 32px', background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
+      <section className="cm-section" style={{ ...sectionPad, background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
         <div style={{ maxWidth: 820, margin: '0 auto' }}>
           <Reveal>
             <h2 style={{ ...h2, marginBottom: 18 }}>The rules are written down, and everyone can read them</h2>
@@ -276,7 +283,7 @@ export default function HomePage() {
       </section>
 
       {/* ── WHO ── */}
-      <section style={{ padding: '120px 32px' }}>
+      <section className="cm-section" style={sectionPad}>
         <div style={{ maxWidth: 820, margin: '0 auto' }}>
           <Reveal>
             <h2 style={{ ...h2, marginBottom: 18 }}>Families. That&rsquo;s the whole list.</h2>
@@ -294,13 +301,13 @@ export default function HomePage() {
       </section>
 
       {/* ── PRICING ── */}
-      <section id="pricing" style={{ padding: '120px 32px', background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
+      <section id="pricing" className="cm-section" style={{ ...sectionPad, background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <Reveal style={{ textAlign: 'center', marginBottom: 48 }}>
             <p style={{ ...kicker, margin: '0 0 14px' }}>Pricing</p>
             <h2 style={{ ...h2, fontSize: 'clamp(32px,4vw,54px)' }}>One price. Everyone in the house.</h2>
           </Reveal>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,280px),1fr))', gap: 20 }}>
             {[
               {
                 title: 'Monthly',
@@ -379,7 +386,7 @@ export default function HomePage() {
       </section>
 
       {/* ── FAQ ── */}
-      <section id="faq" style={{ padding: '120px 32px' }}>
+      <section id="faq" className="cm-section" style={sectionPad}>
         <div style={{ maxWidth: 820, margin: '0 auto' }}>
           <Reveal>
             <h2 style={{ ...h2, fontSize: 'clamp(32px,3.8vw,50px)', textAlign: 'center', marginBottom: 44 }}>Frequently asked questions</h2>
@@ -389,7 +396,7 @@ export default function HomePage() {
       </section>
 
       {/* ── CLOSE ── */}
-      <section style={{ padding: '120px 32px', background: 'var(--bgs)', borderTop: '1px solid var(--bd)' }}>
+      <section className="cm-section" style={{ ...sectionPad, background: 'var(--bgs)', borderTop: '1px solid var(--bd)' }}>
         <Reveal style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ ...h2, marginBottom: 16 }}>Everyone knows what&rsquo;s theirs to do.</h2>
           <p style={{ margin: '0 0 28px', fontSize: 18, lineHeight: 1.6, color: 'var(--txm)' }}>
@@ -411,8 +418,14 @@ export default function HomePage() {
 
       <SiteFooter />
 
-      {/* Hero collapses to one column before the phone is dropped. */}
-      <style>{`@media (max-width: 1180px) { .cm-hero-grid { grid-template-columns: minmax(0,1fr) !important; } }`}</style>
+      <style>{`
+        @media (max-width: 1180px) {
+          .cm-hero-grid { grid-template-columns: minmax(0,1fr) !important; gap: 32px !important; }
+        }
+        @media (max-width: 768px) {
+          .cm-hero-grid { gap: 24px !important; }
+        }
+      `}</style>
     </div>
   );
 }

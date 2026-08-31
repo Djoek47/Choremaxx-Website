@@ -1,5 +1,3 @@
-'use client';
-
 import { memo } from 'react';
 
 import { ICONS, type IconName, type IconShape } from './icons';

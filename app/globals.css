@@ -37,11 +37,21 @@
   --radius-xl:  32px;
   --radius-2xl: 40px;
 
-  --font-sans: 'General Sans', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --font-sans: var(--font-general-sans), 'General Sans', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
 }
 
 :root {
   color-scheme: light;
+
+  /* V2 responsive spacing — used by marketing pages and site chrome */
+  --cm-page-x: clamp(16px, 4vw, 32px);
+  --cm-section-y: clamp(64px, 12vw, 130px);
+  --cm-header-y: max(18px, env(safe-area-inset-top, 0px));
+  --cm-footer-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html {
+  overflow-x: clip;
 }
 
 html[data-appearance='night'] {
@@ -675,7 +685,7 @@ html[data-appearance='night'] .blob-blue {
   --bd: rgba(20,40,60,.10); --gl: rgba(255,255,255,.65); --glb: rgba(255,255,255,.80);
   --spec: 0 1px 0 rgba(255,255,255,.55) inset;
   --shadow: 0 1px 0 rgba(255,255,255,.55) inset, 0 18px 40px rgba(15,14,23,.08);
-  --font: 'General Sans', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font: var(--font-general-sans), 'General Sans', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 html[data-palette='sky']    { --p:#378ADD; --pd:#2A6FB5; --pl:#E5F2FB; }
@@ -722,3 +732,28 @@ a:hover { color: var(--color-primary-dark); }
 
 .cm-reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
 .cm-reveal.cm-in { opacity: 1; transform: none; }
+
+/* V2 marketing sections — shared mobile spacing */
+.cm-section {
+  padding: var(--cm-section-y) var(--cm-page-x);
+}
+
+/* Mobile: drop expensive glass blur; disable decorative hero motion */
+@media (max-width: 768px) {
+  .cm-glass,
+  .cm-header-glass,
+  .cm-menu-glass {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .cm-hero-blob {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .cm-deadline-outcomes {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}

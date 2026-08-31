@@ -38,9 +38,14 @@ export default function SiteFooter() {
   const { logo } = usePalette();
 
   return (
-    <footer style={{ padding: '72px 32px 34px', background: 'var(--bg)', borderTop: '1px solid var(--bd)' }}>
+    <footer
+      style={{
+        padding: 'clamp(48px, 10vw, 72px) var(--cm-page-x) calc(34px + var(--cm-footer-bottom))',
+        background: 'var(--bg)', borderTop: '1px solid var(--bd)',
+      }}
+    >
       <div style={{ maxWidth: 1180, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', gap: 44, marginBottom: 52 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,180px),1fr))', gap: 44, marginBottom: 52 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -60,7 +65,12 @@ export default function SiteFooter() {
                 {col.title}
               </p>
               {col.links.map((l) => (
-                <Link key={l.href} href={l.href} style={{ fontSize: 13.5, color: 'var(--txs)' }}>
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className="cm-footer-link"
+                  style={{ fontSize: 13.5, color: 'var(--txs)', padding: '8px 0', display: 'inline-block', minHeight: 44, lineHeight: '28px' }}
+                >
                   {l.label}
                 </Link>
               ))}

@@ -33,7 +33,7 @@ const OUTCOMES: Outcome[] = [
 ];
 
 const panel: React.CSSProperties = {
-  padding: 32, borderRadius: 32, background: 'var(--gl)', border: '1px solid var(--glb)',
+  padding: 'clamp(20px, 4vw, 32px)', borderRadius: 32, background: 'var(--gl)', border: '1px solid var(--glb)',
   backdropFilter: 'blur(38px) saturate(190%)', boxShadow: 'var(--shadow)',
   display: 'flex', flexDirection: 'column', gap: 24,
 };
@@ -50,7 +50,7 @@ export default function DeadlineDemo() {
 
   return (
     <div className="cm-deadline" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1.08fr) minmax(0,.92fr)', gap: 22 }}>
-      <div style={panel}>
+      <div className="cm-glass" style={panel}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, padding: 20, borderRadius: 22, background: 'color-mix(in srgb,var(--bg) 70%,transparent)', border: '1px solid var(--bd)' }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <p style={{ margin: 0, fontSize: 16, fontWeight: 650, letterSpacing: '-.02em', color: 'var(--tx)' }}>Load the dishwasher</p>
@@ -61,7 +61,7 @@ export default function DeadlineDemo() {
 
         <div>
           <p style={{ margin: '0 0 12px', fontSize: 11, fontWeight: 650, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--txm)' }}>They tap Complete at</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 10 }}>
+          <div className="cm-deadline-outcomes cm-glass" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 10 }}>
             {OUTCOMES.map((x, idx) => {
               const on = idx === i;
               return (
@@ -121,7 +121,7 @@ export default function DeadlineDemo() {
         </div>
       </div>
 
-      <div style={{ ...panel, gap: 22 }}>
+      <div className="cm-glass" style={{ ...panel, gap: 22 }}>
         <p style={{ margin: 0, fontSize: 19, fontWeight: 650, letterSpacing: '-.025em', color: 'var(--tx)' }}>Liam&rsquo;s week</p>
 
         <div>

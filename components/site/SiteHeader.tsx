@@ -19,8 +19,10 @@ export default function SiteHeader() {
 
   return (
     <header
+      className="cm-site-header"
       style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, padding: '18px 32px',
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+        padding: 'var(--cm-header-y) var(--cm-page-x) 18px',
         display: 'flex', alignItems: 'center', gap: 20, pointerEvents: 'none', flexWrap: 'wrap',
       }}
     >
@@ -33,7 +35,7 @@ export default function SiteHeader() {
       </Link>
 
       <nav
-        className="cm-desktop-nav"
+        className="cm-desktop-nav cm-header-glass"
         style={{
           margin: '0 auto', display: 'flex', alignItems: 'center', gap: 2, padding: 5, borderRadius: 999,
           background: 'var(--gl)', border: '1px solid var(--glb)', backdropFilter: 'blur(32px) saturate(190%)',
@@ -52,9 +54,12 @@ export default function SiteHeader() {
       </nav>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, pointerEvents: 'auto', flexShrink: 0, marginLeft: 'auto' }}>
-        <PaletteDots />
+        <div className="cm-header-palette">
+          <PaletteDots />
+        </div>
         <Link
           href="https://apps.apple.com/app/id6796850110"
+          className="cm-header-cta"
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 7, padding: '10px 20px', borderRadius: 999,
             background: 'linear-gradient(180deg, color-mix(in srgb,#fff 18%,var(--p)) 0%, var(--p) 60%)',
@@ -62,7 +67,8 @@ export default function SiteHeader() {
             boxShadow: '0 1px 0 rgba(255,255,255,.35) inset, 0 6px 22px color-mix(in srgb,var(--p) 42%,transparent)',
           }}
         >
-          Get it on the App Store
+          <span className="cm-cta-long">Get it on the App Store</span>
+          <span className="cm-cta-short">App Store</span>
         </Link>
         <button
           type="button"
@@ -83,6 +89,7 @@ export default function SiteHeader() {
 
       {open ? (
         <div
+          className="cm-menu-glass"
           style={{
             flexBasis: '100%', marginTop: 10, pointerEvents: 'auto', padding: 18, borderRadius: 26,
             background: 'var(--gl)', border: '1px solid var(--glb)', backdropFilter: 'blur(32px) saturate(190%)',
@@ -90,17 +97,33 @@ export default function SiteHeader() {
           }}
         >
           {LINKS.map((l) => (
-            <Link key={l.href} href={l.href} onClick={() => setOpen(false)} style={{ padding: '11px 14px', borderRadius: 14, fontSize: 15, fontWeight: 600, color: 'var(--txs)' }}>
+            <Link
+              key={l.href}
+              href={l.href}
+              onClick={() => setOpen(false)}
+              className="cm-mobile-nav-link"
+              style={{ padding: '12px 16px', borderRadius: 14, fontSize: 15, fontWeight: 600, color: 'var(--txs)', minHeight: 44, display: 'flex', alignItems: 'center' }}
+            >
               {l.label}
             </Link>
           ))}
+          <div className="cm-mobile-palette" style={{ padding: '8px 16px', display: 'none' }}>
+            <PaletteDots />
+          </div>
         </div>
       ) : null}
 
       <style jsx>{`
+        .cm-cta-short { display: none; }
         @media (max-width: 1000px) {
           .cm-desktop-nav { display: none !important; }
           .cm-burger { display: grid !important; }
+          .cm-header-palette { display: none !important; }
+          .cm-mobile-palette { display: block !important; }
+        }
+        @media (max-width: 480px) {
+          .cm-cta-long { display: none; }
+          .cm-cta-short { display: inline; }
         }
       `}</style>
     </header>

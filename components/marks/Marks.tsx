@@ -1,5 +1,3 @@
-'use client';
-
 import Icon, { type IconName } from '@/lib/Icon';
 
 type MarkProps = { size?: number };

@@ -17,12 +17,19 @@ export default function PageShellV2({
   children: React.ReactNode;
 }) {
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+    <div style={{ minHeight: '100dvh', background: 'var(--bg)' }}>
       <SiteHeader />
 
-      <section style={{ position: 'relative', padding: '150px 32px 44px', overflow: 'hidden' }}>
+      <section
+        style={{
+          position: 'relative',
+          padding: 'calc(120px + var(--cm-header-y)) var(--cm-page-x) 44px',
+          overflow: 'hidden',
+        }}
+      >
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
           <div
+            className="cm-hero-blob"
             style={{
               position: 'absolute', top: -260, right: -160, width: 660, height: 660, borderRadius: '50%',
               filter: 'blur(90px)', animation: 'cmDrift 30s ease-in-out infinite alternate',
@@ -42,7 +49,7 @@ export default function PageShellV2({
         </div>
       </section>
 
-      <section style={{ padding: '0 32px 110px' }}>
+      <section style={{ padding: `0 var(--cm-page-x) clamp(64px, 12vw, 110px)` }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>{children}</div>
       </section>
 

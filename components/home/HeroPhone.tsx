@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from 'react';
 
 const SCREENS = [
-  { label: 'Home', src: '/screenshots/home.png', alt: 'ChoreMaxx Home — Today dashboard' },
-  { label: 'Plan', src: '/screenshots/plan.png', alt: 'ChoreMaxx Plan — smart trip routing' },
-  { label: 'Shopping', src: '/screenshots/shopping.png', alt: 'ChoreMaxx Shopping — aisle-sorted list' },
-  { label: 'Rewards', src: '/screenshots/rewards.png', alt: 'ChoreMaxx Rewards — privilege cards' },
-  { label: 'Poppins', src: '/screenshots/poppins-activity.png', alt: 'ChoreMaxx Poppins Activity feed' },
+  { label: 'Home', src: '/screenshots/home.webp', fallback: '/screenshots/home.png', alt: 'ChoreMaxx Home — Today dashboard' },
+  { label: 'Plan', src: '/screenshots/plan.webp', fallback: '/screenshots/plan.png', alt: 'ChoreMaxx Plan — smart trip routing' },
+  { label: 'Shopping', src: '/screenshots/shopping.webp', fallback: '/screenshots/shopping.png', alt: 'ChoreMaxx Shopping — aisle-sorted list' },
+  { label: 'Rewards', src: '/screenshots/rewards.webp', fallback: '/screenshots/rewards.png', alt: 'ChoreMaxx Rewards — privilege cards' },
+  { label: 'Poppins', src: '/screenshots/poppins-activity.webp', fallback: '/screenshots/poppins-activity.png', alt: 'ChoreMaxx Poppins Activity feed' },
 ] as const;
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
@@ -84,8 +84,8 @@ export default function HeroPhone() {
   );
 
   return (
-    <div className="cm-hero-phone" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 660, perspective: 1400 }}>
-      <div style={{ position: 'relative', width: 320, flexShrink: 0 }}>
+    <div className="cm-hero-phone" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 660, perspective: 1400, width: '100%' }}>
+      <div className="cm-hero-phone-inner" style={{ position: 'relative', width: 320, maxWidth: '100%', flexShrink: 0 }}>
         <div
           ref={tilt}
           style={{
@@ -96,18 +96,26 @@ export default function HeroPhone() {
           }}
         >
           <div style={{ position: 'relative', borderRadius: 42, overflow: 'hidden', background: 'var(--bgs)', aspectRatio: '470 / 1024' }}>
-            {SCREENS.map((s) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={s.label}
-                src={s.src}
-                alt={s.alt}
-                style={{
-                  position: 'absolute', inset: 0, display: 'block', width: '100%', height: '100%', objectFit: 'cover',
-                  opacity: tab === s.label ? 1 : 0, transition: 'opacity .35s ease',
-                }}
-              />
-            ))}
+            {SCREENS.map((s) => {
+              if (tab !== s.label) return null;
+              return (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={s.label}
+                  src={s.src}
+                  alt={s.alt}
+                  fetchPriority={s.label === 'Home' ? 'high' : undefined}
+                  loading={s.label === 'Home' ? 'eager' : 'lazy'}
+                  style={{
+                    position: 'absolute', inset: 0, display: 'block', width: '100%', height: '100%', objectFit: 'cover',
+                  }}
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    if (img.src.endsWith('.webp')) img.src = s.fallback;
+                  }}
+                />
+              );
+            })}
             <div style={{ position: 'absolute', top: 14, left: '50%', transform: 'translateX(-50%)', width: 96, height: 26, borderRadius: 999, background: 'rgba(10,10,14,.86)' }} />
           </div>
         </div>
@@ -162,10 +170,12 @@ export default function HeroPhone() {
 
       {/* Screen tabs */}
       <div
+        className="cm-hero-tabs"
         style={{
           position: 'absolute', bottom: -6, left: '50%', transform: 'translateX(-50%)', zIndex: 20,
           display: 'flex', gap: 5, padding: 6, borderRadius: 999, background: 'var(--gl)',
           border: '1px solid var(--glb)', backdropFilter: 'blur(32px) saturate(190%)', boxShadow: 'var(--shadow)',
+          maxWidth: 'calc(100vw - 2 * var(--cm-page-x))', overflowX: 'auto', WebkitOverflowScrolling: 'touch',
         }}
       >
         {SCREENS.map((s) => (
@@ -174,8 +184,9 @@ export default function HeroPhone() {
             type="button"
             onClick={() => setTab(s.label)}
             style={{
-              border: 'none', cursor: 'pointer', fontFamily: 'inherit', padding: '8px 13px', borderRadius: 999,
-              fontSize: 12.5, fontWeight: 600, transition: 'background .25s, color .25s',
+              border: 'none', cursor: 'pointer', fontFamily: 'inherit', padding: '10px 14px', borderRadius: 999,
+              fontSize: 12.5, fontWeight: 600, transition: 'background .25s, color .25s', flexShrink: 0,
+              minHeight: 44, display: 'inline-flex', alignItems: 'center',
               background: tab === s.label ? 'var(--p)' : 'transparent',
               color: tab === s.label ? '#fff' : 'var(--txs)',
             }}
@@ -187,7 +198,10 @@ export default function HeroPhone() {
 
       <style jsx>{`
         @media (max-width: 1180px) { .cm-float { display: none; } }
-        @media (max-width: 560px)  { .cm-hero-phone { display: none; } }
+        @media (max-width: 560px) {
+          .cm-hero-phone { min-height: 420px !important; }
+          .cm-hero-phone-inner { width: min(280px, 100%) !important; }
+        }
       `}</style>
     </div>
   );

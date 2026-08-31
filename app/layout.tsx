@@ -3,6 +3,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PaletteProvider from '@/components/theme/PaletteProvider';
+import { generalSans } from '@/lib/fonts';
 
 const SITE_URL = 'https://www.choremaxx.app';
 
@@ -140,6 +141,7 @@ const PALETTE_BOOTSTRAP_SCRIPT = `(function(){
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
+  viewportFit: 'cover',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#D85A30' },
     { media: '(prefers-color-scheme: dark)', color: '#1A0C08' },
@@ -156,7 +158,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="scroll-smooth"
+      className={`scroll-smooth ${generalSans.variable}`}
       data-palette={DEFAULT_PALETTE}
       data-appearance="day"
       style={{ background: 'var(--color-bg)' }}
@@ -167,12 +169,6 @@ export default function RootLayout({
         <link rel="icon" type="image/png" href={TAB_ICON_DAY} />
         <meta name="theme-color" content="#D85A30" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#1A0C08" media="(prefers-color-scheme: dark)" />
-        {/* General Sans powers the V2 redesign typography (falls back to SF Pro). */}
-        <link rel="preconnect" href="https://api.fontshare.com" />
-        <link
-          rel="stylesheet"
-          href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600,700,800&display=swap"
-        />
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script dangerouslySetInnerHTML={{ __html: PALETTE_BOOTSTRAP_SCRIPT }} />
         <script type="application/ld+json">

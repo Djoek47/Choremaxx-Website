@@ -3,9 +3,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  images: {
-    unoptimized: true,
-  },
   async headers() {
     return [
       {
@@ -14,6 +11,18 @@ const nextConfig = {
           { key: 'Content-Type', value: 'application/json' },
           { key: 'Cache-Control', value: 'public, max-age=3600' },
         ],
+      },
+      {
+        source: '/brand/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      {
+        source: '/screenshots/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      {
+        source: '/fonts/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
       {
         source: '/auth/callback',
