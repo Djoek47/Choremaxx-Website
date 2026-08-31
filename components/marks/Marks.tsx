@@ -31,12 +31,14 @@ export const MarkPoppins = wrap('poppinsFavorite');
 
 export function MarkTile({
   children,
+  tone = 'rust',
   size = 42,
 }: {
   children: React.ReactNode;
   tone?: 'rust' | 'colourless';
   size?: number;
 }) {
+  const isRust = tone === 'rust';
   return (
     <span
       style={{
@@ -46,8 +48,9 @@ export function MarkTile({
         display: 'grid',
         placeItems: 'center',
         flexShrink: 0,
-        background: 'color-mix(in srgb, var(--tx) 8%, transparent)',
-        color: 'var(--tx)',
+        background: isRust ? 'var(--pl)' : 'color-mix(in srgb, var(--txm) 10%, transparent)',
+        color: isRust ? 'var(--tx)' : 'var(--txs)',
+        ...(!isRust ? ({ '--icon-accent': 'currentColor' } as React.CSSProperties) : undefined),
       }}
     >
       {children}

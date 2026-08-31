@@ -4,8 +4,8 @@ import { ICONS, type IconName, type IconShape } from './icons';
 
 export type { IconName };
 
-/** Rust accent — matches the app Duotone Rust spec. */
-export const ICON_ACCENT = '#E4552B';
+/** Theme-aware duotone accent — set `--icon-accent` on a parent to override. */
+export const ICON_ACCENT = 'var(--icon-accent, var(--p))';
 
 const STROKE = { body: 1.75, accent: 1.9 };
 
