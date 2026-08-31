@@ -3,14 +3,34 @@
 import { useState } from 'react';
 
 const FAQ: { q: string; a: string }[] = [
-  { q: 'How do I create a household?', a: 'Download ChoreMaxx, sign up with email or Apple/Google, name your household, choose your reward system, and invite members by code, link, or QR.' },
-  { q: 'Do my kids need their own email?', a: 'No. Admins create Sidekick profiles with just a name. They sign in on a shared device or with a simple PIN.' },
-  { q: 'What is Poppins?', a: 'Poppins is the AI built into ChoreMaxx, and it is Admins only. Ask it how something works, or tell it what you want — assign Saturday’s yard work, move a task, remind everyone before the deadline. It answers, and it acts. Sidekicks do not get access to it.' },
-  { q: 'How do rewards and rankings work?', a: 'Members earn XP the moment they tap Complete. XP builds streaks, wins the Week’s Crown and Monthly Sovereign, and can be spent in the reward shop on privileges you configure — screen time, outing choices, allowance, and more.' },
-  { q: 'Do my kids need my approval before they claim a reward?', a: 'You choose when you create the reward: instant, or requires your approval. Either way that day’s tasks and homework have to be done first, which is completion rather than permission. To claim one, a Sidekick presses and holds the reward card (Hold & Request).' },
-  { q: 'How do I delete my account?', a: 'In the app: Settings → Delete account. Or email privacy@choremaxx.app. We remove your data within 30 days.' },
-  { q: 'Is my data sold?', a: 'No, never. We do not sell personal data. You own your data and can export or delete it at any time.' },
-  { q: 'What happens if someone leaves the household?', a: 'An Admin can remove members. Their past tasks and XP remain on record. They can always be re-invited.' },
+  {
+    q: 'Who can assign tasks?',
+    a: 'Admins only — up to two per household. The paying admin decides who the second one is. Sidekicks complete their own tasks; nobody can mark someone else’s work as done.',
+  },
+  {
+    q: 'Can my children claim a reward without my approval?',
+    a: 'Only if you set that reward to grant instantly, and only after the day’s tasks and homework are finished. Anything set to require approval still comes to you. Sidekicks can also propose a new reward occasionally — you decide whether it becomes real.',
+  },
+  {
+    q: 'Does ChoreMaxx send money?',
+    a: 'No. It’s not a payment platform and it never connects to your bank. Allowance is approved and recorded in the app; you pay them however you already do.',
+  },
+  {
+    q: 'What happens if a task gets missed?',
+    a: 'Finished after the deadline but before 11:59pm, it earns reduced XP and keeps the streak. After 11:59pm it expires and can’t be completed. Expired tasks sit in their own tab for a week, then clear out.',
+  },
+  {
+    q: 'Do I have to check every completed chore?',
+    a: 'No. XP lands when your child taps Complete. If you want to verify, request a photo on that task. Homework proof can be set as required, per child.',
+  },
+  {
+    q: 'Can I turn it off for a vacation?',
+    a: 'Recess pauses tasks and freezes every streak where it stands.',
+  },
+  {
+    q: 'Is my family’s data safe?',
+    a: 'Household data is encrypted, we don’t sell it, and you can export or delete all of it from inside the app.',
+  },
 ];
 
 export default function SupportFaq() {

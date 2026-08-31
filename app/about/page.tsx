@@ -35,7 +35,7 @@ export default function AboutPage() {
     <PageShellV2
       kicker="Company"
       heading="We built the part the chore chart was missing"
-      sub="ChoreMaxx is a household operating system for families — assign the work, record who did it, and make it worth doing."
+      sub="ChoreMaxx is the chore app for families with standards — assign the work, record who did it, and make it worth doing."
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div style={card}>

@@ -26,8 +26,9 @@ const DEFAULT_PALETTE = 'coral';
 const TAB_ICON_DAY = '/brand/icons/icon-coral.png';
 
 export const metadata: Metadata = {
-  title: 'ChoreMaxx — AI Household Operating System',
-  description: 'Run your household together. AI-powered task management, rewards, and family coordination in one calm place.',
+  title: 'ChoreMaxx — The chore app for families with standards',
+  description:
+    'Assign the work, track who actually did it, and make it worth doing. 150 ready-made chores, XP, streaks and weekly crowns. For families, not roommates.',
   metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: SITE_URL,
@@ -37,8 +38,8 @@ export const metadata: Metadata = {
     apple: '/apple-icon.png',
   },
   openGraph: {
-    title: 'ChoreMaxx — AI Household Operating System',
-    description: 'Run your household together. AI-powered task management, rewards, and family coordination in one calm place.',
+    title: 'ChoreMaxx — Everyone knows what\'s theirs to do',
+    description: 'Parents assign. Kids complete. XP, streaks, crowns and rewards keep it honest. Free for 7 days.',
     url: SITE_URL,
     type: 'website',
     images: [
@@ -52,8 +53,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ChoreMaxx — AI Household Operating System',
-    description: 'Run your household together.',
+    title: 'ChoreMaxx — Everyone knows what\'s theirs to do',
+    description: 'Parents assign. Kids complete. XP, streaks, crowns and rewards keep it honest. Free for 7 days.',
     images: [`${SITE_URL}/og.png`],
   },
   robots: {
@@ -202,7 +203,7 @@ export default function RootLayout({
             url: SITE_URL,
             logo: `${SITE_URL}/brand/choremaxx-logo-mark.png`,
             email: 'support@choremaxx.app',
-            description: 'AI Household Operating System',
+            description: 'The chore app for families with standards',
           })}
         </script>
         <script type="application/ld+json">
@@ -227,7 +228,7 @@ export default function RootLayout({
             installUrl: APP_STORE_URL,
             image: `${SITE_URL}/og.png`,
             description:
-              'AI organizes chores, shopping, schedules and responsibilities so everyone in the family knows exactly what to do.',
+              'Assign the work, track who actually did it, and make it worth doing. For families, not roommates.',
             publisher: { '@type': 'Organization', name: 'ChoreMaxx', url: SITE_URL },
             offers: [
               {

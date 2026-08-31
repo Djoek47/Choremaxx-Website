@@ -6,7 +6,7 @@ import type { MetadataRoute } from 'next';
  * use the Coral default brand tokens (see app/globals.css). */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'ChoreMaxx — AI Household Operating System',
+    name: 'ChoreMaxx — The chore app for families with standards',
     short_name: 'ChoreMaxx',
     description:
       'Run your household together. AI-powered task management, rewards, and family coordination in one calm place.',
