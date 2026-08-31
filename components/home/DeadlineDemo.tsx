@@ -63,7 +63,7 @@ export default function DeadlineDemo() {
 
         <div>
           <p style={{ margin: '0 0 12px', fontSize: 11, fontWeight: 650, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--txm)' }}>They tap Complete at</p>
-          <div className="cm-deadline-outcomes cm-glass" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 10 }}>
+          <div className="cm-deadline-outcomes cm-glass choice-grid">
             {OUTCOMES.map((x, idx) => {
               const on = idx === i;
               return (

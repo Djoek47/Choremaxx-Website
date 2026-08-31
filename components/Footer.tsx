@@ -73,7 +73,7 @@ export default function Footer() {
                 chore<span style={{ color: 'var(--color-primary)' }}>maxx</span>
               </span>
             </Link>
-            <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)', maxWidth: 180 }}>
+            <p className="text-sm leading-relaxed prose-measure" style={{ color: 'var(--color-text-muted)', maxWidth: '34ch' }}>
               AI Household Operating System for a better, happier home.
             </p>
             {/* App store badge */}

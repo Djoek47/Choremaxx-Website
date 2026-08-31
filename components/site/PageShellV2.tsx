@@ -17,13 +17,13 @@ export default function PageShellV2({
   children: React.ReactNode;
 }) {
   return (
-    <div style={{ minHeight: '100dvh', background: 'var(--bg)' }}>
+    <div style={{ minHeight: 'var(--vh-full)', background: 'var(--bg)', overflowX: 'clip' }}>
       <SiteHeader />
 
       <section
         style={{
           position: 'relative',
-          padding: 'calc(120px + var(--cm-header-y)) var(--cm-page-x) 44px',
+          padding: `calc(120px + var(--cm-header-y)) var(--side-pad) 44px`,
           overflow: 'hidden',
         }}
       >
@@ -49,7 +49,7 @@ export default function PageShellV2({
         </div>
       </section>
 
-      <section style={{ padding: `0 var(--cm-page-x) clamp(64px, 12vw, 110px)` }}>
+      <section style={{ padding: `0 var(--side-pad) var(--sec-pad)` }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>{children}</div>
       </section>
 

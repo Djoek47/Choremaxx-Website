@@ -220,7 +220,8 @@ export default function Features() {
         </p>
         <div className="flex flex-wrap gap-3">
           <Link href="/download" className="btn-primary">
-            Download free
+            <span className="cm-cta-short">Download</span>
+            <span className="cm-cta-long">Download free</span>
           </Link>
           <Link href="/how-it-works" className="btn-ghost">
             How it works

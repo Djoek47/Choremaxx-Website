@@ -45,7 +45,7 @@ export default function SiteFooter() {
       }}
     >
       <div style={{ maxWidth: 1180, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,180px),1fr))', gap: 44, marginBottom: 52 }}>
+        <div className="cm-footer-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,180px),1fr))', gap: 44, marginBottom: 52 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -54,7 +54,7 @@ export default function SiteFooter() {
                 chore<span style={{ color: 'var(--p)' }}>maxx</span>
               </span>
             </span>
-            <p style={{ margin: 0, maxWidth: 210, fontSize: 13.5, lineHeight: 1.6, color: 'var(--txm)' }}>
+            <p className="prose-measure" style={{ margin: 0, fontSize: 13.5, lineHeight: 1.6, color: 'var(--txm)' }}>
               Poppins keeps the whole house in step.
             </p>
           </div>

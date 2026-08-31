@@ -60,9 +60,9 @@ export default function HowItWorks() {
       sub="From setup to streaks in under ten minutes."
     >
       {/* Flow steps */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-16">
+      <div className="auto-grid mb-16">
         {flow.map(({ n, title, body }) => (
-          <div key={n} className="glass-card p-7 flex flex-col gap-3">
+          <div key={n} className="glass-card card flex flex-col gap-3">
             <span
               style={{
                 fontSize: '2.5rem',
@@ -88,9 +88,9 @@ export default function HowItWorks() {
       <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--color-text-primary)' }}>
         Who is it for?
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-16">
+      <div className="auto-grid mb-16">
         {whoFor.map(({ label, desc }) => (
-          <div key={label} className="glass-tile p-6 flex flex-col gap-3">
+          <div key={label} className="glass-tile card flex flex-col gap-3">
             <h3 className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>
               {label}
             </h3>

@@ -16,6 +16,14 @@ const LINKS = [
 export default function SiteHeader() {
   const { logo } = usePalette();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -31,17 +39,23 @@ export default function SiteHeader() {
     };
   }, [open]);
 
+  const solid = open || scrolled;
+
   return (
     <header
-      className="cm-site-header"
+      className={`cm-site-header app-header${solid ? ' cm-header-solid' : ''}`}
       style={{
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         zIndex: 200,
-        padding: 'var(--cm-header-y) var(--cm-page-x) 14px',
+        paddingTop: 'var(--cm-header-y)',
+        paddingBottom: 14,
+        paddingLeft: 'max(var(--side-pad), env(safe-area-inset-left, 0px))',
+        paddingRight: 'max(var(--side-pad), env(safe-area-inset-right, 0px))',
         isolation: 'isolate',
+        transition: 'background 0.3s ease, box-shadow 0.3s ease',
       }}
     >
       <div
@@ -106,6 +120,7 @@ export default function SiteHeader() {
           <Link
             href="https://apps.apple.com/app/id6796850110"
             className="cm-header-cta"
+            aria-label="Get ChoreMaxx on the App Store"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -201,12 +216,31 @@ export default function SiteHeader() {
                   minHeight: 48,
                   display: 'flex',
                   alignItems: 'center',
-                  background: 'transparent',
                 }}
               >
                 {l.label}
               </Link>
             ))}
+            <Link
+              href="https://apps.apple.com/app/id6796850110"
+              onClick={() => setOpen(false)}
+              style={{
+                marginTop: 4,
+                padding: '14px 16px',
+                borderRadius: 14,
+                fontSize: 15,
+                fontWeight: 600,
+                color: '#fff',
+                minHeight: 48,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'linear-gradient(180deg, color-mix(in srgb,#fff 18%,var(--p)) 0%, var(--p) 60%)',
+              }}
+            >
+              <span className="cm-cta-long">Start 7 days free</span>
+              <span className="cm-cta-short">Start free</span>
+            </Link>
             <div style={{ padding: '10px 12px 6px', borderTop: '1px solid var(--bd)', marginTop: 4 }}>
               <PaletteDots size={16} />
             </div>

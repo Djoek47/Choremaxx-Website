@@ -84,12 +84,25 @@ export default function HeroPhone() {
   );
 
   return (
-    <div className="cm-hero-phone" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 660, perspective: 1400, width: '100%' }}>
+    <div
+      className="cm-hero-phone"
+      style={{
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: 660,
+        perspective: 1400,
+        width: '100%',
+        maxWidth: '100%',
+      }}
+    >
       <div className="cm-hero-phone-inner" style={{ position: 'relative', width: 320, maxWidth: '100%', flexShrink: 0 }}>
         <div
           ref={tilt}
           style={{
-            position: 'relative', zIndex: 10, width: 320, padding: 11, borderRadius: 52, transformStyle: 'preserve-3d',
+            position: 'relative', zIndex: 10, width: '100%', maxWidth: 320, margin: '0 auto', padding: 11, borderRadius: 52, transformStyle: 'preserve-3d',
             background: 'linear-gradient(150deg, color-mix(in srgb,var(--tx) 92%,transparent), color-mix(in srgb,var(--tx) 70%,transparent))',
             boxShadow: '0 50px 100px rgba(15,14,23,.26), 0 10px 30px rgba(15,14,23,.14), inset 0 0 0 1px rgba(255,255,255,.14)',
             transition: 'transform .35s cubic-bezier(.22,1,.36,1)',
@@ -168,14 +181,15 @@ export default function HeroPhone() {
         </div>
       </div>
 
-      {/* Screen tabs */}
+      {/* Screen tabs — in flow below the mockup (tab-strip never wraps) */}
       <div
-        className="cm-hero-tabs"
+        className="tab-strip cm-hero-tabs"
         style={{
-          position: 'absolute', bottom: -6, left: '50%', transform: 'translateX(-50%)', zIndex: 20,
-          display: 'flex', gap: 5, padding: 6, borderRadius: 999, background: 'var(--gl)',
-          border: '1px solid var(--glb)', backdropFilter: 'blur(32px) saturate(190%)', boxShadow: 'var(--shadow)',
-          maxWidth: 'calc(100vw - 2 * var(--cm-page-x))', overflowX: 'auto', WebkitOverflowScrolling: 'touch',
+          padding: 6,
+          borderRadius: 999,
+          background: 'var(--bg)',
+          border: '1px solid var(--bd)',
+          boxShadow: 'var(--shadow)',
         }}
       >
         {SCREENS.map((s) => (
@@ -184,9 +198,8 @@ export default function HeroPhone() {
             type="button"
             onClick={() => setTab(s.label)}
             style={{
-              border: 'none', cursor: 'pointer', fontFamily: 'inherit', padding: '10px 14px', borderRadius: 999,
-              fontSize: 12.5, fontWeight: 600, transition: 'background .25s, color .25s', flexShrink: 0,
-              minHeight: 44, display: 'inline-flex', alignItems: 'center',
+              border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: 999,
+              fontWeight: 600, transition: 'background .25s, color .25s',
               background: tab === s.label ? 'var(--p)' : 'transparent',
               color: tab === s.label ? '#fff' : 'var(--txs)',
             }}
@@ -199,7 +212,7 @@ export default function HeroPhone() {
       <style jsx>{`
         @media (max-width: 1180px) { .cm-float { display: none; } }
         @media (max-width: 560px) {
-          .cm-hero-phone { min-height: 420px !important; }
+          .cm-hero-phone { min-height: auto !important; padding-bottom: 8px; }
           .cm-hero-phone-inner { width: min(280px, 100%) !important; }
         }
       `}</style>
