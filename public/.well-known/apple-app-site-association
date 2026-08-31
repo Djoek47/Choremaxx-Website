@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["R98S6HMKZL.app.choremaxx.household"],
+        "paths": [
+          "/auth/callback",
+          "/auth/callback/*",
+          "/join/*"
+        ]
+      }
+    ]
+  }
+}

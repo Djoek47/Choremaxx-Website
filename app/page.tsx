@@ -1,627 +1,436 @@
-import Image from 'next/image';
-import Link from 'next/link';
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
+
+import HeroPhone from '@/components/home/HeroPhone';
+import Reveal from '@/components/home/Reveal';
+import {
+  MarkBolt, MarkBook, MarkCart, MarkChart, MarkClipboard, MarkClock, MarkCrown, MarkFlame,
+  MarkMedal, MarkMoon, MarkPause, MarkScales, MarkShield, MarkTile,
+} from '@/components/marks/Marks';
+import SiteFooter from '@/components/site/SiteFooter';
+import SiteHeader from '@/components/site/SiteHeader';
+import StickyCta from '@/components/site/StickyCta';
+
+const DeadlineDemo = dynamic(() => import('@/components/home/DeadlineDemo'));
+const SupportFaq = dynamic(() => import('@/components/support/SupportFaq'));
 
 export const metadata: Metadata = {
-  title: 'ChoreMaxx — AI Household Operating System',
+  title: 'ChoreMaxx — The chore app for families with standards',
   description:
-    'AI organizes chores, shopping, schedules and responsibilities so everyone knows exactly what to do.',
+    'Assign the work, track who actually did it, and make it worth doing. 150 ready-made chores, XP, streaks and weekly crowns. For families, not roommates.',
+  alternates: { canonical: 'https://www.choremaxx.app/' },
+  openGraph: {
+    title: 'ChoreMaxx — Everyone knows what\u2019s theirs to do',
+    description: 'Parents assign. Kids complete. XP, streaks, crowns and rewards keep it honest. Free for 7 days.',
+  },
 };
 
-/* ─── Inline SVG icons ────────────────────────────────────── */
-function Icon({ d, size = 22 }: { d: string; size?: number }) {
+const DOES = [
+  { Mark: MarkClipboard, label: 'Pick from 150 chores, not a blank text box', sub: 'Fifteen domains — kitchen, bathroom, laundry, pets, yard, car, homework and the rest. Tap what you want done instead of inventing chore names at 9pm.' },
+  { Mark: MarkScales, label: 'Every task carries a weight', sub: 'Emptying the dishwasher isn\u2019t scrubbing the tub. Harder work is worth more XP, so effort actually shows up in the standings.' },
+  { Mark: MarkClock, label: 'One deadline everyone can see', sub: 'You set the household\u2019s daily deadline. Daily, weekday, weekly and monthly tasks all land against it. Miss it and the task goes late; leave it overnight and it expires.' },
+  { Mark: MarkBook, label: 'Homework has its own tab', sub: 'Because homework isn\u2019t a chore, and treating it like one never worked.' },
+  { Mark: MarkCart, label: 'The grocery list sorts itself', sub: 'Type \u201Cmilk,\u201D it files under Dairy & Eggs. Type \u201Csteak,\u201D it goes to Meat & Seafood. Shop the list by aisle instead of walking the store three times.' },
+];
+
+const POINTS = [
+  { Mark: MarkBolt, label: 'Instant XP', sub: 'Your child finishes, taps, and the points land. You get notified and can ask for a photo afterward if something looks suspiciously clean.' },
+  { Mark: MarkFlame, label: 'Streaks', sub: 'Daily and weekday tasks build a streak. Personal hygiene is tracked as a streak too, with no points attached, because brushing your teeth shouldn\u2019t be a transaction.' },
+  { Mark: MarkMoon, label: 'Late Credit', sub: 'Finished after the deadline but before midnight? Reduced XP, streak intact. Late is better than never, and the app says so.' },
+  { Mark: MarkShield, label: 'Streak Rescue', sub: 'Miss a day and you can pay part of the week\u2019s XP to save the streak. Miss three, and it\u2019s gone. Nobody gets it back for free.' },
+  { Mark: MarkPause, label: 'Recess', sub: 'Going away? Freeze everything. Leave with a 12-day streak, come home with a 12-day streak.' },
+];
+
+const TROPHIES = [
+  { Mark: MarkCrown, title: 'The Week\u2019s Crown', sub: 'Highest XP of the week' },
+  { Mark: MarkMedal, title: 'The Monthly Sovereign', sub: 'Highest XP of the month' },
+  { Mark: MarkChart, title: 'Champion\u2019s Record', sub: 'Tasks done, on time vs. late' },
+];
+
+const glass: React.CSSProperties = {
+  background: 'color-mix(in srgb, var(--bg) 92%, var(--tx))',
+  border: '1px solid var(--bd)',
+  boxShadow: 'var(--shadow)',
+};
+
+const sectionPad: React.CSSProperties = {
+  padding: 'var(--sec-pad) var(--side-pad)',
+};
+
+const h2: React.CSSProperties = {
+  margin: 0, fontSize: 'clamp(34px,4.2vw,58px)', fontWeight: 700,
+  letterSpacing: '-.04em', lineHeight: 1.04, color: 'var(--tx)', textWrap: 'balance',
+};
+
+const kicker: React.CSSProperties = {
+  fontSize: 11.5, fontWeight: 650, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--p)',
+};
+
+export default function HomePage() {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d={d} />
-    </svg>
-  );
-}
+    <div style={{ minHeight: 'var(--vh-full)', background: 'var(--bg)' }}>
+      <SiteHeader />
 
-/* ─── Glass floating ring decoration ─────────────────────── */
-function Ring({ size, style }: { size: number; style?: React.CSSProperties }) {
-  return (
-    <div
-      aria-hidden
-      className="ring-deco"
-      style={{
-        width: size,
-        height: size,
-        border: '9px solid rgba(180,160,240,0.22)',
-        boxShadow: 'inset 0 0 50px rgba(160,130,255,0.14), 0 0 60px rgba(140,110,255,0.12)',
-        ...style,
-      }}
-    />
-  );
-}
-
-/* ─── Section wrapper ─────────────────────────────────────── */
-function Section({ children, className = '', id }: { children: React.ReactNode; className?: string; id?: string }) {
-  return (
-    <section id={id} className={`section relative overflow-hidden ${className}`}>
-      {children}
-    </section>
-  );
-}
-
-/* ─── Feature icons (thin stroke, primary-colored) ────────── */
-const featureItems = [
-  {
-    icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z',
-    label: 'AI Assistant',
-    sub: 'Natural conversations. Real results.',
-  },
-  {
-    icon: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5',
-    label: 'Smart Scheduling',
-    sub: 'Automatically plan the perfect week.',
-  },
-  {
-    icon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z',
-    label: 'Shared Tasks',
-    sub: 'Everyone knows what to do and when.',
-  },
-  {
-    icon: 'M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z',
-    label: 'Grocery & Lists',
-    sub: 'Smart lists that update themselves.',
-  },
-  {
-    icon: 'M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z',
-    label: 'Rewards & XP',
-    sub: 'Motivate with rewards, XP and achievements.',
-  },
-  {
-    icon: 'M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z',
-    label: 'Household Insights',
-    sub: 'Understand your home with powerful insights.',
-  },
-];
-
-const householdModes = [
-  { label: 'Parents',    sub: 'For families with kids',       iconPath: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0' },
-  { label: 'Roommates',  sub: 'Share and split tasks',        iconPath: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z' },
-  { label: 'Couples',    sub: 'Build better habits together', iconPath: 'M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z' },
-  { label: 'Caretakers', sub: 'Care made simple',             iconPath: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z' },
-  { label: 'Students',   sub: 'Stay on top of tasks',         iconPath: 'M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5' },
-  { label: 'Kids',       sub: 'Fun & responsibility',         iconPath: 'M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z' },
-];
-
-const timelineItems = [
-  { time: '9:00 AM',   label: 'Breakfast',    person: 'Mom',   active: false },
-  { time: '10:30 AM',  label: 'Laundry',      person: 'Sarah', active: false },
-  { time: '1:00 PM',   label: 'Take Garbage', person: 'Alex',  active: true  },
-  { time: '4:30 PM',   label: 'Clean Room',   person: 'Noah',  active: false },
-  { time: '7:00 PM',   label: 'Water Plants', person: 'Emma',  active: false },
-];
-
-const testimonials = [
-  {
-    quote: '"ChoreMaxx made our chaotic house feel calm. Everyone finally pulls their weight!"',
-    name: 'Jessica M.',
-    role: 'Mom of 3',
-  },
-  {
-    quote: '"As roommates, this app is a game changer. No more awkward reminders!"',
-    name: 'Daniel K.',
-    role: 'College Student',
-  },
-  {
-    quote: '"The AI suggestions are incredibly helpful. It knows what we need."',
-    name: 'Alex T.',
-    role: 'Working Professional',
-  },
-];
-
-const pricingPlans = [
-  {
-    name: 'Free',
-    price: '$0',
-    period: '/month',
-    desc: 'For small households getting started.',
-    features: ['Up to 5 members', 'Basic task management', 'Grocery list', 'Mobile app access'],
-    cta: 'Get Started',
-    highlight: false,
-  },
-  {
-    name: 'Premium',
-    price: '$4.99',
-    period: '/month',
-    desc: 'Advanced features for growing homes.',
-    features: ['Unlimited members', 'AI Assistant', 'Advanced scheduling', 'Rewards & XP', 'Priority support'],
-    cta: 'Start Free Trial',
-    highlight: true,
-    badge: 'Most Popular',
-  },
-  {
-    name: 'Family',
-    price: '$8.99',
-    period: '/month',
-    desc: 'Everything in Premium, plus more.',
-    features: ['Multi-home management', 'Advanced insights', 'Custom rewards', 'Early access to new features'],
-    cta: 'Start Free Trial',
-    highlight: false,
-  },
-];
-
-const faqItems = [
-  { q: 'How does the AI Assistant work?',     a: 'Nova uses advanced AI to understand your household patterns, suggest optimal task assignments, and proactively remind members — all through natural conversation.' },
-  { q: 'Can I use ChoreMaxx with roommates?', a: 'Absolutely. ChoreMaxx has a dedicated Roommates mode with equal role management, fair task distribution tracking, and split-responsibility tools.' },
-  { q: 'Is my data secure?',                  a: 'Yes. All household data is encrypted end-to-end. We never sell your data. You can export or delete everything at any time from within the app.' },
-  { q: 'Can I customize tasks and rewards?',  a: 'Yes — create any task with custom names, difficulty, frequency, and XP value. Rewards are fully configurable by household admins.' },
-];
-
-/* ═══════════════════════════════════════════════════════════ */
-export default function Home() {
-  return (
-    <div style={{ background: '#F6F5FA' }}>
-
-      {/* ── 1. HERO ─────────────────────────────────────── */}
+      {/* ── HERO ── */}
       <section
-        className="relative overflow-hidden"
+        id="top"
+        className="cm-section hero"
         style={{
-          minHeight: '100vh',
-          background: 'linear-gradient(160deg, #EDE9FB 0%, #F6F5FA 40%, #EAF0FF 100%)',
+          position: 'relative', display: 'flex', alignItems: 'center',
+          paddingTop: 'calc(120px + var(--cm-header-y))',
+          paddingBottom: 'var(--sec-pad)',
+          background: 'linear-gradient(160deg, color-mix(in srgb,var(--p) 12%,var(--bg)) 0%, var(--bg) 45%, color-mix(in srgb,var(--p) 8%,var(--bg)) 100%)',
         }}
       >
-        {/* Ambient blobs */}
-        <div className="blob blob-purple" style={{ width: 600, height: 600, top: -150, right: -100, opacity: 0.6 }} />
-        <div className="blob blob-blue"   style={{ width: 400, height: 400, bottom: 0, left: -80, opacity: 0.5 }} />
-        <div className="blob blob-pink"   style={{ width: 300, height: 300, top: '30%', left: '35%', opacity: 0.4 }} />
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+          <div className="cm-hero-blob" style={{ position: 'absolute', top: -220, right: -160, width: 720, height: 720, borderRadius: '50%', filter: 'blur(90px)', animation: 'cmDrift 26s ease-in-out infinite alternate', background: 'radial-gradient(circle, color-mix(in srgb,var(--p) 30%,transparent) 0%, transparent 70%)' }} />
+          <div className="cm-hero-blob" style={{ position: 'absolute', bottom: -180, left: -140, width: 520, height: 520, borderRadius: '50%', filter: 'blur(80px)', animation: 'cmDrift 34s ease-in-out infinite alternate-reverse', background: 'radial-gradient(circle, color-mix(in srgb,var(--sec) 22%,transparent) 0%, transparent 70%)' }} />
+          <div className="cm-hero-blob" style={{ position: 'absolute', top: -160, right: -190, width: 600, height: 600, borderRadius: '50%', border: '9px solid color-mix(in srgb,var(--p) 15%,transparent)', animation: 'cmSpin 120s linear infinite' }} />
+        </div>
 
-        {/* Floating rings — matching reference 3D glass objects */}
-        <Ring size={520} style={{ top: -140, right: -160, opacity: 0.40, transform: 'rotate(-18deg)' }} />
-        <Ring size={340} style={{ bottom: -60, left: -80,  opacity: 0.28, transform: 'rotate(22deg)'  }} />
-        <Ring size={200} style={{ top: '38%', right: '6%', opacity: 0.22, transform: 'rotate(45deg)'  }} />
-
-        <div className="container-page relative z-10" style={{ paddingTop: '5rem', paddingBottom: '4rem' }}>
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-8">
-
-            {/* Left: headline + CTA */}
-            <div className="flex-1 flex flex-col gap-7 max-w-xl">
-
-              {/* Eyebrow chip */}
-              <div className="chip self-start">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5B8CFF" strokeWidth="2">
-                  <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                </svg>
-                AI Household Operating System
-              </div>
-
-              <h1 className="text-balance">
-                Finally.<br />
-                A Home That<br />
-                Runs{' '}
-                <span style={{ color: '#5B8CFF' }}>Itself.</span>
-              </h1>
-
-              <p className="text-lg" style={{ color: '#3D3A4E', maxWidth: 440 }}>
-                AI organizes chores, shopping, schedules and responsibilities so everyone knows exactly what to do.
-              </p>
-
-              <div className="flex flex-wrap items-center gap-3">
-                <Link href="/download" className="btn-primary gap-2">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
-                  </svg>
-                  Download on App Store
-                </Link>
-                <Link href="/how-it-works" className="btn-ghost gap-2">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                  Watch Demo
-                </Link>
-              </div>
-
-              {/* Star rating */}
-              <div className="flex items-center gap-3">
-                <div className="flex -space-x-2">
-                  {[1,2,3,4].map(i => (
-                    <div key={i} className="w-8 h-8 rounded-full border-2 border-white overflow-hidden"
-                      style={{ background: `hsl(${250 + i * 20},60%,75%)` }} />
-                  ))}
-                </div>
-                <div>
-                  <span style={{ color: '#FFD166', fontSize: '0.875rem', fontWeight: 700 }}>4.9 ★★★★★</span>
-                  <span className="text-sm ml-2" style={{ color: '#8B8AA0' }}>Loved by 50,000+ families</span>
-                </div>
-              </div>
+        <div className="cm-hero-grid" style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', width: '100%', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,540px)', gap: 'var(--col-gap)', alignItems: 'center' }}>
+          <div className="min-w-0" style={{ display: 'flex', flexDirection: 'column', gap: 26, maxWidth: 760 }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, alignSelf: 'flex-start', padding: '6px 14px', borderRadius: 999, background: 'var(--pl)', border: '1px solid color-mix(in srgb,var(--p) 24%,transparent)', boxShadow: 'var(--spec)', fontSize: 12.5, fontWeight: 600, color: 'var(--p)', animation: 'cmFade .8s .1s both' }}>
+              Built for real families with high standards
             </div>
 
-            {/* Right: phone mockup + floating widget cards */}
-            <div className="flex-1 relative hidden lg:flex items-center justify-center" style={{ minHeight: 580 }}>
+            <h1 style={{ margin: 0, fontSize: 'clamp(26px,3.5vw,51px)', fontWeight: 700, lineHeight: 1.06, letterSpacing: '-.045em', color: 'var(--tx)', textWrap: 'balance' }}>
+              Your house. Your <span style={{ color: 'var(--p)' }}>rules</span>. Actually followed.
+            </h1>
 
-              {/* Main phone card */}
-              <div
-                className="relative z-10"
-                style={{
-                  width: 280,
-                  background: 'rgba(255,255,255,0.65)',
-                  backdropFilter: 'blur(35px)',
-                  WebkitBackdropFilter: 'blur(35px)',
-                  borderRadius: 40,
-                  border: '1px solid rgba(255,255,255,0.85)',
-                  boxShadow: '0 24px 80px rgba(100,80,200,0.18), 0 4px 16px rgba(0,0,0,0.08)',
-                  overflow: 'hidden',
-                }}
-              >
-                <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_6631-v9iwoCWH3W4q6dq7oB2z5HISd3Verm.png"
-                  alt="ChoreMaxx app — The Johnsons household dashboard"
-                  width={280}
-                  height={560}
-                  className="w-full h-auto"
-                  priority
-                />
-              </div>
+            <p style={{ margin: 0, maxWidth: 470, fontSize: 19, lineHeight: 1.6, color: 'var(--txs)', animation: 'cmRise .9s cubic-bezier(.22,1,.36,1) .62s both' }}>
+              With ChoreMaxx, hand out the work, track who actually did it, and make it worth doing. You stay in charge — the app just stops the arguing.
+            </p>
 
-              {/* Floating widget: Grocery List */}
-              <div className="glass-card p-4 absolute left-0 top-8" style={{ width: 165, zIndex: 20 }}>
-                <p className="text-xs font-semibold mb-2" style={{ color: '#0F0E17' }}>Grocery List</p>
-                {['Milk', 'Eggs', 'Bread', 'Bananas'].map((item, i) => (
-                  <div key={item} className="flex items-center gap-2 py-0.5">
-                    <div className="w-4 h-4 rounded-full border flex items-center justify-center flex-shrink-0"
-                      style={{ borderColor: i < 2 ? '#5BD6BD' : '#C986FF', background: i < 2 ? 'rgba(91,214,189,0.15)' : 'transparent' }}>
-                      {i < 2 && <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#5BD6BD" strokeWidth="3"><path d="M5 13l4 4L19 7" /></svg>}
-                    </div>
-                    <span className="text-xs" style={{ color: i < 2 ? '#8B8AA0' : '#0F0E17', textDecoration: i < 2 ? 'line-through' : 'none' }}>{item}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Floating widget: AI Assistant */}
-              <div className="glass-card p-4 absolute right-0 top-12" style={{ width: 185, zIndex: 20 }}>
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #5B8CFF, #C986FF)' }}>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="white">
-                      <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                    </svg>
-                  </div>
-                  <span className="text-xs font-semibold" style={{ color: '#5B8CFF' }}>AI Assistant</span>
-                  <span className="text-xs ml-auto" style={{ color: '#8B8AA0' }}>now</span>
-                </div>
-                <p className="text-xs" style={{ color: '#0F0E17' }}>Laundry completed!</p>
-                <p className="text-xs" style={{ color: '#5BD6BD', fontWeight: 600 }}>Sarah earned +80 XP</p>
-              </div>
-
-              {/* Floating widget: Kids XP */}
-              <div className="glass-card p-4 absolute left-0 bottom-20" style={{ width: 160, zIndex: 20 }}>
-                <p className="text-xs font-semibold mb-1" style={{ color: '#8B8AA0' }}>Kids XP</p>
-                <p className="text-3xl font-bold" style={{ color: '#0F0E17', letterSpacing: '-0.03em' }}>1,250</p>
-                <p className="text-xs" style={{ color: '#8B8AA0' }}>Total XP</p>
-              </div>
-
-              {/* Floating widget: Energy Harmony */}
-              <div className="glass-card p-4 absolute right-0 bottom-16" style={{ width: 170, zIndex: 20 }}>
-                <p className="text-xs font-semibold mb-1" style={{ color: '#0F0E17' }}>Energy Harmony</p>
-                <p className="text-sm font-bold" style={{ color: '#5BD6BD' }}>High</p>
-                <svg width="130" height="40" viewBox="0 0 130 40" fill="none" className="mt-1">
-                  <path d="M0 25 Q25 10 50 20 T100 15 T130 22" stroke="#5BD6BD" strokeWidth="2" fill="none" />
-                </svg>
-              </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, animation: 'cmRise .9s cubic-bezier(.22,1,.36,1) .70s both' }}>
+              <Link href="/download" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, padding: '15px 28px', borderRadius: 999, background: 'linear-gradient(180deg, color-mix(in srgb,#fff 18%,var(--p)) 0%, var(--p) 60%)', color: '#fff', fontSize: 15, fontWeight: 600, boxShadow: '0 1px 0 rgba(255,255,255,.35) inset, 0 8px 28px color-mix(in srgb,var(--p) 45%,transparent)' }}>
+                <span className="cm-cta-short">Start free</span>
+                <span className="cm-cta-long">Start 7 days free</span>
+              </Link>
+              <Link href="/#deadline" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, padding: '15px 26px', borderRadius: 999, background: 'color-mix(in srgb,var(--gl) 55%,transparent)', border: '1.5px solid var(--bd)', color: 'var(--txs)', fontSize: 15, fontWeight: 600 }}>
+                See how it works
+              </Link>
             </div>
           </div>
+
+          <HeroPhone />
         </div>
       </section>
 
-      {/* ── 2. TRUST LOGOS ──────────────────────────────── */}
-      <section style={{ background: '#FFFFFF', borderTop: '1px solid rgba(200,190,230,0.20)', borderBottom: '1px solid rgba(200,190,230,0.20)' }}>
-        <div className="container-page py-10">
-          <p className="text-center text-xs font-semibold uppercase tracking-widest mb-8" style={{ color: '#8B8AA0' }}>
-            Trusted by families worldwide
+      {/* ── PROBLEM ── */}
+      <section className="cm-section" style={{ ...sectionPad, background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
+        <Reveal style={{ maxWidth: 820, margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ ...h2, fontSize: 'clamp(32px,4vw,54px)', marginBottom: 20 }}>The chore chart lasted eleven days</h2>
+          <p style={{ margin: 0, fontSize: 18, lineHeight: 1.65, color: 'var(--txm)' }}>
+            You wrote it out. You taped it to the fridge. Then someone &ldquo;already did that one,&rdquo; someone else swears it wasn&rsquo;t theirs,
+            and by the second week you&rsquo;re doing the dishes yourself again. The chart wasn&rsquo;t the problem. Nothing was keeping score.
           </p>
-          <div className="flex items-center justify-center flex-wrap gap-10">
-            {['Forbes', 'TechCrunch', 'Yahoo!', 'Product Hunt', 'The Verge'].map(name => (
-              <span key={name} className="text-base font-bold" style={{ color: '#C0BBDA' }}>{name}</span>
-            ))}
-          </div>
-        </div>
+        </Reveal>
       </section>
 
-      {/* ── 3. FEATURES GRID ────────────────────────────── */}
-      <Section>
-        <div className="container-page">
-          <div className="section-heading">
-            <h2 className="text-balance">Everything Your Home Needs</h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
-            {featureItems.map(({ icon, label, sub }) => (
-              <div key={label} className="glass-tile p-5 flex flex-col items-center text-center gap-3">
-                <div
-                  className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                  style={{ background: 'rgba(91,140,255,0.10)', color: '#5B8CFF' }}
-                >
-                  <Icon d={icon} size={22} />
-                </div>
-                <p className="text-sm font-semibold" style={{ color: '#0F0E17' }}>{label}</p>
-                <p className="text-xs leading-snug" style={{ color: '#8B8AA0' }}>{sub}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* ── 4. HOUSEHOLD MODES ──────────────────────────── */}
-      <Section style={{ background: '#FFFFFF' }}>
-        <div className="container-page">
-          <div className="section-heading">
-            <h2 className="text-balance">Built For Every Type of Home</h2>
-            <p className="text-base" style={{ color: '#8B8AA0' }}>Choose the mode that fits your household.</p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
-            {householdModes.map(({ label, sub, iconPath }, i) => (
-              <div
-                key={label}
-                className="glass-tile p-5 flex flex-col items-center text-center gap-3 cursor-pointer"
-                style={i === 0 ? { border: '1.5px solid rgba(91,140,255,0.40)', background: 'rgba(91,140,255,0.06)' } : {}}
-              >
-                <div
-                  className="w-11 h-11 rounded-2xl flex items-center justify-center"
-                  style={{ background: i === 0 ? 'rgba(91,140,255,0.12)' : 'rgba(100,80,180,0.07)', color: '#5B8CFF' }}
-                >
-                  <Icon d={iconPath} size={20} />
-                </div>
-                <p className="text-sm font-semibold" style={{ color: '#0F0E17' }}>{label}</p>
-                <p className="text-xs" style={{ color: '#8B8AA0' }}>{sub}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* ── 5. CHORE TIMELINE ───────────────────────────── */}
-      <Section>
-        <div className="container-page">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center gap-12">
-            <div className="lg:w-72 flex-shrink-0">
-              <h2 className="text-balance mb-4">See Your Day, Stay In Sync</h2>
-              <p className="text-base mb-6" style={{ color: '#8B8AA0' }}>
-                A beautiful timeline everyone can follow and update.
-              </p>
-              <Link href="/features" className="btn-ghost text-sm px-5 py-2.5 inline-flex items-center gap-2">
-                Explore All Tasks
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-              </Link>
-            </div>
-            <div className="flex-1 overflow-x-auto">
-              <div className="flex items-start gap-4 min-w-max pb-4">
-                {timelineItems.map(({ time, label, person, active }) => (
-                  <div
-                    key={label}
-                    className="flex flex-col items-center gap-3"
-                    style={{ width: 130 }}
-                  >
-                    <p className="text-xs font-semibold" style={{ color: active ? '#5B8CFF' : '#8B8AA0' }}>{time}</p>
-                    <div
-                      className="w-full rounded-2xl p-4 flex flex-col items-center gap-2 text-center"
-                      style={{
-                        background: active ? '#5B8CFF' : 'rgba(255,255,255,0.80)',
-                        border: `1px solid ${active ? '#5B8CFF' : 'rgba(200,190,230,0.35)'}`,
-                        boxShadow: active ? '0 8px 32px rgba(91,140,255,0.30)' : '0 2px 12px rgba(100,80,180,0.06)',
-                      }}
-                    >
-                      <p className="text-sm font-semibold" style={{ color: active ? '#FFF' : '#0F0E17' }}>{label}</p>
-                      <p className="text-xs" style={{ color: active ? 'rgba(255,255,255,0.75)' : '#8B8AA0' }}>{person}</p>
-                    </div>
-                    {/* Timeline dot */}
-                    <div className="w-3 h-3 rounded-full" style={{ background: active ? '#5B8CFF' : '#C0BBDA' }} />
-                  </div>
-                ))}
-              </div>
-              {/* Timeline line */}
-              <div className="h-px mt-1" style={{ background: 'linear-gradient(90deg, #5B8CFF 28%, #C0BBDA 28%)' }} />
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* ── 6. REWARDS / XP ─────────────────────────────── */}
-      <Section style={{ background: '#FFFFFF' }}>
-        <div className="container-page">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
-
-            {/* Left text */}
-            <div className="lg:w-80 flex-shrink-0">
-              <h2 className="text-balance mb-4">Make Chores Worth It</h2>
-              <p className="text-base mb-6" style={{ color: '#8B8AA0' }}>
-                Positive habits. Real rewards. A happier home.
-              </p>
-              <Link href="/features" className="btn-ghost text-sm px-5 py-2.5 inline-flex items-center gap-2">
-                See Rewards
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-              </Link>
-            </div>
-
-            {/* XP card */}
-            <div className="flex-1 flex flex-wrap gap-5 items-center justify-center">
-              <div
-                className="glass-card p-7 flex flex-col gap-4"
-                style={{ minWidth: 260 }}
-              >
-                <p className="text-sm" style={{ color: '#8B8AA0' }}>You earned</p>
-                <p className="text-5xl font-extrabold" style={{ color: '#5B8CFF', letterSpacing: '-0.04em' }}>+120 XP</p>
-                <p className="text-sm font-semibold" style={{ color: '#5BD6BD' }}>Great job!</p>
-                <div>
-                  <div className="flex justify-between text-xs mb-1.5">
-                    <span style={{ color: '#8B8AA0' }}>1,250 / 2,000 XP</span>
-                  </div>
-                  <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(91,140,255,0.12)' }}>
-                    <div className="h-full rounded-full" style={{ width: '62.5%', background: 'linear-gradient(90deg, #5B8CFF, #C986FF)' }} />
-                  </div>
-                </div>
-              </div>
-
-              {/* Achievement cards */}
-              <div className="flex flex-col gap-4">
-                {[
-                  { icon: '🔥', label: 'Daily Streak', val: '7 days in a row' },
-                  { icon: '🏆', label: 'Top Contributor', val: 'This week'      },
-                  { icon: '🎯', label: 'Family Goal',     val: '88% completed' },
-                ].map(({ icon, label, val }) => (
-                  <div key={label} className="glass-tile px-5 py-3 flex items-center gap-4" style={{ minWidth: 200 }}>
-                    <span style={{ fontSize: '1.25rem' }}>{icon}</span>
-                    <div>
-                      <p className="text-sm font-semibold" style={{ color: '#0F0E17' }}>{label}</p>
-                      <p className="text-xs" style={{ color: '#8B8AA0' }}>{val}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* ── 7. TESTIMONIALS ─────────────────────────────── */}
-      <Section>
-        <div className="container-page">
-          <div className="section-heading">
-            <h2>What Families Are Saying</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map(({ quote, name, role }) => (
-              <div key={name} className="glass-card p-8 flex flex-col gap-5">
-                <svg width="28" height="20" viewBox="0 0 28 20" fill="none">
-                  <path d="M0 20V12C0 5.373 4.477 1.12 13.43 0l1.14 2.286C9.143 3.428 6.857 6.095 6.286 10H12V20H0zm16 0V12C16 5.373 20.477 1.12 29.43 0L30.57 2.286C25.143 3.428 22.857 6.095 22.286 10H28V20H16z" fill="#5B8CFF" opacity="0.20" />
-                </svg>
-                <p className="text-base leading-relaxed" style={{ color: '#3D3A4E' }}>{quote}</p>
-                <div className="flex items-center gap-3 mt-auto">
-                  <div className="w-10 h-10 rounded-full" style={{ background: 'linear-gradient(135deg, #5B8CFF44, #C986FF44)' }} />
+      {/* ── WHAT IT DOES ── */}
+      <section id="does" className="cm-section" style={sectionPad}>
+        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+          <Reveal style={{ maxWidth: 620, marginBottom: 52 }}>
+            <p style={{ ...kicker, margin: '0 0 14px' }}>What ChoreMaxx does</p>
+            <h2 style={h2}>Assign it once. It holds.</h2>
+          </Reveal>
+          <div className="auto-grid">
+            {DOES.map(({ Mark, label, sub }) => (
+              <Reveal key={label}>
+                <div className="cm-glass card" style={{ ...glass, display: 'flex', alignItems: 'flex-start', gap: 16, borderRadius: 24, height: '100%' }}>
+                  <MarkTile><Mark /></MarkTile>
                   <div>
-                    <p className="text-sm font-semibold" style={{ color: '#0F0E17' }}>{name}</p>
-                    <p className="text-xs" style={{ color: '#8B8AA0' }}>{role}</p>
+                    <p style={{ margin: '0 0 7px', fontSize: 16, fontWeight: 650, letterSpacing: '-.02em', color: 'var(--tx)' }}>{label}</p>
+                    <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.6, color: 'var(--txm)' }}>{sub}</p>
                   </div>
                 </div>
-              </div>
+              </Reveal>
             ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* ── 8. PRICING ──────────────────────────────────── */}
-      <Section id="pricing" style={{ background: '#FFFFFF' }}>
-        <div className="container-page">
-          <div className="section-heading">
-            <h2>Simple Pricing, For Every Home</h2>
-            {/* Monthly / Yearly toggle */}
-            <div className="flex items-center gap-2 mt-2">
-              <div
-                className="flex items-center gap-1 p-1 rounded-full"
-                style={{ background: 'rgba(91,140,255,0.08)', border: '1px solid rgba(91,140,255,0.20)' }}
-              >
-                <span className="px-4 py-1.5 rounded-full text-sm font-semibold" style={{ background: '#5B8CFF', color: '#FFF' }}>Monthly</span>
-                <span className="px-4 py-1.5 rounded-full text-sm font-medium" style={{ color: '#8B8AA0' }}>
-                  Yearly
-                  <span className="ml-1.5 text-xs px-2 py-0.5 rounded-full" style={{ background: '#5BD6BD', color: '#FFF' }}>Save 20%</span>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {pricingPlans.map(({ name, price, period, desc, features, cta, highlight, badge }) => (
-              <div
-                key={name}
-                className="glass-card p-8 flex flex-col gap-6 relative"
-                style={highlight ? {
-                  border: '1.5px solid #5B8CFF',
-                  boxShadow: '0 8px 40px rgba(91,140,255,0.20)',
-                } : {}}
-              >
-                {badge && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                    <span className="px-4 py-1 rounded-full text-xs font-semibold text-white"
-                      style={{ background: '#5B8CFF' }}>{badge}</span>
-                  </div>
-                )}
-                <div>
-                  <p className="text-sm font-semibold mb-1" style={{ color: '#8B8AA0' }}>{name}</p>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-extrabold" style={{ color: '#0F0E17', letterSpacing: '-0.03em' }}>{price}</span>
-                    <span className="text-sm" style={{ color: '#8B8AA0' }}>{period}</span>
-                  </div>
-                  <p className="text-sm mt-2" style={{ color: '#8B8AA0' }}>{desc}</p>
-                </div>
-                <ul className="flex flex-col gap-2.5 flex-1">
-                  {features.map(f => (
-                    <li key={f} className="flex items-center gap-2.5 text-sm" style={{ color: '#3D3A4E' }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5BD6BD" strokeWidth="2.5" strokeLinecap="round">
-                        <path d="M5 13l4 4L19 7" />
-                      </svg>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/download"
-                  className={highlight ? 'btn-primary text-center' : 'btn-ghost text-center'}
-                >
-                  {cta}
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* ── 9. FAQ ──────────────────────────────────────── */}
-      <Section>
-        <div className="container-page max-w-3xl mx-auto">
-          <div className="section-heading">
-            <h2>Frequently Asked Questions</h2>
-          </div>
-          <div className="flex flex-col gap-3">
-            {faqItems.map(({ q, a }) => (
-              <details
-                key={q}
-                className="glass-card px-7 py-5 cursor-pointer group"
-                style={{ listStyle: 'none' }}
-              >
-                <summary className="flex items-center justify-between text-sm font-semibold list-none" style={{ color: '#0F0E17' }}>
-                  {q}
-                  <svg className="w-5 h-5 flex-shrink-0 ml-4 transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" stroke="#8B8AA0" strokeWidth="2">
-                    <path d="M12 5v14M5 12h14" strokeLinecap="round" />
-                  </svg>
-                </summary>
-                <p className="text-sm mt-4 leading-relaxed" style={{ color: '#8B8AA0' }}>{a}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* ── 10. FINAL CTA ───────────────────────────────── */}
-      <section
-        className="relative overflow-hidden py-28"
-        style={{ background: 'linear-gradient(160deg, #EDE9FB 0%, #F0F4FF 60%, #EAF5F2 100%)' }}
-      >
-        <div className="blob blob-purple" style={{ width: 500, height: 500, top: -100, left: -100, opacity: 0.50 }} />
-        <div className="blob blob-blue"   style={{ width: 400, height: 400, bottom: -80, right: -80, opacity: 0.45 }} />
-        <Ring size={440} style={{ top: -100, right: -120, opacity: 0.30 }} />
-
-        <div className="container-page relative z-10 flex flex-col items-center text-center gap-8">
-          <h2 className="text-balance text-5xl md:text-6xl" style={{ maxWidth: 620 }}>
-            Ready For A Better Home?
-          </h2>
-          <p className="text-lg" style={{ color: '#8B8AA0', maxWidth: 400 }}>
-            Join thousands of families getting organized with ChoreMaxx today.
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/download" className="btn-primary gap-2 px-8 py-4 text-base">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
-              </svg>
-              Download on App Store
-            </Link>
-            <Link href="/how-it-works" className="btn-ghost gap-2 px-8 py-4 text-base">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
-              Watch Demo
-            </Link>
           </div>
         </div>
       </section>
 
+      {/* ── DEADLINE ── */}
+      <section id="deadline" className="cm-section" style={{ ...sectionPad, background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+          <Reveal style={{ maxWidth: 660, marginBottom: 52 }}>
+            <p style={{ ...kicker, margin: '0 0 14px' }}>Try it right here</p>
+            <h2 style={{ ...h2, marginBottom: 14 }}>One deadline. Three ways the night can end.</h2>
+            <p style={{ margin: 0, fontSize: 17.5, lineHeight: 1.6, color: 'var(--txm)' }}>
+              You set the household&rsquo;s daily deadline. Pick when Liam actually taps Complete and watch what the app does about it — full XP,
+              Late Credit, or an expired task and a broken streak he has to buy back.
+            </p>
+          </Reveal>
+          <DeadlineDemo />
+        </div>
+      </section>
+
+      {/* ── POINTS ── */}
+      <section className="cm-section" style={sectionPad}>
+        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+          <Reveal style={{ maxWidth: 660, marginBottom: 52 }}>
+            <p style={{ ...kicker, margin: '0 0 14px' }}>Points that mean something</p>
+            <h2 style={{ ...h2, marginBottom: 14 }}>XP hits the second they tap Complete</h2>
+            <p style={{ margin: 0, fontSize: 17.5, lineHeight: 1.6, color: 'var(--txm)' }}>
+              No waiting on a parent to log in and bless it. Your child finishes, taps, and the points land. You get notified and can ask for a photo afterward if something looks suspiciously clean.
+            </p>
+          </Reveal>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(210px,1fr))', gap: 18 }}>
+            {POINTS.map(({ Mark, label, sub }) => (
+              <Reveal key={label}>
+                <div className="cm-glass card" style={{ ...glass, display: 'flex', flexDirection: 'column', gap: 11, borderRadius: 24, height: '100%' }}>
+                  <MarkTile><Mark /></MarkTile>
+                  <p style={{ margin: 0, fontSize: 16, fontWeight: 650, letterSpacing: '-.02em', color: 'var(--tx)' }}>{label}</p>
+                  <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: 'var(--txm)' }}>{sub}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── TROPHIES (halo, colourless) ── */}
+      <section className="cm-section" style={{ ...sectionPad, background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
+        <div className="split" style={{ maxWidth: 1180, margin: '0 auto', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', alignItems: 'center' }}>
+          <Reveal>
+            <h2 style={{ ...h2, fontSize: 'clamp(34px,4.2vw,54px)', marginBottom: 16 }}>Somebody wins the week</h2>
+            <p style={{ margin: 0, fontSize: 17.5, lineHeight: 1.6, color: 'var(--txm)' }}>
+              The Week&rsquo;s Crown goes to the highest XP of the week. The Monthly Sovereign takes the month. Gold, silver, bronze — and a Champion&rsquo;s Record anyone in the house can open: tasks completed, how many were on time, how many were late.
+            </p>
+            <p style={{ margin: '16px 0 0', fontSize: 17.5, lineHeight: 1.6, color: 'var(--txm)' }}>
+              Only one child? They compete against their own best week. That&rsquo;s usually harder.
+            </p>
+          </Reveal>
+          <Reveal style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {TROPHIES.map(({ Mark, title, sub }) => (
+              <div key={title} className="cm-glass" style={{ ...glass, display: 'flex', alignItems: 'center', gap: 18, padding: '24px 26px', borderRadius: 24 }}>
+                <MarkTile tone="colourless"><Mark /></MarkTile>
+                <div>
+                  <p style={{ margin: 0, fontSize: 17, fontWeight: 650, letterSpacing: '-.02em', color: 'var(--tx)' }}>{title}</p>
+                  <p style={{ margin: '4px 0 0', fontSize: 14, color: 'var(--txm)' }}>{sub}</p>
+                </div>
+              </div>
+            ))}
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── REWARDS ── */}
+      <section className="cm-section" style={sectionPad}>
+        <div style={{ maxWidth: 820, margin: '0 auto' }}>
+          <Reveal>
+            <p style={{ ...kicker, margin: '0 0 14px' }}>Rewards &amp; allowance</p>
+            <h2 style={{ ...h2, marginBottom: 18 }}>You decide what the work is worth</h2>
+            <p style={{ margin: '0 0 16px', fontSize: 17.5, lineHeight: 1.65, color: 'var(--txm)' }}>
+              Run it however your house runs. XP only. Allowance only. XP plus rewards. Or the full system.
+            </p>
+            <p style={{ margin: '0 0 16px', fontSize: 17.5, lineHeight: 1.65, color: 'var(--txm)' }}>
+              Pick from the reward library or mint your own — extra screen time, choosing dinner, a later bedtime, whatever actually motivates your child. Set each one to grant instantly or require your approval.
+            </p>
+            <p style={{ margin: '0 0 16px', fontSize: 17.5, lineHeight: 1.65, color: 'var(--txm)' }}>
+              Once the day&rsquo;s tasks and homework are done, a Sidekick can hold to request a reward. Before that, the button just tells them to go finish.
+            </p>
+            <p style={{ margin: 0, fontSize: 17.5, lineHeight: 1.65, color: 'var(--txm)' }}>
+              About allowance, plainly: ChoreMaxx is not a payment app. It never touches your bank, and no money moves through it. You approve an amount, the app records it, and you settle up the way you already do.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── POPPINS ── */}
+      <section id="poppins" className="cm-section" style={{ ...sectionPad, paddingTop: 'clamp(80px, 14vw, 130px)' }}>
+        <div className="split" style={{ maxWidth: 1180, margin: '0 auto', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', alignItems: 'center' }}>
+          <Reveal>
+            <p style={{ ...kicker, margin: '0 0 16px' }}>Poppins</p>
+            <h2 style={{ ...h2, marginBottom: 18 }}>Poppins does the admin so you don&rsquo;t</h2>
+            <p style={{ margin: '0 0 16px', fontSize: 17.5, lineHeight: 1.6, color: 'var(--txm)' }}>
+              Poppins is the AI built into ChoreMaxx, and it&rsquo;s yours — parents only. Ask it anything about how the app works, or just tell it
+              what you want: assign Saturday&rsquo;s yard work, move a task to Noah, remind everyone thirty minutes before the deadline.
+            </p>
+            <p style={{ margin: 0, fontSize: 18, fontWeight: 650, letterSpacing: '-.02em', color: 'var(--tx)' }}>
+              It answers, and it acts. Kids don&rsquo;t get access to it. Kids get their tasks.
+            </p>
+          </Reveal>
+          <Reveal>
+            <div className="cm-glass" style={{ ...glass, padding: 30, borderRadius: 30 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 11, marginBottom: 18 }}>
+                <span style={{ width: 30, height: 30, borderRadius: 999, background: 'var(--p)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
+                </span>
+                <p style={{ margin: 0, fontSize: 15.5, fontWeight: 650, letterSpacing: '-.02em', color: 'var(--tx)' }}>Poppins</p>
+                <span style={{ marginLeft: 'auto', fontSize: 12, color: 'var(--txm)' }}>Parents only</span>
+              </div>
+              <p style={{ margin: 0, fontSize: 16, lineHeight: 1.65, fontStyle: 'italic', color: 'var(--txs)' }}>
+                &ldquo;Assigned Saturday yard work to Noah and moved Sunday dishes to Emma. Reminder set for 30 minutes before tonight&rsquo;s deadline.&rdquo;
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── HOUSE RULES ── */}
+      <section className="cm-section" style={{ ...sectionPad, background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
+        <div style={{ maxWidth: 820, margin: '0 auto' }}>
+          <Reveal>
+            <h2 style={{ ...h2, marginBottom: 18 }}>The rules are written down, and everyone can read them</h2>
+            <p style={{ margin: '0 0 16px', fontSize: 17.5, lineHeight: 1.65, color: 'var(--txm)' }}>
+              Every mechanic in ChoreMaxx — how XP is earned, when things expire, what breaks a streak, how crowns are won — lives on one screen. Thirty-six rules, seven chapters, no mystery.
+            </p>
+            <p style={{ margin: 0, fontSize: 17.5, lineHeight: 1.65, color: 'var(--txm)' }}>
+              There are two versions. The Admin version, and a Sidekick version written for a nine-year-old. When your child says the app cheated them, you both open the same page.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── WHO ── */}
+      <section className="cm-section" style={sectionPad}>
+        <div style={{ maxWidth: 820, margin: '0 auto' }}>
+          <Reveal>
+            <h2 style={{ ...h2, marginBottom: 18 }}>Families. That&rsquo;s the whole list.</h2>
+            <p style={{ margin: '0 0 16px', fontSize: 17.5, lineHeight: 1.65, color: 'var(--txm)' }}>
+              ChoreMaxx is built for parents and the kids who live with them. We took out the roommate mode, the coworking mode, and everything else that made it a general task app.
+            </p>
+            <p style={{ margin: '0 0 16px', fontSize: 17.5, lineHeight: 1.65, color: 'var(--txm)' }}>
+              Two admins maximum, so authority is clear. Everyone else joins as a Sidekick with a personal invite link — one per child, expires in a week, and they&rsquo;re in the second they tap it.
+            </p>
+            <p style={{ margin: 0, fontSize: 17.5, lineHeight: 1.65, color: 'var(--txm)' }}>
+              Best for kids old enough to be responsible for something. If you&rsquo;re still in bottles and naps, come back in a few years.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── PRICING ── */}
+      <section id="pricing" className="cm-section" style={{ ...sectionPad, background: 'var(--bgs)', borderTop: '1px solid var(--bd)', borderBottom: '1px solid var(--bd)' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <Reveal style={{ textAlign: 'center', marginBottom: 48 }}>
+            <p style={{ ...kicker, margin: '0 0 14px' }}>Pricing</p>
+            <h2 style={{ ...h2, fontSize: 'clamp(32px,4vw,54px)' }}>One price. Everyone in the house.</h2>
+          </Reveal>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,280px),1fr))', gap: 20 }}>
+            {[
+              {
+                title: 'Monthly',
+                price: '$4.99',
+                period: '/month',
+                note: '7 days free, then billed monthly through Apple.',
+                bullets: [
+                  'Every member of the household',
+                  'All 150 chores across 15 domains',
+                  'XP, streaks, crowns and Streak Rescue',
+                  'Rewards, allowance tracking and the grocery list',
+                  'Poppins',
+                  'Cancel anytime',
+                ],
+                highlight: false,
+              },
+              {
+                title: 'Yearly',
+                price: '$48',
+                period: '/year',
+                note: '7 days free, then billed yearly through Apple. Everything above, two months cheaper.',
+                bullets: [
+                  'Every member of the household',
+                  'All 150 chores across 15 domains',
+                  'XP, streaks, crowns and Streak Rescue',
+                  'Rewards, allowance tracking and the grocery list',
+                  'Poppins',
+                  'Cancel anytime',
+                ],
+                highlight: true,
+              },
+            ].map((tier) => (
+              <Reveal key={tier.title}>
+                <div
+                  className="cm-glass"
+                  style={{
+                    ...glass, padding: 34, borderRadius: 30, position: 'relative', height: '100%',
+                    display: 'flex', flexDirection: 'column', gap: 22,
+                    border: tier.highlight ? '1.5px solid var(--p)' : '1px solid var(--bd)',
+                  }}
+                >
+                  {tier.highlight ? (
+                    <span style={{ position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)', padding: '5px 15px', borderRadius: 999, background: 'var(--p)', color: '#fff', fontSize: 11.5, fontWeight: 700, whiteSpace: 'nowrap' }}>
+                      Save 20%
+                    </span>
+                  ) : null}
+                  <div>
+                    <p style={{ margin: '0 0 6px', fontSize: 12.5, fontWeight: 650, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--txm)' }}>{tier.title}</p>
+                    <p style={{ margin: 0, display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                      <span style={{ fontSize: 44, fontWeight: 700, letterSpacing: '-.045em', color: 'var(--tx)', lineHeight: 1 }}>{tier.price}</span>
+                      <span style={{ fontSize: 15, color: 'var(--txm)', fontWeight: 550 }}>{tier.period}</span>
+                    </p>
+                    <p style={{ margin: '10px 0 0', fontSize: 14.5, lineHeight: 1.55, color: 'var(--txm)' }}>{tier.note}</p>
+                    <ul style={{ margin: '16px 0 0', padding: '0 0 0 18px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {tier.bullets.map((b) => (
+                        <li key={b} style={{ fontSize: 14, lineHeight: 1.5, color: 'var(--txs)' }}>{b}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Link
+                    href="/download"
+                    style={{
+                      marginTop: 'auto', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 14, borderRadius: 999,
+                      fontSize: 14.5, fontWeight: 650,
+                      background: tier.highlight ? 'linear-gradient(180deg, color-mix(in srgb,#fff 18%,var(--p)) 0%, var(--p) 60%)' : 'transparent',
+                      color: tier.highlight ? '#fff' : 'var(--txs)',
+                      border: tier.highlight ? 'none' : '1.5px solid var(--bd)',
+                    }}
+                  >
+                    Start 7 days free
+                  </Link>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section id="faq" className="cm-section" style={sectionPad}>
+        <div style={{ maxWidth: 820, margin: '0 auto' }}>
+          <Reveal>
+            <h2 style={{ ...h2, fontSize: 'clamp(32px,3.8vw,50px)', textAlign: 'center', marginBottom: 44 }}>Frequently asked questions</h2>
+          </Reveal>
+          <SupportFaq />
+        </div>
+      </section>
+
+      {/* ── CLOSE ── */}
+      <section className="cm-section" style={{ ...sectionPad, background: 'var(--bgs)', borderTop: '1px solid var(--bd)' }}>
+        <Reveal style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ ...h2, marginBottom: 16 }}>Everyone knows what&rsquo;s theirs to do.</h2>
+          <p style={{ margin: '0 0 28px', fontSize: 18, lineHeight: 1.6, color: 'var(--txm)' }}>
+            Seven days free. No card until you&rsquo;ve seen whether it holds.
+          </p>
+          <a
+            href="https://apps.apple.com/app/id6796850110"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 9, padding: '15px 28px', borderRadius: 999,
+              background: 'linear-gradient(180deg, color-mix(in srgb,#fff 18%,var(--p)) 0%, var(--p) 60%)',
+              color: '#fff', fontSize: 15, fontWeight: 600,
+              boxShadow: '0 1px 0 rgba(255,255,255,.35) inset, 0 8px 28px color-mix(in srgb,var(--p) 45%,transparent)',
+            }}
+          >
+            Get ChoreMaxx on the App Store
+          </a>
+        </Reveal>
+      </section>
+
+      <SiteFooter />
+      <StickyCta />
+
+      <style>{`
+        @media (max-width: 1180px) {
+          .cm-hero-grid { grid-template-columns: minmax(0,1fr) !important; gap: 32px !important; }
+        }
+        @media (max-width: 768px) {
+          .cm-hero-grid { gap: 24px !important; }
+        }
+      `}</style>
     </div>
   );
 }

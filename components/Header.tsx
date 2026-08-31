@@ -1,11 +1,36 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
+/* Routes shipped in the V2 redesign — they render their own SiteHeader/SiteFooter
+ * (directly or via PageShellV2), so the legacy global chrome must stay hidden. */
+const REDESIGN_ROUTES = new Set([
+  '/',
+  '/support',
+  '/contact',
+  '/about',
+  '/privacy',
+  '/terms',
+  '/cookies',
+  '/copyright',
+  '/kids',
+]);
+
 export default function Header() {
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Auth / invite bridges — full-bleed Apple-calm pages without marketing chrome.
+  // V2 redesign routes render their own <SiteHeader>, so suppress this one there.
+  if (
+    pathname?.startsWith('/auth') ||
+    pathname?.startsWith('/join') ||
+    REDESIGN_ROUTES.has(pathname ?? '')
+  ) {
+    return null;
+  }
 
   const navLinks = [
     { label: 'Features',     href: '/features'     },
@@ -25,18 +50,12 @@ export default function Header() {
           className="flex items-center gap-2 flex-shrink-0"
           aria-label="ChoreMaxx home"
         >
-          <Image
-            src="/brand/choremaxx-logo-mark.png"
-            alt=""
-            width={28}
-            height={28}
-            className="w-7 h-7"
-          />
+          <span className="brand-logo w-7 h-7" role="img" aria-hidden="true" />
           <span
             className="text-lg font-bold tracking-tight"
-            style={{ color: '#0F0E17' }}
+            style={{ color: 'var(--color-secondary)' }}
           >
-            chore<span style={{ color: '#5B8CFF' }}>maxx</span>
+            chore<span style={{ color: 'var(--color-primary)' }}>maxx</span>
           </span>
         </Link>
 
@@ -50,8 +69,8 @@ export default function Header() {
               key={href}
               href={href}
               className="px-4 py-1.5 text-sm font-medium rounded-full transition-colors duration-200"
-              style={{ color: '#3D3A4E' }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(91,140,255,0.08)')}
+              style={{ color: 'var(--color-text-secondary)' }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'color-mix(in srgb, var(--color-primary) 8%, transparent)')}
               onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               {label}
@@ -69,12 +88,16 @@ export default function Header() {
         {/* Mobile hamburger */}
         <button
           className="md:hidden p-2 rounded-xl"
-          style={{ background: 'rgba(255,255,255,0.80)', border: '1px solid rgba(200,195,230,0.45)' }}
+          style={{
+            background: 'var(--color-glass)',
+            border: '1px solid var(--color-glass-border)',
+            color: 'var(--color-text-secondary)',
+          }}
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle navigation"
           aria-expanded={mobileOpen}
         >
-          <svg className="w-5 h-5" fill="none" stroke="#3D3A4E" strokeWidth={2} viewBox="0 0 24 24">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
             {mobileOpen
               ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               : <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -88,10 +111,10 @@ export default function Header() {
         <div
           className="md:hidden mx-4 mb-2 rounded-2xl p-5 flex flex-col gap-3 pointer-events-auto"
           style={{
-            background: 'rgba(255,255,255,0.92)',
+            background: 'var(--color-glass)',
             backdropFilter: 'blur(30px)',
             WebkitBackdropFilter: 'blur(30px)',
-            border: '1px solid rgba(200,195,230,0.45)',
+            border: '1px solid var(--color-glass-border)',
             boxShadow: '0 8px 32px rgba(100,80,160,0.12)',
           }}
         >
@@ -100,7 +123,7 @@ export default function Header() {
               key={href}
               href={href}
               className="text-sm font-medium px-3 py-2 rounded-xl transition-colors"
-              style={{ color: '#3D3A4E' }}
+              style={{ color: 'var(--color-text-secondary)' }}
               onClick={() => setMobileOpen(false)}
             >
               {label}
