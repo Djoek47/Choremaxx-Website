@@ -25,8 +25,10 @@ const BELIEFS = [
 ];
 
 const card: React.CSSProperties = {
-  padding: 34, borderRadius: 30, background: 'var(--gl)', border: '1px solid var(--glb)',
-  backdropFilter: 'blur(34px) saturate(185%)', boxShadow: 'var(--shadow)',
+  padding: 34, borderRadius: 30,
+  background: 'color-mix(in srgb, var(--bg) 92%, var(--tx))',
+  border: '1px solid var(--bd)',
+  boxShadow: 'var(--shadow)',
   display: 'flex', flexDirection: 'column', gap: 18,
 };
 
@@ -53,7 +55,7 @@ export default function AboutPage() {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(230px,1fr))', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,220px),1fr))', gap: 16 }}>
           {CARDS.map(({ Mark, title, body }) => (
             <div key={title} style={{ ...card, padding: 26, borderRadius: 24, gap: 10 }}>
               <MarkTile><Mark /></MarkTile>

@@ -33,8 +33,10 @@ const OUTCOMES: Outcome[] = [
 ];
 
 const panel: React.CSSProperties = {
-  padding: 'clamp(20px, 4vw, 32px)', borderRadius: 32, background: 'var(--gl)', border: '1px solid var(--glb)',
-  backdropFilter: 'blur(38px) saturate(190%)', boxShadow: 'var(--shadow)',
+  padding: 'clamp(20px, 4vw, 32px)', borderRadius: 32,
+  background: 'color-mix(in srgb, var(--bg) 92%, var(--tx))',
+  border: '1px solid var(--bd)',
+  boxShadow: 'var(--shadow)',
   display: 'flex', flexDirection: 'column', gap: 24,
 };
 

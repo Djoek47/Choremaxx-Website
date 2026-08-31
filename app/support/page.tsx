@@ -13,11 +13,14 @@ import PageShellV2 from '@/components/site/PageShellV2';
 export default function SupportPage() {
   return (
     <PageShellV2 kicker="Company" heading="Support & help" sub="We read every message and respond within 24 hours.">
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: 20, alignItems: 'start' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,280px),1fr))', gap: 20, alignItems: 'start' }}>
         <div
+          className="cm-glass"
           style={{
-            padding: 30, borderRadius: 30, background: 'var(--gl)', border: '1px solid var(--glb)',
-            backdropFilter: 'blur(34px) saturate(185%)', boxShadow: 'var(--shadow)',
+            padding: 30, borderRadius: 30,
+            background: 'color-mix(in srgb, var(--bg) 92%, var(--tx))',
+            border: '1px solid var(--bd)',
+            boxShadow: 'var(--shadow)',
             display: 'flex', flexDirection: 'column', gap: 18,
           }}
         >

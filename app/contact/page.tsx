@@ -15,8 +15,10 @@ const DESKS = [
 ];
 
 const card: React.CSSProperties = {
-  padding: 28, borderRadius: 26, background: 'var(--gl)', border: '1px solid var(--glb)',
-  backdropFilter: 'blur(26px)', boxShadow: 'var(--shadow)',
+  padding: 28, borderRadius: 26,
+  background: 'color-mix(in srgb, var(--bg) 92%, var(--tx))',
+  border: '1px solid var(--bd)',
+  boxShadow: 'var(--shadow)',
   display: 'flex', flexDirection: 'column', gap: 9,
 };
 

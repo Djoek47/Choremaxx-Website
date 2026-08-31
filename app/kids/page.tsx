@@ -41,8 +41,10 @@ const CANNOT = [
 ];
 
 const card: React.CSSProperties = {
-  padding: 34, borderRadius: 30, background: 'var(--gl)', border: '1px solid var(--glb)',
-  backdropFilter: 'blur(34px) saturate(185%)', boxShadow: 'var(--shadow)',
+  padding: 34, borderRadius: 30,
+  background: 'color-mix(in srgb, var(--bg) 92%, var(--tx))',
+  border: '1px solid var(--bd)',
+  boxShadow: 'var(--shadow)',
   display: 'flex', flexDirection: 'column', gap: 16,
 };
 

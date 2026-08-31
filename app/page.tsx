@@ -48,8 +48,9 @@ const TROPHIES = [
 ];
 
 const glass: React.CSSProperties = {
-  background: 'var(--gl)', border: '1px solid var(--glb)',
-  backdropFilter: 'blur(22px) saturate(170%)', boxShadow: 'var(--shadow)',
+  background: 'color-mix(in srgb, var(--bg) 92%, var(--tx))',
+  border: '1px solid var(--bd)',
+  boxShadow: 'var(--shadow)',
 };
 
 const sectionPad: React.CSSProperties = {
@@ -177,7 +178,7 @@ export default function HomePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(210px,1fr))', gap: 18 }}>
             {POINTS.map(({ Mark, label, sub }) => (
               <Reveal key={label}>
-                <div style={{ ...glass, display: 'flex', flexDirection: 'column', gap: 11, padding: 26, borderRadius: 24, height: '100%' }}>
+                <div className="cm-glass" style={{ ...glass, display: 'flex', flexDirection: 'column', gap: 11, padding: 26, borderRadius: 24, height: '100%' }}>
                   <MarkTile><Mark /></MarkTile>
                   <p style={{ margin: 0, fontSize: 16, fontWeight: 650, letterSpacing: '-.02em', color: 'var(--tx)' }}>{label}</p>
                   <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: 'var(--txm)' }}>{sub}</p>
@@ -202,7 +203,7 @@ export default function HomePage() {
           </Reveal>
           <Reveal style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {TROPHIES.map(({ Mark, title, sub }) => (
-              <div key={title} style={{ ...glass, display: 'flex', alignItems: 'center', gap: 18, padding: '24px 26px', borderRadius: 24 }}>
+              <div key={title} className="cm-glass" style={{ ...glass, display: 'flex', alignItems: 'center', gap: 18, padding: '24px 26px', borderRadius: 24 }}>
                 <MarkTile tone="colourless"><Mark /></MarkTile>
                 <div>
                   <p style={{ margin: 0, fontSize: 17, fontWeight: 650, letterSpacing: '-.02em', color: 'var(--tx)' }}>{title}</p>
@@ -251,7 +252,7 @@ export default function HomePage() {
             </p>
           </Reveal>
           <Reveal>
-            <div style={{ ...glass, padding: 30, borderRadius: 30 }}>
+            <div className="cm-glass" style={{ ...glass, padding: 30, borderRadius: 30 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 11, marginBottom: 18 }}>
                 <span style={{ width: 30, height: 30, borderRadius: 999, background: 'var(--p)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
@@ -342,10 +343,11 @@ export default function HomePage() {
             ].map((tier) => (
               <Reveal key={tier.title}>
                 <div
+                  className="cm-glass"
                   style={{
                     ...glass, padding: 34, borderRadius: 30, position: 'relative', height: '100%',
                     display: 'flex', flexDirection: 'column', gap: 22,
-                    border: tier.highlight ? '1.5px solid var(--p)' : '1px solid var(--glb)',
+                    border: tier.highlight ? '1.5px solid var(--p)' : '1px solid var(--bd)',
                   }}
                 >
                   {tier.highlight ? (

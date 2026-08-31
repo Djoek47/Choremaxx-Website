@@ -740,13 +740,33 @@ a:hover { color: var(--color-primary-dark); }
   padding: var(--cm-section-y) var(--cm-page-x);
 }
 
-/* Mobile: drop expensive glass blur; disable decorative hero motion */
+/* Site header — responsive chrome (no styled-jsx dependency) */
+.cm-cta-short { display: none; }
+.cm-burger { display: none; }
+.cm-mobile-menu,
+.cm-menu-backdrop { display: none; }
+
+@media (max-width: 1000px) {
+  .cm-desktop-nav { display: none !important; }
+  .cm-header-palette { display: none !important; }
+  .cm-burger { display: grid !important; }
+  .cm-mobile-menu { display: flex !important; }
+  .cm-menu-backdrop { display: block !important; }
+}
+
+@media (max-width: 480px) {
+  .cm-cta-long { display: none; }
+  .cm-cta-short { display: inline; }
+}
+
+/* Mobile: solid surfaces instead of see-through glass (avoids text-over-text) */
 @media (max-width: 768px) {
   .cm-glass,
-  .cm-header-glass,
-  .cm-menu-glass {
+  .cm-header-glass {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+    background: var(--bg) !important;
+    border-color: var(--bd) !important;
   }
 
   .cm-hero-blob {
