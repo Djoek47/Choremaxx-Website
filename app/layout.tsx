@@ -19,8 +19,9 @@ const DEFAULT_PALETTE = 'coral';
 const TAB_ICON_DAY = '/brand/icons/icon-coral.png';
 
 export const metadata: Metadata = {
-  title: 'ChoreMaxx — AI Household Operating System',
-  description: 'Run your household together. AI-powered task management, rewards, and family coordination in one calm place.',
+  title: 'ChoreMaxx — The chore app for families with standards',
+  description:
+    'Assign the work, track who actually did it, and make it worth doing. 150 ready-made chores, XP, streaks and weekly crowns. For families, not roommates.',
   metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: SITE_URL,
@@ -30,8 +31,8 @@ export const metadata: Metadata = {
     apple: '/apple-icon.png',
   },
   openGraph: {
-    title: 'ChoreMaxx — AI Household Operating System',
-    description: 'Run your household together. AI-powered task management, rewards, and family coordination in one calm place.',
+    title: 'ChoreMaxx — Everyone knows what\'s theirs to do',
+    description: 'Parents assign. Kids complete. XP, streaks, crowns and rewards keep it honest. Free for 7 days.',
     url: SITE_URL,
     type: 'website',
     images: [
@@ -45,8 +46,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ChoreMaxx — AI Household Operating System',
-    description: 'Run your household together.',
+    title: 'ChoreMaxx — Everyone knows what\'s theirs to do',
+    description: 'Parents assign. Kids complete. XP, streaks, crowns and rewards keep it honest. Free for 7 days.',
     images: [`${SITE_URL}/og.png`],
   },
   robots: 'index, follow',
@@ -182,9 +183,52 @@ export default function RootLayout({
             url: SITE_URL,
             logo: `${SITE_URL}/brand/choremaxx-logo-mark.png`,
             email: 'support@choremaxx.app',
-            description: 'AI Household Operating System',
+            description: 'The chore app for families with standards',
           })}
         </script>
+<<<<<<< HEAD
+=======
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'ChoreMaxx',
+            url: SITE_URL,
+            inLanguage: 'en',
+            publisher: { '@type': 'Organization', name: 'ChoreMaxx', url: SITE_URL },
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'MobileApplication',
+            name: 'ChoreMaxx',
+            operatingSystem: 'iOS',
+            applicationCategory: 'LifestyleApplication',
+            url: SITE_URL,
+            downloadUrl: APP_STORE_URL,
+            installUrl: APP_STORE_URL,
+            image: `${SITE_URL}/og.png`,
+            description:
+              'Assign the work, track who actually did it, and make it worth doing. For families, not roommates.',
+            publisher: { '@type': 'Organization', name: 'ChoreMaxx', url: SITE_URL },
+            offers: [
+              {
+                '@type': 'Offer',
+                price: '4.99',
+                priceCurrency: 'USD',
+                category: 'Monthly subscription',
+              },
+              {
+                '@type': 'Offer',
+                price: '48',
+                priceCurrency: 'USD',
+                category: 'Annual subscription',
+              },
+            ],
+          })}
+        </script>
+>>>>>>> 2a50250 (feat(site): Duotone Rust icons and family-standards copy)
       </head>
       <body className="antialiased" style={{ background: 'var(--color-bg)', color: 'var(--color-text-primary)' }}>
         {/* PaletteProvider hydrates the session palette/appearance chosen by the

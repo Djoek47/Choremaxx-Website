@@ -50,7 +50,7 @@ export default function SiteFooter() {
               </span>
             </span>
             <p style={{ margin: 0, maxWidth: 210, fontSize: 13.5, lineHeight: 1.6, color: 'var(--txm)' }}>
-              The chore app for families with standards. Built in Montr&eacute;al.
+              Poppins keeps the whole house in step.
             </p>
           </div>
 

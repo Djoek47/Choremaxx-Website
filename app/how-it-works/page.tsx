@@ -45,15 +45,11 @@ const flow = [
 const whoFor = [
   {
     label: 'Families',
-    desc: 'Parents assign chores, kids earn rewards. Everyone sees what is fair. Less arguing, more done.',
+    desc: 'Parents assign. Kids complete. XP, streaks and crowns keep it honest.',
   },
   {
-    label: 'Helpers',
-    desc: 'Grandparents and caregivers join with clear roles — help without taking over.',
-  },
-  {
-    label: 'Blended households',
-    desc: 'Multiple kids, multiple homes, different schedules. One calm system to coordinate.',
+    label: 'Sidekicks',
+    desc: 'Each child gets a personal invite. They see their tasks — not the controls.',
   },
 ];
 

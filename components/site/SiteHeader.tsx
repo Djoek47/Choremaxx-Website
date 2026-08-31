@@ -7,11 +7,10 @@ import PaletteDots from '@/components/theme/PaletteDots';
 import { usePalette } from '@/components/theme/PaletteProvider';
 
 const LINKS = [
-  { href: '/#does', label: 'What it does' },
-  { href: '/#deadline', label: 'The deadline' },
-  { href: '/#poppins', label: 'Poppins' },
+  { href: '/features', label: 'Features' },
+  { href: '/how-it-works', label: 'How it works' },
   { href: '/#pricing', label: 'Pricing' },
-  { href: '/#faq', label: 'FAQ' },
+  { href: '/support', label: 'Support' },
 ];
 
 export default function SiteHeader() {
@@ -55,7 +54,7 @@ export default function SiteHeader() {
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, pointerEvents: 'auto', flexShrink: 0, marginLeft: 'auto' }}>
         <PaletteDots />
         <Link
-          href="/download"
+          href="https://apps.apple.com/app/id6796850110"
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 7, padding: '10px 20px', borderRadius: 999,
             background: 'linear-gradient(180deg, color-mix(in srgb,#fff 18%,var(--p)) 0%, var(--p) 60%)',
@@ -63,7 +62,7 @@ export default function SiteHeader() {
             boxShadow: '0 1px 0 rgba(255,255,255,.35) inset, 0 6px 22px color-mix(in srgb,var(--p) 42%,transparent)',
           }}
         >
-          Start 7 days free
+          Get it on the App Store
         </Link>
         <button
           type="button"
