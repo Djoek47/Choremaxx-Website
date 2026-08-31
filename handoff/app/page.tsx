@@ -13,8 +13,8 @@ import SiteFooter from '@/components/site/SiteFooter';
 import SiteHeader from '@/components/site/SiteHeader';
 
 export const metadata: Metadata = {
-  title: 'ChoreMaxx — Your house doesn\u2019t run itself. Your kids do.',
-  description: 'ChoreMaxx hands out the work, tracks who actually did it, and makes it worth doing. Built for families.',
+  title: 'ChoreMaxx — Your house. Your rules. Actually followed.',
+  description: 'With ChoreMaxx, hand out the work, track who actually did it, and make it worth doing. Built for families.',
   alternates: { canonical: 'https://www.choremaxx.app/' },
 };
 
@@ -81,14 +81,12 @@ export default function HomePage() {
 
             {/* Each sentence is its own nowrap block — the break is always between them. */}
             <h1 style={{ margin: 0, fontSize: 'clamp(26px,3.5vw,51px)', fontWeight: 700, lineHeight: 1.06, letterSpacing: '-.045em', color: 'var(--tx)' }}>
-              <span style={{ display: 'block', whiteSpace: 'nowrap' }}>Your house doesn&rsquo;t run itself.</span>
-              <span style={{ display: 'block', whiteSpace: 'nowrap' }}>
-                Your <span style={{ color: 'var(--p)' }}>kids</span> do.
-              </span>
+              <span style={{ display: 'block', whiteSpace: 'nowrap' }}>Your house. Your <span style={{ color: 'var(--p)' }}>rules</span>.</span>
+              <span style={{ display: 'block', whiteSpace: 'nowrap' }}>Actually followed.</span>
             </h1>
 
             <p style={{ margin: 0, maxWidth: 470, fontSize: 19, lineHeight: 1.6, color: 'var(--txs)', animation: 'cmRise .9s cubic-bezier(.22,1,.36,1) .62s both' }}>
-              ChoreMaxx hands out the work, tracks who actually did it, and makes it worth doing. You stay in charge — the app just stops the arguing.
+              With ChoreMaxx, hand out the work, track who actually did it, and make it worth doing. You stay in charge — the app just stops the arguing.
             </p>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, animation: 'cmRise .9s cubic-bezier(.22,1,.36,1) .70s both' }}>

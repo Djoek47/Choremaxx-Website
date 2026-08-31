@@ -11,8 +11,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: 'ChoreMaxx',
-    title: 'ChoreMaxx — Your house doesn\u2019t run itself. Your kids do.',
-    description: 'ChoreMaxx hands out the work, tracks who actually did it, and makes it worth doing.',
+    title: 'ChoreMaxx — Your house. Your rules. Actually followed.',
+    description: 'With ChoreMaxx, hand out the work, track who actually did it, and make it worth doing.',
     images: ['/og.png'],
   },
   twitter: { card: 'summary_large_image', images: ['/og.png'] },
