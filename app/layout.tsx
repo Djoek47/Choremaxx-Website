@@ -186,49 +186,6 @@ export default function RootLayout({
             description: 'The chore app for families with standards',
           })}
         </script>
-<<<<<<< HEAD
-=======
-        <script type="application/ld+json">
-          {JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: 'ChoreMaxx',
-            url: SITE_URL,
-            inLanguage: 'en',
-            publisher: { '@type': 'Organization', name: 'ChoreMaxx', url: SITE_URL },
-          })}
-        </script>
-        <script type="application/ld+json">
-          {JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'MobileApplication',
-            name: 'ChoreMaxx',
-            operatingSystem: 'iOS',
-            applicationCategory: 'LifestyleApplication',
-            url: SITE_URL,
-            downloadUrl: APP_STORE_URL,
-            installUrl: APP_STORE_URL,
-            image: `${SITE_URL}/og.png`,
-            description:
-              'Assign the work, track who actually did it, and make it worth doing. For families, not roommates.',
-            publisher: { '@type': 'Organization', name: 'ChoreMaxx', url: SITE_URL },
-            offers: [
-              {
-                '@type': 'Offer',
-                price: '4.99',
-                priceCurrency: 'USD',
-                category: 'Monthly subscription',
-              },
-              {
-                '@type': 'Offer',
-                price: '48',
-                priceCurrency: 'USD',
-                category: 'Annual subscription',
-              },
-            ],
-          })}
-        </script>
->>>>>>> 2a50250 (feat(site): Duotone Rust icons and family-standards copy)
       </head>
       <body className="antialiased" style={{ background: 'var(--color-bg)', color: 'var(--color-text-primary)' }}>
         {/* PaletteProvider hydrates the session palette/appearance chosen by the
