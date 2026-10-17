@@ -5,7 +5,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
+      disallow: ['/auth/', '/join/'],
     },
-    sitemap: 'https://mytikas73.com/sitemap.xml',
+    sitemap: 'https://www.choremaxx.app/sitemap.xml',
   };
 }

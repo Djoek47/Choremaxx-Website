@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Join household · ChoreMaxx</title>
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap">
+<link rel="stylesheet" href="/legal.css">
+</head>
+<body>
+<div class="wrap" style="max-width:440px;padding-top:60px;text-align:center">
+  <img src="/assets/logo.png" alt="ChoreMaxx" width="72" height="72" style="border-radius:18px;margin-bottom:16px">
+  <h1 id="title" style="font-size:28px">Open ChoreMaxx to join</h1>
+  <p class="lead" id="text">This invite opens in the app.</p>
+  <p style="margin-top:22px"><a class="btn" id="open" href="choremaxx://join">Open ChoreMaxx</a></p>
+  <p class="stamp" style="margin-top:18px">Don’t have the app? <a href="https://apps.apple.com/app/id6796850110">Get it on the App Store</a>.</p>
+</div>
+<script>
+(function () {
+  var parts = location.pathname.split('/').filter(Boolean);
+  var code = parts[0] === 'join' ? (parts[1] || '') : '';
+  var q = new URLSearchParams(location.search);
+  if (!code) code = q.get('code') || '';
+  code = String(code).trim().toUpperCase();
+  var deep = 'choremaxx://join' + (code ? '/' + encodeURIComponent(code) : '');
+  var open = document.getElementById('open');
+  open.href = deep;
+  if (code) {
+    document.getElementById('title').textContent = 'Join ' + code;
+    document.getElementById('text').textContent = 'Open ChoreMaxx to accept this household invite.';
+  }
+  if (/iPhone|iPad|Android/i.test(navigator.userAgent)) {
+    setTimeout(function () { location.href = deep; }, 500);
+  }
+})();
+</script>
+</body>
+</html>
