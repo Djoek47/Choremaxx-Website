@@ -5,7 +5,7 @@ Production public site is the **static redesign** in [`site/`](./site/).
 | Path | What |
 |---|---|
 | `site/` | Public marketing site (deploy this to Vercel → `www.choremaxx.app`) |
-| `console/` | Staff support console (Vite; deploy separately to `console.choremaxx.app`) |
+| `console/` | Staff support console (Vite) → **https://console.choremaxx.app** |
 | `app/`, `components/`, … | Previous Next.js site (kept for reference / legal source) |
 
 ## Deploy public site
@@ -16,4 +16,9 @@ Production public site is the **static redesign** in [`site/`](./site/).
 
 ## Deploy console
 
-See [`console/README.md`](./console/README.md). Set `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` on that Vercel project.
+See [`console/README.md`](./console/README.md).
+
+- **URL:** https://console.choremaxx.app  
+- Vercel project: `choremaxx-console` (root directory `console`)
+- Set `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` on that project
+- Supabase Auth → Redirect URLs must include `https://console.choremaxx.app`

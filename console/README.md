@@ -77,9 +77,12 @@ but don't commit it anyway.
 2. Environment variables (Production and Preview):
    - `VITE_SUPABASE_URL` = `https://<project-ref>.supabase.co`
    - `VITE_SUPABASE_ANON_KEY` = the project's **anon** key (Settings → API). Never the service role key.
-3. Deploy. Then Settings → Domains → add `console.choremaxx.app` and the CNAME it shows.
+3. Deploy. Domain **`https://console.choremaxx.app`** is attached to the Vercel project `choremaxx-console`.
 
 `vercel.json` already sets the build, SPA routing, and `noindex` + no-framing headers.
+
+**Live URL:** https://console.choremaxx.app  
+(also https://choremaxx-console.vercel.app)
 
 ## 5. Check it
 
