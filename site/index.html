@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="ChoreMaxx: chores with XP, rewards kids want, one family calendar and Poppin AI. Free for 7 days on iPhone and iPad.">
+<meta property="og:title" content="ChoreMaxx: your home, running itself">
+<meta property="og:description" content="Chores with XP, rewards, a family calendar and Poppin AI. Free for 7 days.">
+<meta property="og:image" content="https://www.choremaxx.app/assets/og.png">
+<meta name="apple-itunes-app" content="app-id=6796850110">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+<title>ChoreMaxx: your home, running itself</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&display=swap">
+<style>
+html{scroll-behavior:smooth}
+/* Layout: a preview switcher (Public site | Console) on top; each is a full page below it.
+   Site: warm cream, coral accent, big wordmark hero with the phone, then features, Poppin AI,
+   pricing, FAQ, download. Console: sidebar + overview with KPIs, households, inbox. */
+:root{
+  --bg:#FBF4EE; --bg2:#F4E9E0; --card:#FFFFFF; --ink:#1E1611; --soft:#4A3D35; --muted:#7B6C62; --line:#EADDD2;
+  --coral:#D85A30; --coral-d:#A8411F; --gold:#C4922A; --sun:#FAC775; --sky:#378ADD; --berry:#7F77DD; --mint:#2FB58F;
+  --night:#1A0F0A; --night2:#26170F;
+  --display:"Bricolage Grotesque",ui-rounded,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#140C08;--bg2:#1C120C;--card:#22160F;--ink:#F6EEE8;--soft:#DCCBBE;--muted:#A8968A;--line:#3A2A20;--night:#0D0805;--night2:#1A100A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#140C08;--bg2:#1C120C;--card:#22160F;--ink:#F6EEE8;--soft:#DCCBBE;--muted:#A8968A;--line:#3A2A20;--night:#0D0805;--night2:#1A100A;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--display);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit}
+.switch{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;justify-content:center;padding:10px 16px;background:color-mix(in srgb,var(--bg) 80%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.switch .seg{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px}
+.switch button{border:0;background:none;padding:8px 16px;border-radius:999px;font-weight:700;font-size:14px;color:var(--muted);cursor:pointer}
+.switch button[aria-pressed="true"]{background:var(--coral);color:#fff}
+button:focus-visible,a:focus-visible{outline:2px solid var(--coral);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1160px;margin:0 auto;padding-inline:20px}
+
+/* ── Site nav ───────────────── */
+.nav{display:flex;align-items:center;justify-content:space-between;padding-block:18px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;font-size:22px;letter-spacing:-.5px}
+.brand .c{color:var(--gold)}.brand .m{color:var(--coral)}
+.navlinks{display:flex;gap:26px;align-items:center;font-weight:600;font-size:15px;color:var(--soft)}
+.navlinks a{text-decoration:none}
+.pill{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;border-radius:14px;padding:12px 18px;background:var(--coral);color:#fff;box-shadow:0 4px 0 var(--coral-d);transition:transform .12s,box-shadow .12s}
+.pill:active{transform:translateY(3px);box-shadow:0 1px 0 var(--coral-d)}
+.pill.ghost{background:var(--card);color:var(--ink);box-shadow:0 4px 0 var(--line);border:1px solid var(--line)}
+@media (max-width:820px){.navlinks a:not(.pill){display:none}}
+
+/* ── Hero ───────────────── */
+.hero{position:relative;overflow:hidden;padding-block:40px 70px}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.35;pointer-events:none}
+@media (prefers-reduced-motion:no-preference){.blob{animation:drift 16s ease-in-out infinite alternate}.blob.b{animation-duration:20s}}
+@keyframes drift{to{transform:translate(60px,40px) scale(1.15)}}
+.heroGrid{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+@media (max-width:900px){.heroGrid{grid-template-columns:1fr}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--coral);background:color-mix(in srgb,var(--coral) 12%,transparent);border-radius:999px;padding:6px 12px}
+h1.big{font-size:clamp(44px,7vw,84px);line-height:.98;letter-spacing:-2.5px;margin:18px 0 18px;font-weight:800;text-wrap:balance}
+h1.big .m{color:var(--coral)}
+.lead{font-size:clamp(18px,2vw,21px);line-height:1.5;color:var(--soft);max-width:34ch;margin:0 0 26px}
+.ctaRow{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.small{font-size:14px;color:var(--muted)}
+.stage{position:relative;justify-self:center;width:min(360px,90vw)}
+.stage img.phone{width:100%;display:block;filter:drop-shadow(0 30px 50px #0003)}
+.float{position:absolute;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 14px;box-shadow:0 12px 30px #0002;display:flex;gap:10px;align-items:center;font-size:14px;font-weight:600;white-space:nowrap}
+.float b{display:block;font-size:15px}
+.float small{color:var(--muted);font-weight:500}
+@media (prefers-reduced-motion:no-preference){.float{animation:bob 4s ease-in-out infinite}.float.f2{animation-delay:-1.3s}.float.f3{animation-delay:-2.6s}}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.dot{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;flex:none}
+@media (max-width:520px){.float{transform:scale(.85)}}
+
+/* ── Strip ───────────────── */
+.strip{display:flex;flex-wrap:wrap;gap:10px 28px;justify-content:center;padding-block:20px;border-block:1px solid var(--line);color:var(--muted);font-weight:600;font-size:15px}
+.strip span{display:inline-flex;align-items:center;gap:8px}
+
+section{padding-block:80px}
+h2{font-size:clamp(32px,4.4vw,52px);letter-spacing:-1.4px;line-height:1.04;margin:0 0 14px;font-weight:800;text-wrap:balance}
+.sec-lead{font-size:18px;color:var(--soft);max-width:56ch;line-height:1.5;margin:0 0 40px}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:820px){.steps{grid-template-columns:1fr}}
+.step{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:24px;display:flex;flex-direction:column;gap:10px}
+.step .n{font-size:13px;font-weight:800;color:var(--coral);letter-spacing:.06em}
+.step h3{margin:0;font-size:22px;letter-spacing:-.4px}
+.step p{margin:0;color:var(--soft);line-height:1.5}
+
+/* features bento */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;overflow:hidden;position:relative;display:flex;flex-direction:column;gap:10px;min-width:0}
+.tile h3{margin:0;font-size:23px;letter-spacing:-.5px}
+.tile p{margin:0;color:var(--soft);line-height:1.5}
+.span3{grid-column:span 3}.span2{grid-column:span 2}.span4{grid-column:span 4}
+@media (max-width:900px){.span3,.span2,.span4{grid-column:span 6}}
+.tile img{border-radius:18px;width:100%;margin-top:auto;display:block}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border-radius:999px;padding:7px 12px;font-weight:700;font-size:13px;background:var(--bg2);color:var(--soft)}
+.xp{display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border-radius:14px;padding:10px 12px;font-weight:600}
+.xp em{font-style:normal;color:var(--coral);font-weight:800}
+.bar{height:10px;border-radius:5px;background:var(--bg2);overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--coral),var(--sun));border-radius:5px}
+
+/* poppin ai */
+.ai{background:var(--night);color:#F6EEE8;border-radius:36px;padding:56px clamp(20px,5vw,64px);position:relative;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+@media (max-width:900px){.ai{grid-template-columns:1fr}}
+.ai h2{color:#fff}
+.ai p{color:#D9CBC0;font-size:18px;line-height:1.55}
+.orb{width:min(300px,70vw);aspect-ratio:1;border-radius:50%;justify-self:center;position:relative;overflow:hidden;background:radial-gradient(circle at 35% 28%,#E9FBFF,#9EE6FF 35%,#3EC7F0 70%);box-shadow:0 0 80px #38BDF855,inset 0 0 0 4px #ffffff55}
+.orb .water{position:absolute;left:-15%;right:-15%;bottom:0;height:62%;background:linear-gradient(#22B8F0,#0B7FB8);border-radius:45% 50% 0 0}
+@media (prefers-reduced-motion:no-preference){.orb .water{animation:slosh 3.4s ease-in-out infinite}}
+@keyframes slosh{50%{transform:translateX(7%) rotate(3deg)}}
+.say{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.say div{background:#ffffff12;border:1px solid #ffffff1f;border-radius:16px;padding:12px 14px;font-size:16px}
+.say div::before{content:"“";color:#38BDF8;font-weight:800;margin-right:4px}
+
+/* pricing */
+.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
+@media (max-width:900px){.prices{grid-template-columns:1fr}}
+.price{background:var(--card);border:2px solid var(--line);border-radius:28px;padding:26px;display:flex;flex-direction:column;gap:12px}
+.price.best{border-color:var(--coral);box-shadow:0 6px 0 color-mix(in srgb,var(--coral) 35%,transparent);transform:translateY(-6px)}
+.price h3{margin:0;font-size:20px}
+.amount{font-size:44px;font-weight:800;letter-spacing:-1.5px;line-height:1}
+.amount small{font-size:16px;font-weight:600;color:var(--muted);letter-spacing:0}
+.price ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;color:var(--soft)}
+.price li::before{content:"✓";color:var(--mint);font-weight:800;margin-right:8px}
+.save{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.5px;border:1.5px solid color-mix(in srgb,var(--coral) 45%,transparent);border-radius:999px;padding:3px 10px;color:transparent;background-image:linear-gradient(100deg,var(--coral) 0%,var(--coral) 35%,#fff 50%,var(--coral) 65%,var(--coral) 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;animation:edge 2.6s linear infinite;width:max-content}
+@keyframes edge{from{background-position:150% 0}to{background-position:-100% 0}}
+.packs{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;align-items:center}
+.pack{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 14px;font-weight:700}
+.pack span{color:var(--muted);font-weight:600;margin-left:6px}
+
+/* faq */
+.faq{display:flex;flex-direction:column;gap:10px;max-width:780px}
+details{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 20px}
+summary{cursor:pointer;font-weight:700;font-size:18px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::after{content:"+";color:var(--coral);font-weight:800}
+details[open] summary::after{content:"–"}
+details p{color:var(--soft);line-height:1.55;margin:10px 0 0}
+
+/* download */
+.final{background:linear-gradient(135deg,var(--coral),#E9844D 55%,var(--sun));color:#fff;border-radius:36px;padding:56px 24px;text-align:center;position:relative;overflow:hidden}
+.final h2{color:#fff}
+.store{display:inline-flex;align-items:center;gap:10px;background:#0B0B0D;color:#fff;border-radius:14px;padding:12px 20px;text-decoration:none;font-weight:700;box-shadow:0 4px 0 #000}
+.store small{display:block;font-size:11px;font-weight:500;opacity:.8}
+footer{padding-block:40px 60px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+footer nav{display:flex;gap:18px;flex-wrap:wrap}
+footer a{text-decoration:none}
+
+/* ── Console ───────────────── */
+.con{display:grid;grid-template-columns:240px 1fr;min-height:100vh;background:var(--bg)}
+@media (max-width:860px){.con{grid-template-columns:1fr}}
+.side{background:var(--card);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:6px}
+@media (max-width:860px){.side{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line)}}
+.side .brand{padding:4px 8px 16px;font-size:18px}
+@media (max-width:860px){.side .brand{display:none}}
+.nb{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;font-weight:600;color:var(--soft);white-space:nowrap}
+.nb.on{background:color-mix(in srgb,var(--coral) 12%,transparent);color:var(--coral)}
+.nb .cnt{margin-left:auto;background:var(--coral);color:#fff;border-radius:999px;font-size:12px;padding:1px 8px;font-weight:800}
+.main{padding:24px clamp(16px,3vw,36px);display:flex;flex-direction:column;gap:20px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.top h1{margin:0;font-size:32px;letter-spacing:-.8px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.kpi .v{font-size:30px;font-weight:800;letter-spacing:-.8px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:13px;font-weight:700}
+.up{color:var(--mint)}.dn{color:#E5484D}
+.spark{height:34px;width:100%}
+.cols{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+@media (max-width:1000px){.cols{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;min-width:0}
+.panel h3{margin:0 0 12px;font-size:17px;display:flex;justify-content:space-between}
+.panel h3 small{color:var(--muted);font-weight:600;font-size:13px}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tblwrap{overflow-x:auto}
+.tbl th{text-align:left;color:var(--muted);font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--line)}
+.tbl td{padding:11px 10px;border-bottom:1px solid var(--line);white-space:nowrap;font-variant-numeric:tabular-nums}
+.st{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-weight:700;font-size:12px}
+.st.paid{background:#2FB58F22;color:#1F8A6B}.st.trial{background:#378ADD22;color:#2B6CB0}.st.lapsed{background:#E5484D1F;color:#C53030}.st.issue{background:#F39A4526;color:#B5541E}
+.msg{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.msg:last-child{border-bottom:0}
+.av{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;color:#fff;font-weight:800;flex:none}
+.msg b{display:block}
+.msg p{margin:2px 0 0;color:var(--muted);font-size:14px;line-height:1.4}
+.tag{font-size:11px;font-weight:800;border-radius:6px;padding:2px 6px;margin-left:6px;background:var(--bg2);color:var(--soft)}
+.err{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.err .n{margin-left:auto;font-weight:800;font-variant-numeric:tabular-nums}
+.hint{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+
+<div id="top">
+ <div class="hero">
+  <div class="blob" style="width:520px;height:520px;background:var(--coral);left:-180px;top:-160px"></div>
+  <div class="blob b" style="width:480px;height:480px;background:var(--sun);right:-160px;top:120px"></div>
+  <div class="wrap">
+   <nav class="nav" aria-label="Main">
+    <a class="brand" href="#top"><img src="/assets/logo.png" alt="" width="34" height="34" style="border-radius:9px"><span><span class="c">chore</span><span class="m">maxx</span></span></a>
+    <div class="navlinks"><a href="#features">Features</a><a href="#poppin">Poppin AI</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a class="pill" href="#download">Get the app</a></div>
+   </nav>
+   <div class="heroGrid">
+    <div>
+     <span class="eyebrow">★ The household app for families</span>
+     <h1 class="big">Your home,<br><span class="m">running itself.</span></h1>
+     <p class="lead">Chores with XP, rewards kids actually want, one family calendar, and Poppin AI to run it by voice.</p>
+     <div class="ctaRow"><a class="pill" href="#download">Try it free for 7 days</a><a class="pill ghost" href="#features">See how it works</a></div>
+     <p class="small" style="margin-top:14px">iPhone and iPad · then $6.99/month or $49.99/year · cancel anytime</p>
+    </div>
+    <div class="stage">
+     <img class="phone" src="/assets/home.webp" alt="ChoreMaxx home screen: today's chores with XP, a 12-day streak and a Poppin AI suggestion">
+     <div class="float f1" style="left:-70px;top:120px"><span class="dot" style="background:#2FB58F22">✓</span><span><b>Maya finished “Feed Biscuit”</b><small>+10 XP · just now</small></span></div>
+     <div class="float f2" style="right:-50px;top:300px"><span class="dot" style="background:#F39A4522">🔥</span><span><b>12-day streak</b><small>The whole house</small></span></div>
+     <div class="float f3" style="left:-40px;bottom:90px"><span class="dot" style="background:#D85A3022">🎃</span><span><b>Halloween in 14 days</b><small>On your calendar</small></span></div>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <div class="wrap"><div class="strip"><span>✓ Built for families</span><span>✓ Kids get their own Sidekick profile</span><span>✓ Shared iPad mode</span><span>✓ Private by design</span></div></div>
+
+ <section id="how"><div class="wrap">
+  <h2>Three steps to a calmer house</h2>
+  <p class="sec-lead">Set it up once in a few minutes. Then the house mostly runs itself.</p>
+  <div class="steps">
+   <div class="step"><span class="n">STEP 1</span><h3>Add your people</h3><p>Invite a co-parent, add kids as Sidekicks, or turn the family iPad into a shared screen.</p></div>
+   <div class="step"><span class="n">STEP 2</span><h3>Pick the chores</h3><p>Start from a ready-made library or say it to Poppin AI. Everyone sees what's theirs today.</p></div>
+   <div class="step"><span class="n">STEP 3</span><h3>Watch it happen</h3><p>Chores earn XP, streaks build up, rewards get unlocked. You get your evenings back.</p></div>
+  </div>
+ </div></section>
+
+ <section id="features" style="padding-top:20px"><div class="wrap">
+  <h2>Everything a busy family juggles</h2>
+  <p class="sec-lead">One app instead of the fridge whiteboard, the group chat and five reminder apps.</p>
+  <div class="bento">
+   <div class="tile span3"><h3>Chores that feel like a game</h3><p>Every chore earns XP. Streaks keep everyone going, without a leaderboard of shame.</p>
+    <div class="xp"><span>Tidy your room · Leo</span><em>+20 XP</em></div><div class="xp"><span>Unload the dishwasher · Leo</span><em>+15 XP</em></div><div class="xp"><span>Math homework · Maya</span><em>+25 XP</em></div></div>
+   <div class="tile span3"><h3>Rewards they actually want</h3><p>Movie night pick, extra game time, Pizza Friday. Kids save XP and redeem when they're ready.</p>
+    <div><div class="xp" style="background:none;padding:0"><span>Pizza Friday</span><em>800 XP</em></div><div class="bar" style="margin-top:8px"><i style="width:72%"></i></div><p class="small" style="margin-top:6px">Maya is 72% of the way</p></div></div>
+   <div class="tile span2"><h3>One family calendar</h3><p>School, practice and plans in one place, with holidays for Canada, Québec, the US, the UK, France and Europe.</p><div class="chips"><span class="chip">🦃 Thanksgiving</span><span class="chip">🎃 Halloween</span><span class="chip">🎄 Christmas</span></div></div>
+   <div class="tile span2"><h3>Smart Trips</h3><p>Pick your stops on a map. ChoreMaxx orders them into the shortest drive and shows the km you save.</p><div class="chips"><span class="chip">Shortest</span><span class="chip">Round trip</span><span class="chip">Saves 2.3 km</span></div></div>
+   <div class="tile span2"><h3>Groceries, sorted</h3><p>A shared list that knows aisles and stores, and slots into the next errand run.</p><div class="chips"><span class="chip">🥛 Milk</span><span class="chip">🍎 Apples</span><span class="chip">🍞 Bread</span></div></div>
+   <div class="tile span4"><h3>Made for iPhone and iPad</h3><p>A calm column on iPad, a shared kitchen screen for the kids, and everything in sync.</p><img src="/assets/ipad.webp" alt="ChoreMaxx on iPad in landscape" loading="lazy"></div>
+   <div class="tile span2" style="background:var(--night2);color:#F5EEFF;border-color:#3A2470"><h3>Seasonal themes</h3><p style="color:#D6CBEF">Bats, cobwebs and a little monster for your color, every October. Christmas is next.</p><img src="/assets/hw.webp" alt="ChoreMaxx home screen in the Halloween theme" loading="lazy" style="max-height:280px;object-fit:cover;object-position:top"></div>
+  </div>
+ </div></section>
+
+ <section id="poppin" style="padding-top:20px"><div class="wrap">
+  <div class="ai">
+   <div>
+    <span class="eyebrow" style="color:#38BDF8;background:#38BDF822">Poppin AI</span>
+    <h2 style="margin-top:16px">Talk to your house.</h2>
+    <p>Say it once and it's done: chores assigned, groceries added, the week planned. Poppin AI is included with your subscription, and your tokens refill every month.</p>
+    <div class="say"><div>Give Leo the dishes tonight and remind him at 7.</div><div>Add milk and apples, we're out.</div><div>Plan Saturday's errands, shortest drive.</div></div>
+   </div>
+   <div class="orb" role="img" aria-label="Poppin AI orb, filled with this month's tokens"><div class="water"></div></div>
+  </div>
+ </div></section>
+
+ <section id="pricing"><div class="wrap">
+  <h2>Simple pricing. Free for 7 days.</h2>
+  <p class="sec-lead">One subscription covers the whole household. Cancel anytime in your Apple ID settings.</p>
+  <div class="prices">
+   <div class="price"><h3>Free trial</h3><div class="amount">$0 <small>for 7 days</small></div><ul><li>Chores, XP and rewards</li><li>Family calendar and holidays</li><li>Smart Trips and groceries</li></ul><a class="pill ghost" href="#download" style="margin-top:auto;justify-content:center">Start free</a></div>
+   <div class="price best"><h3>Yearly</h3><span class="save">SAVE 40%</span><div class="amount">$49.99 <small>/ year</small></div><p class="small" style="margin:0">About $4.17 a month</p><ul><li>Everything in the trial</li><li>Poppin AI with monthly tokens</li><li>Every Sidekick and shared screen</li></ul><a class="pill" href="#download" style="margin-top:auto;justify-content:center">Try it free for 7 days</a></div>
+   <div class="price"><h3>Monthly</h3><div class="amount">$6.99 <small>/ month</small></div><ul><li>Everything in the trial</li><li>Poppin AI with monthly tokens</li><li>Cancel anytime</li></ul><a class="pill ghost" href="#download" style="margin-top:auto;justify-content:center">Try it free for 7 days</a></div>
+  </div>
+  <div class="packs"><span class="small">Need more Poppin AI? Token packs never expire:</span><span class="pack">200 tokens<span>$1.99</span></span><span class="pack">700 tokens<span>$4.99</span></span><span class="pack">2000 tokens<span>$9.99</span></span></div>
+  <p class="small" style="margin-top:14px">Prices in USD; your App Store shows your local price. Payment is charged to your Apple ID when the trial ends and renews automatically unless cancelled at least 24 hours before the end of the period.</p>
+ </div></section>
+
+ <section id="faq" style="padding-top:20px"><div class="wrap">
+  <h2>Questions</h2>
+  <div class="faq">
+   <details open><summary>Who pays, and who can use it?</summary><p>One adult subscribes and the whole household is covered: co-parents, kids' Sidekick profiles and any shared screens.</p></details>
+   <details><summary>Do my kids need their own phone?</summary><p>No. Kids can use a shared iPad in the kitchen, or their own device with a Sidekick profile you control.</p></details>
+   <details><summary>What are Poppin AI tokens?</summary><p>Each thing you ask Poppin AI to do uses a few tokens. Your plan refills them every month, and extra packs never expire.</p></details>
+   <details><summary>How do I cancel?</summary><p>On your iPhone: Settings, your name, Subscriptions. Cancel during the 7 days and you pay nothing.</p></details>
+   <details><summary>What about our privacy?</summary><p>Your household's data stays in your household. We don't sell it or use it for ads. Read the <a href="/privacy">privacy policy</a>.</p></details>
+  </div>
+ </div></section>
+
+ <section id="download" style="padding-top:10px"><div class="wrap">
+  <div class="final">
+   <h2>Give your house a head start.</h2>
+   <p style="font-size:19px;margin:0 auto 26px;max-width:40ch;opacity:.95">Free for 7 days, then $6.99/month or $49.99/year.</p>
+   <a class="store" href="https://apps.apple.com/app/id6796850110"><span><small>Download on the</small>App Store</span></a>
+  </div>
+  <footer><span>© 2026 Choremaxx. All rights reserved.</span><nav aria-label="Footer"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/support">Support</a><a href="mailto:support@choremaxx.app">support@choremaxx.app</a></nav></footer>
+ </div></section>
+</div>
+
+</div>
+</body>
+</html>

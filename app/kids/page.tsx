@@ -4,7 +4,7 @@ import LegalDocument from '@/components/LegalDocument';
 export const metadata: Metadata = {
   title: 'Kids & Parental Controls — ChoreMaxx',
   description: 'How ChoreMaxx works for kids and families. Parental controls built-in.',
-  canonical: 'https://mytikas73.com/kids',
+  alternates: { canonical: 'https://www.choremaxx.app/kids' },
   robots: 'index, follow',
 };
 

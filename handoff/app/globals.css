@@ -1,0 +1,64 @@
+/* ChoreMaxx site theme — 4 house palettes x day/night.
+   Replaces the previous globals.css theme block. Tailwind directives kept at top
+   so existing utility usage still compiles. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --p: #D85A30; --pd: #B84722; --pl: #FDE8DF; --sec: #C4922A;
+  --bg: #FAF0EB; --bgs: #F3E4DC; --card: rgba(255,255,255,.78);
+  --tx: #0F1C2A; --txs: #2A3A4C; --txm: #5A6E82;
+  --bd: rgba(20,40,60,.10); --gl: rgba(255,255,255,.65); --glb: rgba(255,255,255,.80);
+  --spec: 0 1px 0 rgba(255,255,255,.55) inset;
+  --shadow: 0 1px 0 rgba(255,255,255,.55) inset, 0 18px 40px rgba(15,14,23,.08);
+  --font: 'General Sans', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html[data-palette='sky']    { --p:#378ADD; --pd:#2A6FB5; --pl:#E5F2FB; }
+html[data-palette='citrus'] { --p:#EF9F27; --pd:#C47F1A; --pl:#FDF3E0; }
+html[data-palette='coral']  { --p:#D85A30; --pd:#B84722; --pl:#FDE8DF; }
+html[data-palette='berry']  { --p:#7F77DD; --pd:#6259C4; --pl:#EEEBFB; }
+
+html[data-palette='sky'][data-appearance='day']    { --sec:#C4922A; --bg:#EAF3FB; --bgs:#DCE9F5; --tx:#0F1C2A; --txs:#2A3A4C; --txm:#5A6E82; }
+html[data-palette='citrus'][data-appearance='day'] { --sec:#712B13; --bg:#FBF4E8; --bgs:#F3E7D3; --tx:#712B13; --txs:#8A4A28; --txm:#9A6A48; }
+html[data-palette='coral'][data-appearance='day']  { --sec:#C4922A; --bg:#FAF0EB; --bgs:#F3E4DC; --tx:#0F1C2A; --txs:#2A3A4C; --txm:#5A6E82; }
+html[data-palette='berry'][data-appearance='day']  { --sec:#C4789A; --bg:#F4F0FA; --bgs:#EBE4F5; --tx:#1A1230; --txs:#3A2E55; --txm:#6B5F88; --bd:rgba(90,60,140,.12); }
+
+html[data-appearance='night'] {
+  --card: rgba(255,255,255,.05); --gl: rgba(255,255,255,.06); --glb: rgba(255,255,255,.12);
+  --spec: 0 1px 0 rgba(255,255,255,.10) inset;
+  --shadow: 0 1px 0 rgba(255,255,255,.10) inset, 0 18px 44px rgba(0,0,0,.34);
+}
+html[data-palette='sky'][data-appearance='night']    { --sec:#FAC775; --bg:#07121F; --bgs:#0A1525; --tx:#EEF2FF; --txs:#C8D8F0; --txm:#7C9CC0; --bd:rgba(55,138,221,.20);  --pl:rgba(55,138,221,.18); }
+html[data-palette='citrus'][data-appearance='night'] { --sec:#F0DCC8; --bg:#1A1208; --bgs:#241A0C; --tx:#EEF2FF; --txs:#C8D8F0; --txm:#7C9CC0; --bd:rgba(239,159,39,.22);  --pl:rgba(239,159,39,.18); }
+html[data-palette='coral'][data-appearance='night']  { --sec:#FAC775; --bg:#1A0C08; --bgs:#24120C; --tx:#EEF2FF; --txs:#C8D8F0; --txm:#7C9CC0; --bd:rgba(216,90,48,.22);  --pl:rgba(216,90,48,.18); }
+html[data-palette='berry'][data-appearance='night']  { --sec:#F4C0D1; --bg:#100A1C; --bgs:#1A1628; --tx:#F5F0FF; --txs:#D4CBE8; --txm:#9B8FBF; --bd:rgba(127,119,221,.20); --pl:rgba(127,119,221,.18); }
+
+html { overflow-x: hidden; }
+html, body {
+  margin: 0; padding: 0; background: var(--bg); color: var(--tx);
+  transition: background-color .7s cubic-bezier(.22,1,.36,1), color .7s cubic-bezier(.22,1,.36,1);
+}
+body { font-family: var(--font); -webkit-font-smoothing: antialiased; }
+* { box-sizing: border-box; }
+a { color: var(--p); text-decoration: none; transition: color .2s ease; }
+a:hover { color: var(--pd); }
+::selection { background: var(--p); color: #fff; }
+
+@keyframes cmRise   { from { opacity:0; transform:translateY(26px) } to { opacity:1; transform:none } }
+@keyframes cmFade   { from { opacity:0 } to { opacity:1 } }
+@keyframes cmBlurIn { from { opacity:0; filter:blur(14px); transform:translateY(.4em) scale(.96) } to { opacity:1; filter:blur(0); transform:none } }
+@keyframes cmDrift  { 0% { transform:translate3d(0,0,0) } 50% { transform:translate3d(18px,-26px,0) } 100% { transform:translate3d(-10px,14px,0) } }
+@keyframes cmSpin   { to { transform:rotate(360deg) } }
+@keyframes cmPop    { 0% { transform:scale(.6); opacity:0 } 45% { transform:scale(1.12); opacity:1 } 100% { transform:scale(1); opacity:1 } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
+
+.cm-reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+.cm-reveal.cm-in { opacity: 1; transform: none; }

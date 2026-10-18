@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'AI Household Operating System — ChoreMaxx',
   description:
     'ChoreMaxx is an AI household OS that coordinates tasks, schedules, rewards, and family communication in one app.',
-  canonical: 'https://mytikas73.com/household-os',
+  alternates: { canonical: 'https://www.choremaxx.app/household-os' },
 };
 
 const modules = [
@@ -31,25 +31,25 @@ export default function HouseholdOS() {
       sub="Coordinates work, schedules, rewards, and communication — like an OS for your home."
     >
       {/* Intro */}
-      <p className="text-white/70 text-lg leading-relaxed mb-10 max-w-2xl">
+      <p className="text-[#5A4438] text-lg leading-relaxed mb-10 max-w-2xl">
         ChoreMaxx brings clarity, fairness, and momentum to every household. One system, one source of truth,
         everyone coordinated.
       </p>
 
       {/* Core modules */}
-      <h2 className="text-white font-bold text-2xl mb-5">Core modules</h2>
+      <h2 className="text-[#2A1A12] font-bold text-2xl mb-5">Core modules</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-14">
         {modules.map(({ title, desc }) => (
           <div key={title} className="glass-tile p-6 flex flex-col gap-2">
-            <h3 className="text-white font-semibold text-sm">{title}</h3>
-            <p className="text-xs text-white/60 leading-relaxed">{desc}</p>
+            <h3 className="text-[#2A1A12] font-semibold text-sm">{title}</h3>
+            <p className="text-xs text-[#5A4438] leading-relaxed">{desc}</p>
           </div>
         ))}
       </div>
 
       {/* Why it is an OS */}
       <div className="glass-card p-8 mb-10">
-        <h2 className="text-white font-bold text-xl mb-5">Why it is an OS</h2>
+        <h2 className="text-[#2A1A12] font-bold text-xl mb-5">Why it is an OS</h2>
         <ul className="flex flex-col gap-3">
           {[
             ['Centralized',   'No jumping between apps. Everything is here.'],
@@ -57,7 +57,7 @@ export default function HouseholdOS() {
             ['Intelligent',   'Nova learns household patterns and suggests improvements.'],
             ['Fair',          'Rules engine ensures transparent, enforceable expectations.'],
           ].map(([strong, rest]) => (
-            <li key={strong} className="text-sm text-white/65 flex items-start gap-2">
+            <li key={strong} className="text-sm text-[#5A4438] flex items-start gap-2">
               <span style={{ color: 'rgba(196,181,253,0.90)', fontWeight: 700, flexShrink: 0 }}>{strong}:</span>
               <span>{rest}</span>
             </li>
@@ -66,19 +66,19 @@ export default function HouseholdOS() {
       </div>
 
       {/* Who benefits */}
-      <h2 className="text-white font-bold text-2xl mb-5">Who benefits</h2>
+      <h2 className="text-[#2A1A12] font-bold text-2xl mb-5">Who benefits</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-14">
         {whoFor.map(({ label, desc }) => (
           <div key={label} className="glass-tile p-6 flex flex-col gap-2">
-            <h3 className="text-white font-semibold text-sm">{label}</h3>
-            <p className="text-xs text-white/60 leading-relaxed">{desc}</p>
+            <h3 className="text-[#2A1A12] font-semibold text-sm">{label}</h3>
+            <p className="text-xs text-[#5A4438] leading-relaxed">{desc}</p>
           </div>
         ))}
       </div>
 
       {/* CTA */}
       <div className="glass-card p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-        <p className="text-white font-semibold">Ready to upgrade your household?</p>
+        <p className="text-[#2A1A12] font-semibold">Ready to upgrade your household?</p>
         <div className="flex gap-3">
           <Link href="/download" className="btn-primary">Get the app</Link>
           <Link href="/features" className="btn-outline">See all features</Link>

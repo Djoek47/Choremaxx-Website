@@ -1,0 +1,1597 @@
+From 6d5e304540a652adfe632a69350e6b739c0899f3 Mon Sep 17 00:00:00 2001
+From: Cursor Agent <cursoragent@cursor.com>
+Date: Tue, 11 Aug 2026 04:38:23 +0000
+Subject: [PATCH] fix(auth): HTTPS confirm links, OTP entry, and deletion
+ feedback
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Email CTAs now use https://www.choremaxx.app/auth/callback so Mail
+links are tappable; the website agent bridges into the app.
+
+Confirm-email gains a primary code entry path, pending signup is
+persisted, and auth/callback times out instead of spinning forever.
+
+Settings → Delete account opens a two-step Apple-calm flow with
+optional churn feedback (submit_account_deletion_feedback migration).
+---
+ app/_layout.tsx                               |   4 +
+ app/auth/callback.tsx                         |  47 ++-
+ app/confirm-email.tsx                         | 306 +++++++++++-----
+ app/delete-account.tsx                        | 338 ++++++++++++++++++
+ app/settings.tsx                              |  13 +-
+ docs/resend-auth-email.md                     |   6 +-
+ docs/website-agent-auth-bridge-now.md         |  94 +++++
+ emails/auth-hook-render.test.ts               |   1 +
+ emails/auth-hook-render.ts                    |  25 +-
+ emails/verification.tsx                       |  49 ++-
+ lib/auth/email-confirmation.test.ts           |   8 +
+ lib/auth/email-confirmation.ts                |  74 +++-
+ repositories/auth-repository.ts               |  14 +-
+ store/orbit-store.tsx                         |  15 +-
+ .../functions/send-auth-email/branded-html.ts |  18 +-
+ supabase/functions/send-auth-email/index.ts   |  25 +-
+ ...260811000000_account_deletion_feedback.sql |  52 +++
+ types/database.ts                             |   4 +
+ 18 files changed, 928 insertions(+), 165 deletions(-)
+ create mode 100644 app/delete-account.tsx
+ create mode 100644 docs/website-agent-auth-bridge-now.md
+ create mode 100644 supabase/migrations/20260811000000_account_deletion_feedback.sql
+
+diff --git a/app/_layout.tsx b/app/_layout.tsx
+index ce0a8f7..c092a37 100644
+--- a/app/_layout.tsx
++++ b/app/_layout.tsx
+@@ -49,6 +49,10 @@ export default function RootLayout() {
+             name="confirm-email"
+             options={{ headerShown: false, title: 'Confirm Email' }}
+           />
++          <Stack.Screen
++            name="delete-account"
++            options={{ presentation: 'modal', headerShown: false, title: 'Delete Account' }}
++          />
+           <Stack.Screen
+             name="premium"
+             options={{ headerShown: false, title: 'Premium' }}
+diff --git a/app/auth/callback.tsx b/app/auth/callback.tsx
+index b2b75ef..5bf476a 100644
+--- a/app/auth/callback.tsx
++++ b/app/auth/callback.tsx
+@@ -30,7 +30,8 @@ import { useOrbit } from '@/store/orbit-store';
+ 
+ type Phase = 'working' | 'success' | 'needs_continue' | 'error';
+ 
+-const WAIT_FOR_LINK_MS = 4_000;
++const WAIT_FOR_LINK_MS = 3_500;
++const VERIFY_TIMEOUT_MS = 12_000;
+ const SUCCESS_HOLD_MS = 900;
+ 
+ function buildUrlFromParams(params: Record<string, string | string[] | undefined>): string | null {
+@@ -59,6 +60,20 @@ function buildUrlFromParams(params: Record<string, string | string[] | undefined
+   return `choremaxx://auth/callback?${q.toString()}`;
+ }
+ 
++async function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
++  let timer: ReturnType<typeof setTimeout> | undefined;
++  try {
++    return await Promise.race([
++      promise,
++      new Promise<T>((_, reject) => {
++        timer = setTimeout(() => reject(new Error(label)), ms);
++      }),
++    ]);
++  } finally {
++    if (timer) clearTimeout(timer);
++  }
++}
++
+ export default function AuthCallbackScreen() {
+   const insets = useSafeAreaInsets();
+   const { c, glass, glassBorder } = useOrbitColors();
+@@ -80,7 +95,7 @@ export default function AuthCallbackScreen() {
+       router.replace({ pathname: '/confirm-email', params: { email } } as never);
+       return;
+     }
+-    router.replace('/sign-in' as never);
++    router.replace('/confirm-email' as never);
+   };
+ 
+   const finishSuccess = async () => {
+@@ -112,7 +127,11 @@ export default function AuthCallbackScreen() {
+       setMessage('Confirming your email…');
+ 
+       try {
+-        const session = await createSessionFromUrl(incoming);
++        const session = await withTimeout(
++          createSessionFromUrl(incoming),
++          VERIFY_TIMEOUT_MS,
++          'Confirmation timed out. Enter the code from your email instead.'
++        );
+         if (cancelled || finished.current) return;
+ 
+         if (!session) {
+@@ -124,7 +143,7 @@ export default function AuthCallbackScreen() {
+           }
+           setPhase('needs_continue');
+           setMessage(
+-            'Your email may already be confirmed. Continue to sign in and finish setup.'
++            'Your email may already be confirmed. Continue to enter your code or sign in.'
+           );
+           return;
+         }
+@@ -137,17 +156,19 @@ export default function AuthCallbackScreen() {
+       } catch (err) {
+         if (cancelled || finished.current) return;
+         const text = err instanceof Error ? err.message : 'Confirmation failed.';
+-        // Already-used / expired links — offer a calm continue path.
+         const lower = text.toLowerCase();
+         if (
+           lower.includes('expired') ||
+           lower.includes('invalid') ||
+           lower.includes('already') ||
+-          lower.includes('otp')
++          lower.includes('otp') ||
++          lower.includes('timed out')
+         ) {
+           setPhase('needs_continue');
+           setMessage(
+-            'This link was already used or expired. If you confirmed earlier, continue to sign in.'
++            lower.includes('timed out')
++              ? text
++              : 'This link was already used or expired. Enter the code from your email, or continue to sign in.'
+           );
+           return;
+         }
+@@ -183,7 +204,7 @@ export default function AuthCallbackScreen() {
+         }
+         setPhase('needs_continue');
+         setMessage(
+-          'Waiting for the confirmation link. If you already tapped it, continue to sign in.'
++          'Enter the code from your email, or tap Continue if you already confirmed.'
+         );
+       })();
+     }, WAIT_FOR_LINK_MS);
+@@ -253,9 +274,9 @@ export default function AuthCallbackScreen() {
+             },
+           ]}>
+           {phase === 'success'
+-            ? 'You\'re in'
++            ? "You're in"
+             : phase === 'error'
+-              ? 'Couldn\'t confirm'
++              ? "Couldn't confirm"
+               : phase === 'needs_continue'
+                 ? 'One more step'
+                 : 'Confirming'}
+@@ -265,10 +286,10 @@ export default function AuthCallbackScreen() {
+ 
+       {phase === 'needs_continue' || phase === 'error' ? (
+         <Animated.View entering={FadeInUp.delay(120).duration(280)} style={styles.actions}>
+-          <OrbitButton onPress={goConfirmOrSignIn}>Continue</OrbitButton>
+-          <Pressable onPress={() => router.replace('/confirm-email' as never)} hitSlop={12}>
++          <OrbitButton onPress={goConfirmOrSignIn}>Enter code</OrbitButton>
++          <Pressable onPress={() => router.replace('/sign-in' as never)} hitSlop={12}>
+             <Text style={[typography.subheadline, { color: accentTheme.primary, fontWeight: '600' }]}>
+-              Resend confirmation
++              Sign in instead
+             </Text>
+           </Pressable>
+         </Animated.View>
+diff --git a/app/confirm-email.tsx b/app/confirm-email.tsx
+index 7c2fe00..12b8b09 100644
+--- a/app/confirm-email.tsx
++++ b/app/confirm-email.tsx
+@@ -2,12 +2,14 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+ import { router, useLocalSearchParams } from 'expo-router';
+ import { useEffect, useMemo, useState } from 'react';
+ import { Pressable, StyleSheet, View } from 'react-native';
++import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+ 
++import { AppText as Text, AppTextInput as TextInput } from '@/components/orbit/app-text';
++import { AuthErrorBanner } from '@/components/orbit/auth-error-banner';
+ import { AuthShell } from '@/components/orbit/auth-shell';
+ import { OrbitButton } from '@/components/orbit/orbit-button';
+ import { OrbitInput } from '@/components/orbit/orbit-input';
+-import { orbitColors } from '@/constants/orbit-theme';
+-import { AuthErrorBanner } from '@/components/orbit/auth-error-banner';
++import { radius, space, typography } from '@/constants/orbit-theme';
+ import {
+   authIssue,
+   isEmailNotConfirmedError,
+@@ -18,7 +20,9 @@ import {
+   clearPendingSignup,
+   getPendingSignup,
+   getResendCooldownRemainingMs,
++  hydratePendingSignup,
+   resendSignupConfirmation,
++  verifySignupEmailOtp,
+ } from '@/lib/auth/email-confirmation';
+ import {
+   markPremiumGatePending,
+@@ -27,25 +31,34 @@ import {
+ import { getSupabaseClient } from '@/lib/supabase/client';
+ import { useOrbitColors } from '@/lib/theme/use-orbit-colors';
+ import { useOrbit } from '@/store/orbit-store';
+-import { AppText as Text } from '@/components/orbit/app-text';
+ 
+ export default function ConfirmEmailScreen() {
+   const params = useLocalSearchParams<{ email?: string }>();
+-  const { accentTheme, hydrateFromSession, orbitPalette, signIn } = useOrbit();
+-  const { c } = useOrbitColors();
+-  const pending = getPendingSignup();
++  const { accentTheme, hydrateFromSession, signIn } = useOrbit();
++  const { c, glass, glassBorder, isDark } = useOrbitColors();
++  const [pendingPassword, setPendingPassword] = useState(getPendingSignup()?.password ?? '');
+   const email = useMemo(
+-    () => (typeof params.email === 'string' ? params.email : pending?.email ?? '').trim(),
+-    [params.email, pending?.email]
++    () => (typeof params.email === 'string' ? params.email : getPendingSignup()?.email ?? '').trim(),
++    [params.email, pendingPassword]
+   );
+-  const [password, setPassword] = useState(pending?.password ?? '');
+-  const [showPassword, setShowPassword] = useState(!pending?.password);
++  const [code, setCode] = useState('');
++  const [password, setPassword] = useState(pendingPassword);
++  const [showPassword, setShowPassword] = useState(!pendingPassword);
+   const [issue, setIssue] = useState<AuthIssue | null>(null);
+   const [info, setInfo] = useState('');
+   const [busy, setBusy] = useState(false);
+   const [resending, setResending] = useState(false);
+   const [cooldownSec, setCooldownSec] = useState(0);
+ 
++  useEffect(() => {
++    void hydratePendingSignup().then((pending) => {
++      if (!pending) return;
++      setPendingPassword(pending.password);
++      setPassword(pending.password);
++      setShowPassword(false);
++    });
++  }, []);
++
+   useEffect(() => {
+     const tick = () => setCooldownSec(Math.ceil(getResendCooldownRemainingMs() / 1000));
+     tick();
+@@ -76,7 +89,7 @@ export default function ConfirmEmailScreen() {
+           await finishOnboarding();
+         }
+       } catch {
+-        // stay on screen — user can tap Continue
++        // stay on screen — user can enter code or continue
+       }
+     });
+ 
+@@ -94,7 +107,7 @@ export default function ConfirmEmailScreen() {
+     setInfo('');
+     try {
+       await resendSignupConfirmation(email);
+-      setInfo('Confirmation email sent. Check your inbox and spam folder.');
++      setInfo('New email sent. Check inbox and spam.');
+     } catch (err) {
+       setIssue(resolveAuthIssue(err));
+     } finally {
+@@ -102,12 +115,49 @@ export default function ConfirmEmailScreen() {
+     }
+   };
+ 
++  const handleVerifyCode = async () => {
++    if (!email) {
++      setIssue(authIssue('missing_fields', { message: 'Add the email you signed up with.' }));
++      return;
++    }
++    const cleaned = code.replace(/\s+/g, '');
++    if (cleaned.length < 6) {
++      setIssue(
++        authIssue('missing_fields', {
++          title: 'Enter your code',
++          message: 'Use the code from the confirmation email.',
++        })
++      );
++      return;
++    }
++
++    setBusy(true);
++    setIssue(null);
++    try {
++      const session = await verifySignupEmailOtp(email, cleaned);
++      if (!session) {
++        throw new Error('Could not verify that code.');
++      }
++      const next = await import('@/repositories/auth-repository').then((m) =>
++        m.authRepository.getCurrentSession()
++      );
++      if (next) {
++        await hydrateFromSession(next);
++      }
++      await finishOnboarding();
++    } catch (err) {
++      setIssue(resolveAuthIssue(err));
++    } finally {
++      setBusy(false);
++    }
++  };
++
+   const handleContinue = async () => {
+     if (!email) {
+       setIssue(authIssue('missing_fields', { message: 'Add the email you signed up with.' }));
+       return;
+     }
+-    const pwd = password.trim() || pending?.password || '';
++    const pwd = password.trim() || getPendingSignup()?.password || '';
+     if (!pwd) {
+       setShowPassword(true);
+       setIssue(
+@@ -129,7 +179,7 @@ export default function ConfirmEmailScreen() {
+         setIssue(
+           authIssue('email_not_confirmed', {
+             title: 'Still waiting',
+-            message: 'Open the confirmation link in your email, then try again.',
++            message: 'Enter the code from your email, or tap the Confirm email link, then try again.',
+             email,
+           })
+         );
+@@ -145,91 +195,173 @@ export default function ConfirmEmailScreen() {
+     <AuthShell
+       showBack
+       brandHero
+-      kicker="Almost there"
+       title="Confirm your email"
+-      subtitle={`We sent a confirmation link to ${email || 'your inbox'}. Open it on this phone, then continue.`}
++      subtitle={
++        email
++          ? `We sent a link and a code to ${email}.`
++          : 'We sent a link and a code to your inbox.'
++      }
+       footer={
+-        <Pressable onPress={() => router.replace('/sign-in' as never)}>
++        <Pressable onPress={() => router.replace('/sign-in' as never)} hitSlop={12}>
+           <Text style={[styles.link, { color: accentTheme.primary }]}>Back to sign in</Text>
+         </Pressable>
+       }>
+-      <View
+-        style={[
+-          styles.mailCard,
+-          {
+-            backgroundColor: orbitPalette.cardMuted,
+-            borderColor: orbitPalette.border,
+-          },
+-        ]}>
+-        <View style={[styles.mailIcon, { backgroundColor: `${accentTheme.primary}22` }]}>
+-          <MaterialIcons name="mark-email-unread" size={28} color={accentTheme.primary} />
+-        </View>
+-        <Text style={[styles.mailBody, { color: c.textMuted }]}>
+-          Tap the link in the email to verify. Leave Choremaxx open — we’ll continue when the link
+-          opens the app.
+-        </Text>
+-      </View>
+-
+-      {showPassword ? (
+-        <OrbitInput
+-          autoCapitalize="none"
+-          label="Password"
+-          value={password}
+-          onChangeText={setPassword}
+-          secureTextEntry
+-          placeholder="Password you just created"
+-        />
+-      ) : null}
+-
+-      <AuthErrorBanner
+-        issue={issue}
+-        actionParams={{ email }}
+-        onDismiss={() => setIssue(null)}
+-      />
+-      {info ? <Text style={styles.info}>{info}</Text> : null}
+-
+-      <OrbitButton disabled={busy} onPress={() => void handleContinue()}>
+-        {busy ? 'Signing in…' : 'I’ve confirmed — continue'}
+-      </OrbitButton>
+-
+-      <Pressable
+-        disabled={resending || cooldownSec > 0}
+-        onPress={() => void handleResend()}
+-        style={styles.resend}>
+-        <Text
+-          style={[
+-            styles.link,
+-            { color: cooldownSec > 0 ? c.textSubtle : accentTheme.primary },
+-          ]}>
+-          {resending
+-            ? 'Sending…'
+-            : cooldownSec > 0
+-              ? `Resend available in ${cooldownSec}s`
+-              : 'Resend confirmation email'}
++      <Animated.View entering={FadeIn.duration(280)} style={styles.stack}>
++        <Text style={[typography.footnote, styles.hint, { color: c.textMuted }]}>
++          Tap Confirm email in your inbox on this phone — or enter the code here.
+         </Text>
+-      </Pressable>
++
++        <View style={styles.codeBlock}>
++          <Text style={[styles.codeLabel, { color: c.textMuted }]}>Confirmation code</Text>
++          <TextInput
++            accessibilityLabel="Confirmation code"
++            autoCapitalize="none"
++            autoCorrect={false}
++            keyboardType="number-pad"
++            maxLength={12}
++            onChangeText={(value) => setCode(value.replace(/[^\d]/g, ''))}
++            placeholder="••••••••"
++            placeholderTextColor={c.textSubtle}
++            style={[
++              styles.codeInput,
++              {
++                backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.92)',
++                borderColor: glassBorder(0.12),
++                color: c.text,
++              },
++            ]}
++            textContentType="oneTimeCode"
++            value={code}
++          />
++        </View>
++
++        {showPassword ? (
++          <OrbitInput
++            autoCapitalize="none"
++            label="Password"
++            value={password}
++            onChangeText={setPassword}
++            secureTextEntry
++            placeholder="Password you just created"
++          />
++        ) : null}
++
++        <AuthErrorBanner issue={issue} actionParams={{ email }} onDismiss={() => setIssue(null)} />
++        {info ? (
++          <Animated.View entering={FadeInUp.duration(220)}>
++            <Text style={[styles.info, { color: c.success }]}>{info}</Text>
++          </Animated.View>
++        ) : null}
++
++        <OrbitButton disabled={busy || code.length < 6} onPress={() => void handleVerifyCode()}>
++          {busy ? 'Confirming…' : 'Confirm with code'}
++        </OrbitButton>
++
++        <Pressable
++          disabled={resending || cooldownSec > 0}
++          onPress={() => void handleResend()}
++          style={styles.resend}
++          hitSlop={10}>
++          <Text
++            style={[
++              styles.link,
++              { color: cooldownSec > 0 ? c.textSubtle : accentTheme.primary },
++            ]}>
++            {resending
++              ? 'Sending…'
++              : cooldownSec > 0
++                ? `Resend available in ${cooldownSec}s`
++                : 'Resend email'}
++          </Text>
++        </Pressable>
++
++        <View style={[styles.divider, { backgroundColor: glassBorder(0.08) }]} />
++
++        <Pressable
++          onPress={() => void handleContinue()}
++          disabled={busy}
++          style={[styles.secondaryRow, { backgroundColor: glass(0.04), borderColor: glassBorder(0.08) }]}
++          hitSlop={6}>
++          <MaterialIcons name="mark-email-read" size={20} color={c.textSoft} />
++          <View style={styles.secondaryCopy}>
++            <Text style={[styles.secondaryTitle, { color: c.text }]}>
++              {busy ? 'Checking…' : 'Already confirmed'}
++            </Text>
++            <Text style={[styles.secondaryBody, { color: c.textMuted }]}>
++              Continue if you already tapped the email link
++            </Text>
++          </View>
++          <MaterialIcons name="chevron-right" size={22} color={c.textSubtle} />
++        </Pressable>
++      </Animated.View>
+     </AuthShell>
+   );
+ }
+ 
+ const styles = StyleSheet.create({
+-  mailCard: {
+-    borderRadius: 18,
+-    padding: 16,
+-    gap: 12,
+-    backgroundColor: 'rgba(255,255,255,0.04)',
+-    borderWidth: 1,
+-    borderColor: 'rgba(255,255,255,0.1)',
++  stack: {
++    gap: space.md,
++  },
++  hint: {
++    lineHeight: 20,
++    marginBottom: 4,
++  },
++  codeBlock: {
++    gap: space.xs,
++  },
++  codeLabel: {
++    fontSize: 13,
++    fontWeight: '700',
++  },
++  codeInput: {
++    borderCurve: 'continuous',
++    borderRadius: radius.card,
++    borderWidth: StyleSheet.hairlineWidth,
++    fontSize: 28,
++    fontWeight: '700',
++    letterSpacing: 8,
++    minHeight: 64,
++    paddingHorizontal: space.lg,
++    textAlign: 'center',
++  },
++  info: {
++    fontSize: 13,
++    fontWeight: '600',
++    textAlign: 'center',
+   },
+-  mailIcon: {
+-    width: 52,
+-    height: 52,
+-    borderRadius: 26,
++  resend: {
+     alignItems: 'center',
+-    justifyContent: 'center',
++    paddingVertical: 4,
++  },
++  link: {
++    fontSize: 14,
++    fontWeight: '700',
++    textAlign: 'center',
++  },
++  divider: {
++    height: StyleSheet.hairlineWidth,
++    marginVertical: space.xs,
++  },
++  secondaryRow: {
++    alignItems: 'center',
++    borderCurve: 'continuous',
++    borderRadius: radius.card,
++    borderWidth: StyleSheet.hairlineWidth,
++    flexDirection: 'row',
++    gap: space.sm,
++    paddingHorizontal: space.md,
++    paddingVertical: space.md,
++  },
++  secondaryCopy: {
++    flex: 1,
++    gap: 2,
++  },
++  secondaryTitle: {
++    fontSize: 15,
++    fontWeight: '700',
++  },
++  secondaryBody: {
++    fontSize: 13,
++    lineHeight: 18,
+   },
+-  mailBody: { fontSize: 14, lineHeight: 20 },
+-  info: { color: orbitColors.success, fontSize: 13, fontWeight: '600' },
+-  resend: { alignItems: 'center', paddingVertical: 4 },
+-  link: { fontSize: 14, fontWeight: '700', textAlign: 'center' },
+ });
+diff --git a/app/delete-account.tsx b/app/delete-account.tsx
+new file mode 100644
+index 0000000..776f54b
+--- /dev/null
++++ b/app/delete-account.tsx
+@@ -0,0 +1,338 @@
++import MaterialIcons from '@expo/vector-icons/MaterialIcons';
++import { router, Stack } from 'expo-router';
++import { useMemo, useState } from 'react';
++import { Pressable, StyleSheet, View } from 'react-native';
++import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
++import { useSafeAreaInsets } from 'react-native-safe-area-context';
++
++import { AppText as Text, AppTextInput as TextInput } from '@/components/orbit/app-text';
++import { KeyboardScreen } from '@/components/orbit/keyboard-screen';
++import { OrbitButton } from '@/components/orbit/orbit-button';
++import { radius, space, typography } from '@/constants/orbit-theme';
++import { useOrbitColors } from '@/lib/theme/use-orbit-colors';
++import { useOrbit } from '@/store/orbit-store';
++
++type Step = 'reason' | 'confirm' | 'done';
++
++const REASONS = [
++  { id: 'not_using', label: 'I don’t use it enough' },
++  { id: 'too_expensive', label: 'Too expensive' },
++  { id: 'privacy', label: 'Privacy concerns' },
++  { id: 'switching', label: 'Switching to another app' },
++  { id: 'other', label: 'Something else' },
++] as const;
++
++export default function DeleteAccountScreen() {
++  const insets = useSafeAreaInsets();
++  const { c, glass, glassBorder } = useOrbitColors();
++  const { accentTheme, deleteAccount } = useOrbit();
++  const [step, setStep] = useState<Step>('reason');
++  const [reasonId, setReasonId] = useState<(typeof REASONS)[number]['id'] | null>(null);
++  const [detail, setDetail] = useState('');
++  const [busy, setBusy] = useState(false);
++  const [error, setError] = useState('');
++
++  const reasonLabel = useMemo(
++    () => REASONS.find((r) => r.id === reasonId)?.label ?? '',
++    [reasonId]
++  );
++
++  const handleDelete = async () => {
++    setBusy(true);
++    setError('');
++    try {
++      await deleteAccount(
++        reasonId
++          ? {
++              reason: reasonLabel,
++              detail: detail.trim() || undefined,
++            }
++          : undefined
++      );
++      setStep('done');
++      await new Promise((r) => setTimeout(r, 1200));
++      router.replace('/welcome' as never);
++    } catch (err) {
++      setError(err instanceof Error ? err.message : 'Could not delete your account.');
++    } finally {
++      setBusy(false);
++    }
++  };
++
++  return (
++    <View style={[styles.root, { backgroundColor: c.background, paddingTop: insets.top }]}>
++      <Stack.Screen options={{ headerShown: false }} />
++
++      <View style={styles.topBar}>
++        <Pressable
++          onPress={() => (step === 'confirm' ? setStep('reason') : router.back())}
++          hitSlop={12}
++          style={styles.back}>
++          <MaterialIcons name="chevron-left" size={22} color={accentTheme.primary} />
++          <Text style={[styles.backText, { color: accentTheme.primary }]}>
++            {step === 'confirm' ? 'Back' : 'Cancel'}
++          </Text>
++        </Pressable>
++      </View>
++
++      <KeyboardScreen
++        contentContainerStyle={[
++          styles.content,
++          { paddingBottom: Math.max(insets.bottom, space.xl) + space.lg },
++        ]}>
++        {step === 'reason' ? (
++          <Animated.View entering={FadeIn.duration(280)} style={styles.section}>
++            <Text style={[typography.title2, { color: c.text, fontWeight: '700' }]}>
++              Delete account
++            </Text>
++            <Text style={[typography.body, styles.lead, { color: c.textMuted }]}>
++              This removes your profile and personal account data. Household-shared content may
++              remain for other members.
++            </Text>
++
++            <Text style={[styles.sectionLabel, { color: c.textSoft }]}>
++              Optional — why are you leaving?
++            </Text>
++
++            <View style={styles.reasons}>
++              {REASONS.map((reason, index) => {
++                const selected = reasonId === reason.id;
++                return (
++                  <Animated.View key={reason.id} entering={FadeInUp.delay(40 * index).duration(240)}>
++                    <Pressable
++                      onPress={() => setReasonId(reason.id)}
++                      style={[
++                        styles.reasonRow,
++                        {
++                          backgroundColor: selected ? `${accentTheme.primary}18` : glass(0.04),
++                          borderColor: selected ? `${accentTheme.primary}55` : glassBorder(0.08),
++                        },
++                      ]}>
++                      <View
++                        style={[
++                          styles.radio,
++                          {
++                            borderColor: selected ? accentTheme.primary : glassBorder(0.2),
++                            backgroundColor: selected ? accentTheme.primary : 'transparent',
++                          },
++                        ]}
++                      />
++                      <Text style={[styles.reasonLabel, { color: c.text }]}>{reason.label}</Text>
++                    </Pressable>
++                  </Animated.View>
++                );
++              })}
++            </View>
++
++            {reasonId ? (
++              <Animated.View entering={FadeInUp.duration(220)} style={styles.detailBlock}>
++                <Text style={[styles.sectionLabel, { color: c.textSoft }]}>
++                  Anything else? (optional)
++                </Text>
++                <TextInput
++                  multiline
++                  maxLength={500}
++                  onChangeText={setDetail}
++                  placeholder="A short note helps us improve."
++                  placeholderTextColor={c.textSubtle}
++                  style={[
++                    styles.detailInput,
++                    {
++                      backgroundColor: glass(0.04),
++                      borderColor: glassBorder(0.1),
++                      color: c.text,
++                    },
++                  ]}
++                  value={detail}
++                />
++              </Animated.View>
++            ) : null}
++
++            <OrbitButton onPress={() => setStep('confirm')} tone={reasonId ? 'danger' : 'secondary'}>
++              Continue
++            </OrbitButton>
++
++            {!reasonId ? (
++              <Text style={[styles.skipHint, { color: c.textSubtle }]}>
++                Feedback is optional — you can continue without selecting a reason.
++              </Text>
++            ) : null}
++
++            <Pressable onPress={() => router.back()} hitSlop={12} style={styles.keep}>
++              <Text style={[styles.keepText, { color: accentTheme.primary }]}>Keep my account</Text>
++            </Pressable>
++          </Animated.View>
++        ) : null}
++
++        {step === 'confirm' ? (
++          <Animated.View entering={FadeIn.duration(280)} style={styles.section}>
++            <View
++              style={[
++                styles.warnIcon,
++                { backgroundColor: `${c.danger ?? '#F87171'}18`, borderColor: `${c.danger ?? '#F87171'}33` },
++              ]}>
++              <MaterialIcons name="warning-amber" size={28} color={c.danger ?? '#F87171'} />
++            </View>
++            <Text style={[typography.title2, { color: c.text, fontWeight: '700', textAlign: 'center' }]}>
++              Delete forever?
++            </Text>
++            <Text style={[typography.body, styles.leadCenter, { color: c.textMuted }]}>
++              This cannot be undone. You’ll need a new account to use Choremaxx again.
++            </Text>
++
++            {error ? (
++              <Text style={[styles.error, { color: c.danger ?? '#F87171' }]}>{error}</Text>
++            ) : null}
++
++            <OrbitButton disabled={busy} onPress={() => void handleDelete()} tone="danger">
++              {busy ? 'Deleting…' : 'Delete my account'}
++            </OrbitButton>
++
++            <Pressable
++              disabled={busy}
++              onPress={() => setStep('reason')}
++              hitSlop={12}
++              style={styles.keep}>
++              <Text style={[styles.keepText, { color: accentTheme.primary }]}>Go back</Text>
++            </Pressable>
++          </Animated.View>
++        ) : null}
++
++        {step === 'done' ? (
++          <Animated.View entering={FadeIn.duration(320)} style={[styles.section, styles.done]}>
++            <View
++              style={[
++                styles.warnIcon,
++                { backgroundColor: `${c.success}22`, borderColor: `${c.success}44` },
++              ]}>
++              <MaterialIcons name="check" size={28} color={c.success} />
++            </View>
++            <Text style={[typography.title2, { color: c.text, fontWeight: '700', textAlign: 'center' }]}>
++              Account deleted
++            </Text>
++            <Text style={[typography.body, styles.leadCenter, { color: c.textMuted }]}>
++              Thank you for trying Choremaxx.
++            </Text>
++          </Animated.View>
++        ) : null}
++      </KeyboardScreen>
++    </View>
++  );
++}
++
++const styles = StyleSheet.create({
++  root: {
++    flex: 1,
++  },
++  topBar: {
++    paddingHorizontal: space.md,
++    paddingTop: space.sm,
++  },
++  back: {
++    alignItems: 'center',
++    alignSelf: 'flex-start',
++    flexDirection: 'row',
++    gap: 2,
++  },
++  backText: {
++    fontSize: 16,
++    fontWeight: '600',
++  },
++  content: {
++    flexGrow: 1,
++    paddingHorizontal: space.xl,
++    paddingTop: space.lg,
++  },
++  section: {
++    gap: space.md,
++  },
++  lead: {
++    lineHeight: 22,
++    marginBottom: space.sm,
++  },
++  leadCenter: {
++    lineHeight: 22,
++    marginBottom: space.sm,
++    textAlign: 'center',
++  },
++  sectionLabel: {
++    fontSize: 13,
++    fontWeight: '700',
++    letterSpacing: 0.2,
++    marginTop: space.xs,
++  },
++  reasons: {
++    gap: space.sm,
++  },
++  reasonRow: {
++    alignItems: 'center',
++    borderCurve: 'continuous',
++    borderRadius: radius.card,
++    borderWidth: StyleSheet.hairlineWidth,
++    flexDirection: 'row',
++    gap: space.md,
++    paddingHorizontal: space.md,
++    paddingVertical: 14,
++  },
++  radio: {
++    borderCurve: 'continuous',
++    borderRadius: 999,
++    borderWidth: 2,
++    height: 18,
++    width: 18,
++  },
++  reasonLabel: {
++    flex: 1,
++    fontSize: 16,
++    fontWeight: '600',
++  },
++  detailBlock: {
++    gap: space.xs,
++  },
++  detailInput: {
++    borderCurve: 'continuous',
++    borderRadius: radius.card,
++    borderWidth: StyleSheet.hairlineWidth,
++    fontSize: 15,
++    lineHeight: 22,
++    minHeight: 96,
++    paddingHorizontal: space.md,
++    paddingVertical: space.md,
++    textAlignVertical: 'top',
++  },
++  keep: {
++    alignItems: 'center',
++    paddingVertical: space.sm,
++  },
++  keepText: {
++    fontSize: 15,
++    fontWeight: '700',
++  },
++  skipHint: {
++    fontSize: 13,
++    lineHeight: 18,
++    textAlign: 'center',
++  },
++  warnIcon: {
++    alignItems: 'center',
++    alignSelf: 'center',
++    borderCurve: 'continuous',
++    borderRadius: 999,
++    borderWidth: StyleSheet.hairlineWidth,
++    height: 64,
++    justifyContent: 'center',
++    marginBottom: space.sm,
++    width: 64,
++  },
++  error: {
++    fontSize: 14,
++    fontWeight: '600',
++    textAlign: 'center',
++  },
++  done: {
++    alignItems: 'center',
++    flex: 1,
++    justifyContent: 'center',
++    paddingBottom: 80,
++  },
++});
+diff --git a/app/settings.tsx b/app/settings.tsx
+index 096bfbb..bb0cf95 100644
+--- a/app/settings.tsx
++++ b/app/settings.tsx
+@@ -145,7 +145,6 @@ export default function SettingsScreen() {
+     createSharedDevice,
+     currentMember,
+     currentUser,
+-    deleteAccount,
+     household,
+     orbitPalette,
+     paletteId,
+@@ -306,17 +305,7 @@ export default function SettingsScreen() {
+   };
+ 
+   const handleDelete = () => {
+-    Alert.alert('Delete account', 'This permanently removes your Choremaxx account.', [
+-      { text: 'Cancel', style: 'cancel' },
+-      {
+-        text: 'Delete',
+-        style: 'destructive',
+-        onPress: async () => {
+-          await deleteAccount();
+-          router.replace('/welcome' as never);
+-        },
+-      },
+-    ]);
++    router.push('/delete-account' as never);
+   };
+ 
+   const personalizeMember = useMemo(
+diff --git a/docs/resend-auth-email.md b/docs/resend-auth-email.md
+index 9eaa69e..6921f6d 100644
+--- a/docs/resend-auth-email.md
++++ b/docs/resend-auth-email.md
+@@ -83,8 +83,8 @@ curl -X PATCH "https://api.supabase.com/v1/projects/$PROJECT_REF/config/auth" \
+ 
+ 1. Sign up a non-team email from the app (TestFlight or staging).
+ 2. Confirm delivery in [Resend → Emails](https://resend.com/emails).
+-3. Open the link → app opens `choremaxx://auth/callback?token_hash=…&type=signup` (verifyOtp in-app).  
+-   Optional HTTPS bridge: `https://www.choremaxx.app/auth/callback` (site page forwards into the app).
++3. Open the link → `https://www.choremaxx.app/auth/callback?token_hash=…&type=signup` (website bridge) → app `choremaxx://auth/callback?…` → `verifyOtp` in-app.  
++   Or enter the email code on Confirm your email.
+ 
+ ---
+ 
+@@ -130,7 +130,7 @@ Same as Path A — signup / resend / forgot-password should appear in Resend wit
+ ## What stays in Supabase
+ 
+ - Email + password (and Apple) providers
+-- Confirm email on/off, redirect allow-list (`choremaxx://auth/callback`)
++- Confirm email on/off, redirect allow-list (`https://www.choremaxx.app/auth/callback`, `choremaxx://auth/callback`)
+ - Auth templates **if** you stay on Path A (Dashboard → Authentication → Email Templates)
+ - Rate-limit knobs (raise after custom SMTP or when hook + Resend is live)
+ 
+diff --git a/docs/website-agent-auth-bridge-now.md b/docs/website-agent-auth-bridge-now.md
+new file mode 100644
+index 0000000..1c91b12
+--- /dev/null
++++ b/docs/website-agent-auth-bridge-now.md
+@@ -0,0 +1,94 @@
++# Website agent — auth email bridge (do now)
++
++The Orbit app + Resend Auth emails now point confirmation CTAs at:
++
++`https://www.choremaxx.app/auth/callback?token_hash=…&type=signup`
++
++Custom-scheme-only links (`choremaxx://…`) are no longer the primary email CTA — Mail often shows them as plain text.
++
++**Your job is the website half.** Ship this so confirm links are clickable and open the app with the token intact.
++
++## Must ship
++
++### 1. `/auth/callback` page (critical)
++
++File: `app/auth/callback/page.tsx` (Next.js App Router)
++
++Behavior:
++
++1. `robots: noindex`
++2. Read `token_hash`, `type`, optional `code` / `access_token` / `refresh_token` / `error` from **query**
++3. Also read `location.hash` if Supabase still redirects with fragments (client effect)
++4. Forward to **`choremaxx://auth/callback?…`** with the **same params in the query string** (never only in the hash)
++5. Calm Apple-simple UI:
++   - Soft wash background (not flat SaaS purple)
++   - choremaxx wordmark
++   - Large title: **Opening Choremaxx…**
++   - One short line: “Confirming your email”
++   - Primary button: **Open Choremaxx** (same deep link)
++   - Fallback: App Store `https://apps.apple.com/app/id6796850110`
++6. Auto-attempt open after a short delay (~400–800ms)
++7. Never show a forever spinner with no exit — always keep the Open button visible
++
++### 2. Universal Links / AASA
++
++`public/.well-known/apple-app-site-association` (no extension), `Content-Type: application/json`:
++
++```json
++{
++  "applinks": {
++    "apps": [],
++    "details": [
++      {
++        "appIDs": ["R98S6HMKZL.app.choremaxx.household"],
++        "paths": ["/auth/callback", "/auth/callback/*", "/join/*"]
++      }
++    ]
++  }
++}
++```
++
++Also ship `public/.well-known/assetlinks.json` for Android if Play is live.
++
++Ensure `next.config` does not rewrite/block `/.well-known/*`.
++
++### 3. Invite bridge (same pass if not live)
++
++`/join/[code]` → `choremaxx://join/{CODE}` + App Store fallback. Spec in `docs/website-agent-handoff.md` §4.3.
++
++### 4. Allow-list note for Supabase (ops, not code)
++
++Ask whoever owns Supabase Auth → URL configuration to allow:
++
++- `https://www.choremaxx.app/auth/callback`
++- `https://choremaxx.app/auth/callback`
++- `choremaxx://auth/callback` (still used after the bridge)
++
++## Smoke tests
++
++```bash
++curl -I "https://www.choremaxx.app/auth/callback?token_hash=test&type=signup"
++# expect 200, not 404
++
++curl -I "https://www.choremaxx.app/.well-known/apple-app-site-association"
++# expect 200 + application/json
++```
++
++Manual:
++
++1. Sign up in TestFlight → open Confirm email button in Mail  
++2. Browser/site opens → forwards into app  
++3. App shows brief Confirming → **You're in** (or Enter code) — **never** endless spinner  
++4. If link fails, enter the email code on Confirm your email in-app
++
++## Visual direction
++
++Apple-caliber restraint: soft whites / deep charcoals, sparse coral accent, large type, generous space. No cards in the hero, no promo clutter. Brand wordmark is the hero signal.
++
++## Do not
++
++- Put auth secrets or `verifyOtp` on the website — only forward params into the app
++- Use hash-only redirects into `choremaxx://`
++- Leave `/auth/callback` as a marketing 404
++
++Full prior handoff: `docs/website-agent-handoff.md` (Orbit).
+diff --git a/emails/auth-hook-render.test.ts b/emails/auth-hook-render.test.ts
+index 2d795d2..d2e8b00 100644
+--- a/emails/auth-hook-render.test.ts
++++ b/emails/auth-hook-render.test.ts
+@@ -16,6 +16,7 @@ test('auth hook maps signup → verification template', async () => {
+   assert.match(out.html, /Bricolage/);
+   assert.match(out.html, /123456/);
+   assert.match(out.text, /123456/);
++  assert.match(out.html, /enter this code in Choremaxx/i);
+ });
+ 
+ test('auth hook maps recovery → password reset', async () => {
+diff --git a/emails/auth-hook-render.ts b/emails/auth-hook-render.ts
+index d0b28a2..44005f8 100644
+--- a/emails/auth-hook-render.ts
++++ b/emails/auth-hook-render.ts
+@@ -65,21 +65,26 @@ export async function renderAuthHookEmail(
+       result = await render(verification, {
+         name,
+         confirmUrl: input.confirmUrl,
++        otp: input.otp,
+         expiresInHours: 24,
+       });
+       break;
+   }
+ 
+-  const otp = input.otp?.trim();
+-  if (otp) {
+-    result = {
+-      ...result,
+-      text: `${result.text}\n\nOr enter this code: ${otp}`,
+-      html: result.html.replace(
+-        /<\/body>/i,
+-        `<p style="font-family:&quot;Bricolage Grotesque&quot;,BricolageGrotesque,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;color:#8B8AA0;text-align:center;margin:24px 16px;">Or enter this code: <strong style="letter-spacing:0.12em;color:#0F0E17;">${otp}</strong></p></body>`
+-      ),
+-    };
++  // OTP is rendered inside VerificationEmail when provided.
++  // Other templates still append a plain fallback for magic-link / recovery codes.
++  if (action !== 'signup' && action !== 'invite') {
++    const otp = input.otp?.trim();
++    if (otp) {
++      result = {
++        ...result,
++        text: `${result.text}\n\nOr enter this code: ${otp}`,
++        html: result.html.replace(
++          /<\/body>/i,
++          `<p style="font-family:&quot;Bricolage Grotesque&quot;,BricolageGrotesque,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;color:#8B8AA0;text-align:center;margin:24px 16px;">Or enter this code: <strong style="letter-spacing:0.12em;color:#0F0E17;">${otp}</strong></p></body>`
++        ),
++      };
++    }
+   }
+ 
+   return result;
+diff --git a/emails/verification.tsx b/emails/verification.tsx
+index d25e115..aaf1eaf 100644
+--- a/emails/verification.tsx
++++ b/emails/verification.tsx
+@@ -14,10 +14,17 @@ import { firstName } from './utils/format';
+ export type VerificationEmailProps = {
+   name: string;
+   confirmUrl: string;
++  /** Numeric OTP from Auth hook — enter in-app when the link fails. */
++  otp?: string;
+   expiresInHours?: number;
+ };
+ 
+-export default function VerificationEmail({ name, confirmUrl, expiresInHours = 24 }: VerificationEmailProps) {
++export default function VerificationEmail({
++  name,
++  confirmUrl,
++  otp,
++  expiresInHours = 24,
++}: VerificationEmailProps) {
+   return (
+     <EmailLayout previewText="Confirm your email to activate your Choremaxx household.">
+       <Heading style={{ fontFamily: emailFontStack, ...emailType.title, color: emailColors.darkText, margin: '8px 0 16px' }}>
+@@ -27,10 +34,34 @@ export default function VerificationEmail({ name, confirmUrl, expiresInHours = 2
+         Hi {firstName(name)},
+       </Text>
+       <Text style={{ fontFamily: emailFontStack, ...emailType.body, color: emailColors.body, margin: '0 0 24px' }}>
+-        Open this link on your phone to verify your household account, then continue in Choremaxx —
+-        same step as the Confirm your email screen in the app.
++        Tap Confirm email on this phone — we’ll open Choremaxx and finish verifying your household
++        account. Or enter the code below in the app.
+       </Text>
+       <PrimaryButton href={confirmUrl}>Confirm email</PrimaryButton>
++      {otp ? (
++        <>
++          <Text
++            style={{
++              fontFamily: emailFontStack,
++              ...emailType.caption,
++              color: emailColors.muted,
++              margin: '28px 0 0',
++            }}>
++            Or enter this code in Choremaxx:
++          </Text>
++          <Text
++            style={{
++              fontFamily: emailFontStack,
++              fontSize: 28,
++              fontWeight: 700,
++              letterSpacing: '0.16em',
++              color: emailColors.darkText,
++              margin: '8px 0 0',
++            }}>
++            {otp}
++          </Text>
++        </>
++      ) : null}
+       <Text
+         style={{
+           fontFamily: emailFontStack,
+@@ -47,22 +78,26 @@ export default function VerificationEmail({ name, confirmUrl, expiresInHours = 2
+ 
+ VerificationEmail.PreviewProps = {
+   name: 'Sarah',
+-  confirmUrl: 'https://choremaxx.app/auth/verify?token=preview',
++  confirmUrl: 'https://www.choremaxx.app/auth/callback?token_hash=preview&type=signup',
++  otp: '83538952',
+   expiresInHours: 24,
+ } satisfies VerificationEmailProps;
+ 
+ export const subjectFor = () => 'Confirm your email';
+ 
+-export const textFor = ({ name, confirmUrl, expiresInHours = 24 }: VerificationEmailProps) =>
++export const textFor = ({ name, confirmUrl, otp, expiresInHours = 24 }: VerificationEmailProps) =>
+   [
+     `Confirm your email, ${firstName(name)}`,
+     '',
+-    'Open this link on your phone to verify your household account, then continue in Choremaxx.',
++    'Tap Confirm email on this phone — we’ll open Choremaxx and finish verifying your household account.',
+     '',
+     `Confirm email: ${confirmUrl}`,
++    otp ? `Or enter this code in Choremaxx: ${otp}` : '',
+     '',
+     `Link expires in ${expiresInHours} hours.`,
+-  ].join('\n');
++  ]
++    .filter(Boolean)
++    .join('\n');
+ 
+ export const _module: EmailModule<VerificationEmailProps> = {
+   default: VerificationEmail,
+diff --git a/lib/auth/email-confirmation.test.ts b/lib/auth/email-confirmation.test.ts
+index c818a94..20d3214 100644
+--- a/lib/auth/email-confirmation.test.ts
++++ b/lib/auth/email-confirmation.test.ts
+@@ -6,11 +6,19 @@ assert.equal(
+   paramsFromUrl('choremaxx://auth/callback?token_hash=abc&type=signup').token_hash,
+   'abc'
+ );
++assert.equal(
++  paramsFromUrl('https://www.choremaxx.app/auth/callback?token_hash=web&type=signup').token_hash,
++  'web'
++);
+ assert.equal(
+   paramsFromUrl('choremaxx://auth/callback#access_token=tok&refresh_token=ref').access_token,
+   'tok'
+ );
+ assert.equal(urlHasAuthPayload('choremaxx://auth/callback'), false, 'bare callback has no payload');
+ assert.equal(urlHasAuthPayload('choremaxx://auth/callback?token_hash=x&type=signup'), true);
++assert.equal(
++  urlHasAuthPayload('https://www.choremaxx.app/auth/callback?token_hash=x&type=signup'),
++  true
++);
+ 
+ console.log('email-confirmation tests passed');
+diff --git a/lib/auth/email-confirmation.ts b/lib/auth/email-confirmation.ts
+index 440ae54..487f3f0 100644
+--- a/lib/auth/email-confirmation.ts
++++ b/lib/auth/email-confirmation.ts
+@@ -1,5 +1,5 @@
+-import * as Linking from 'expo-linking';
+-import type { EmailOtpType } from '@supabase/supabase-js';
++import AsyncStorage from '@react-native-async-storage/async-storage';
++import type { EmailOtpType, Session } from '@supabase/supabase-js';
+ 
+ import { throwMappedAuthError } from '@/lib/auth/auth-errors';
+ import { paramsFromUrl } from '@/lib/auth/auth-url-params';
+@@ -12,7 +12,13 @@ type PendingSignup = {
+   password: string;
+ };
+ 
++const PENDING_SIGNUP_KEY = 'choremaxx.pendingSignup.v1';
++
++/** HTTPS bridge on the marketing site — clickable in Mail; opens the app via Universal Link / page forward. */
++export const EMAIL_CONFIRM_WEB_URL = 'https://www.choremaxx.app/auth/callback';
++
+ let pendingSignup: PendingSignup | null = null;
++let pendingHydrated = false;
+ 
+ /** Client-side cooldown so resend / signup retries don't spam Auth email (Resend/SMTP). */
+ const RESEND_COOLDOWN_MS = 60_000;
+@@ -37,19 +43,56 @@ export function markAuthEmailSent(now = Date.now()) {
+ 
+ export function setPendingSignup(email: string, password: string) {
+   pendingSignup = { email: email.trim(), password };
++  void AsyncStorage.setItem(PENDING_SIGNUP_KEY, JSON.stringify(pendingSignup)).catch(() => undefined);
+ }
+ 
+ export function getPendingSignup(): PendingSignup | null {
+   return pendingSignup;
+ }
+ 
++/** Load pending signup from disk (call once on confirm-email mount). */
++export async function hydratePendingSignup(): Promise<PendingSignup | null> {
++  if (pendingSignup) {
++    pendingHydrated = true;
++    return pendingSignup;
++  }
++  if (pendingHydrated) return null;
++  pendingHydrated = true;
++  try {
++    const raw = await AsyncStorage.getItem(PENDING_SIGNUP_KEY);
++    if (!raw) return null;
++    const parsed = JSON.parse(raw) as PendingSignup;
++    if (!parsed?.email || !parsed?.password) return null;
++    pendingSignup = { email: parsed.email.trim(), password: parsed.password };
++    return pendingSignup;
++  } catch {
++    return null;
++  }
++}
++
+ export function clearPendingSignup() {
+   pendingSignup = null;
++  void AsyncStorage.removeItem(PENDING_SIGNUP_KEY).catch(() => undefined);
+ }
+ 
+-/** Deep link target for Supabase email confirmation redirects. */
++/**
++ * Redirect target for Supabase Auth emails.
++ * Prefer HTTPS so inbox clients treat the CTA as a real link (custom schemes often render as plain text).
++ * Website `/auth/callback` forwards into `choremaxx://auth/callback?…`.
++ */
+ export function getEmailConfirmRedirectUrl() {
+-  return Linking.createURL('auth/callback');
++  const override = process.env.EXPO_PUBLIC_EMAIL_CONFIRM_REDIRECT?.trim();
++  if (override) return override;
++  return EMAIL_CONFIRM_WEB_URL;
++}
++
++/** App deep link with the same query — used as a secondary fallback in email copy. */
++export function getEmailConfirmAppUrl(tokenHash: string, type = 'signup') {
++  const params = new URLSearchParams({
++    token_hash: tokenHash,
++    type: type || 'signup',
++  });
++  return `choremaxx://auth/callback?${params.toString()}`;
+ }
+ 
+ function otpTypeFromParam(raw: string | undefined): EmailOtpType {
+@@ -65,7 +108,7 @@ function otpTypeFromParam(raw: string | undefined): EmailOtpType {
+  * - PKCE (?code=)
+  * - implicit tokens (#access_token / query)
+  */
+-export async function createSessionFromUrl(url: string) {
++export async function createSessionFromUrl(url: string): Promise<Session | null> {
+   const supabase = getSupabaseClient();
+   if (!supabase) return null;
+ 
+@@ -110,6 +153,27 @@ export async function createSessionFromUrl(url: string) {
+   return null;
+ }
+ 
++/** Confirm signup with the numeric code from the email (“Or enter this code”). */
++export async function verifySignupEmailOtp(email: string, token: string): Promise<Session | null> {
++  const supabase = getSupabaseClient();
++  if (!supabase) {
++    throw new Error('Live auth is not configured.');
++  }
++  const cleaned = token.replace(/\s+/g, '').trim();
++  if (!cleaned) {
++    throw new Error('Enter the code from your email.');
++  }
++  const { data, error } = await supabase.auth.verifyOtp({
++    email: email.trim(),
++    token: cleaned,
++    type: 'signup',
++  });
++  if (error) {
++    throwMappedAuthError(error);
++  }
++  return data.session;
++}
++
+ export async function resendSignupConfirmation(email: string) {
+   const remaining = getResendCooldownRemainingMs();
+   if (remaining > 0) {
+diff --git a/repositories/auth-repository.ts b/repositories/auth-repository.ts
+index 85eecd0..f677dbd 100644
+--- a/repositories/auth-repository.ts
++++ b/repositories/auth-repository.ts
+@@ -244,13 +244,25 @@ export const authRepository = {
+     mapDbError('authRepository.signOut', error);
+   },
+ 
+-  async deleteAccount(): Promise<void> {
++  async deleteAccount(feedback?: { reason: string; detail?: string }): Promise<void> {
+     if (isMockMode()) {
+       await clearMockSession();
+       return;
+     }
+ 
+     const supabase = getConfiguredSupabase('authRepository.deleteAccount');
++
++    if (feedback?.reason?.trim()) {
++      const { error: feedbackError } = await supabase.rpc('submit_account_deletion_feedback', {
++        p_reason: feedback.reason.trim(),
++        p_detail: feedback.detail?.trim() || null,
++      });
++      // Feedback is best-effort — never block account deletion on analytics insert.
++      if (feedbackError) {
++        console.warn('authRepository.deleteAccount.feedback', feedbackError.message);
++      }
++    }
++
+     const { error } = await supabase.rpc('delete_own_account');
+     mapDbError('authRepository.deleteAccount', error);
+   },
+diff --git a/store/orbit-store.tsx b/store/orbit-store.tsx
+index aefcb12..57a6bfb 100644
+--- a/store/orbit-store.tsx
++++ b/store/orbit-store.tsx
+@@ -440,7 +440,7 @@ type OrbitContextValue = {
+     deviceLabel?: string,
+   ) => Promise<{ members: HouseholdMember[]; needsProfilePick: boolean }>;
+   removeMember: (memberId: string) => Promise<void>;
+-  deleteAccount: () => Promise<void>;
++  deleteAccount: (feedback?: { reason: string; detail?: string }) => Promise<void>;
+   exportUserData: () => Promise<string>;
+   toggleSmartDevice: (deviceId: string) => Promise<void>;
+   activateSmartScene: (sceneId: string) => Promise<void>;
+@@ -3579,9 +3579,16 @@ export function OrbitProvider({ children }: PropsWithChildren) {
+     await trackAnalytics('member.removed', { memberId }, analyticsContext);
+   };
+ 
+-  const deleteAccount = async () => {
+-    await authRepository.deleteAccount();
+-    await trackAnalytics('auth.account_deleted', {}, analyticsContext);
++  const deleteAccount = async (feedback?: { reason: string; detail?: string }) => {
++    await authRepository.deleteAccount(feedback);
++    await trackAnalytics(
++      'auth.account_deleted',
++      {
++        reason: feedback?.reason ?? null,
++        has_detail: Boolean(feedback?.detail?.trim()),
++      },
++      analyticsContext
++    );
+     setCurrentUser(null);
+     setHousehold(mockHousehold);
+     setPendingRedemptions([]);
+diff --git a/supabase/functions/send-auth-email/branded-html.ts b/supabase/functions/send-auth-email/branded-html.ts
+index 9be7b5f..75e9f4b 100644
+--- a/supabase/functions/send-auth-email/branded-html.ts
++++ b/supabase/functions/send-auth-email/branded-html.ts
+@@ -110,7 +110,7 @@ function contentFor(input: {
+       return {
+         subject: 'Confirm your email',
+         headline: 'Confirm your email',
+-        body: `Hi ${name}, we sent this so you can verify your household account. Open the link on your phone, then continue in Choremaxx.`,
++        body: `Hi ${name}, tap Confirm email on this phone — we’ll open Choremaxx and finish verifying your household account. Or enter the code below in the app.`,
+         ctaLabel: 'Confirm email',
+         confirmUrl: input.confirmUrl,
+         footnote: 'Link expires in 24 hours.',
+@@ -173,10 +173,20 @@ export function renderBrandedAuthEmail(input: {
+               <h1 style="margin:8px 0 16px;font-family:${FONT_STACK};font-size:28px;line-height:34px;font-weight:700;color:${COLORS.darkText};">${escapeHtml(c.headline)}</h1>
+               <p style="margin:0 0 24px;font-family:${FONT_STACK};font-size:16px;line-height:24px;font-weight:400;color:${COLORS.body};">${escapeHtml(c.body)}</p>
+               ${rowsHtml(c.rows)}
+-              <a href="${escapeHtml(c.confirmUrl)}" style="display:inline-block;padding:16px 22px;background:${COLORS.coral};color:#FFFFFF;text-decoration:none;border-radius:16px;font-family:${FONT_STACK};font-size:16px;font-weight:700;">${escapeHtml(c.ctaLabel)}</a>
++              <table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 0 8px;">
++                <tr>
++                  <td align="center" style="border-radius:16px;background:${COLORS.coral};">
++                    <a href="${escapeHtml(c.confirmUrl)}" style="display:inline-block;padding:16px 28px;background:${COLORS.coral};color:#FFFFFF;text-decoration:none;border-radius:16px;font-family:${FONT_STACK};font-size:16px;font-weight:700;mso-padding-alt:0;">
++                      <!--[if mso]><i style="letter-spacing:28px;mso-font-width:-100%;mso-text-raise:21pt">&nbsp;</i><![endif]-->
++                      <span style="color:#FFFFFF;">${escapeHtml(c.ctaLabel)}</span>
++                      <!--[if mso]><i style="letter-spacing:28px;mso-font-width:-100%">&nbsp;</i><![endif]-->
++                    </a>
++                  </td>
++                </tr>
++              </table>
+               ${
+                 otp
+-                  ? `<p style="margin:28px 0 0;font-family:${FONT_STACK};font-size:14px;color:${COLORS.muted};">Or enter this code:</p>
++                  ? `<p style="margin:28px 0 0;font-family:${FONT_STACK};font-size:14px;color:${COLORS.muted};">Or enter this code in Choremaxx:</p>
+               <p style="margin:8px 0 0;font-family:${FONT_STACK};font-size:28px;letter-spacing:0.16em;font-weight:700;color:${COLORS.darkText};">${escapeHtml(otp)}</p>`
+                   : ''
+               }
+@@ -186,7 +196,7 @@ export function renderBrandedAuthEmail(input: {
+                   : ''
+               }
+               <p style="margin:28px 0 0;font-family:${FONT_STACK};font-size:12px;line-height:1.45;color:${COLORS.muted};">If the button does not work, open this link:<br />
+-                <span style="word-break:break-all;color:${COLORS.body};">${escapeHtml(c.confirmUrl)}</span>
++                <a href="${escapeHtml(c.confirmUrl)}" style="word-break:break-all;color:${COLORS.coral};text-decoration:underline;">${escapeHtml(c.confirmUrl)}</a>
+               </p>
+               <hr style="border:none;border-top:1px solid ${COLORS.divider};margin:28px 0 16px;" />
+               <p style="margin:0;font-family:${FONT_STACK};font-size:12px;line-height:1.5;color:${COLORS.muted};text-align:center;">
+diff --git a/supabase/functions/send-auth-email/index.ts b/supabase/functions/send-auth-email/index.ts
+index 7f86e61..fa3288c 100644
+--- a/supabase/functions/send-auth-email/index.ts
++++ b/supabase/functions/send-auth-email/index.ts
+@@ -63,19 +63,11 @@ function displayName(email: string, meta?: Record<string, unknown>): string {
+ }
+ 
+ /**
+- * Deep link with token_hash — the app calls verifyOtp.
+- * Avoids Supabase /auth/v1/verify → custom-scheme redirects that drop #access_token
+- * (Chrome/iOS often open choremaxx://auth/callback with an empty payload → infinite spinner).
++ * Always use the HTTPS website bridge in email CTAs.
++ * Custom schemes (`choremaxx://…`) often render as plain text in Mail — users cannot tap them.
++ * Site `/auth/callback` forwards query params into the app (Universal Link or `choremaxx://` open).
++ * Avoids Supabase /auth/v1/verify → custom-scheme redirects that drop `#access_token`.
+  */
+-function appConfirmUrl(tokenHash: string, type: EmailActionType): string {
+-  const params = new URLSearchParams({
+-    token_hash: tokenHash,
+-    type: type || 'signup',
+-  });
+-  return `choremaxx://auth/callback?${params.toString()}`;
+-}
+-
+-/** HTTPS bridge (Universal Link / browser) — same query, site page opens the app. */
+ function webConfirmUrl(tokenHash: string, type: EmailActionType): string {
+   const params = new URLSearchParams({
+     token_hash: tokenHash,
+@@ -84,13 +76,8 @@ function webConfirmUrl(tokenHash: string, type: EmailActionType): string {
+   return `https://www.choremaxx.app/auth/callback?${params.toString()}`;
+ }
+ 
+-function confirmUrlForEmail(tokenHash: string, type: EmailActionType, redirectTo: string): string {
+-  // Prefer HTTPS when Auth already asked for a web redirect — survives Mail → Chrome.
+-  if (redirectTo.startsWith('https://') && redirectTo.includes('choremaxx.app')) {
+-    return webConfirmUrl(tokenHash, type);
+-  }
+-  // Default: open the app directly with token_hash (TestFlight / Mail).
+-  return appConfirmUrl(tokenHash, type);
++function confirmUrlForEmail(tokenHash: string, type: EmailActionType, _redirectTo: string): string {
++  return webConfirmUrl(tokenHash, type);
+ }
+ 
+ Deno.serve(async (req) => {
+diff --git a/supabase/migrations/20260811000000_account_deletion_feedback.sql b/supabase/migrations/20260811000000_account_deletion_feedback.sql
+new file mode 100644
+index 0000000..3f74625
+--- /dev/null
++++ b/supabase/migrations/20260811000000_account_deletion_feedback.sql
+@@ -0,0 +1,52 @@
++-- Optional churn feedback captured before account deletion (best-effort).
++create table if not exists public.account_deletion_feedback (
++  id uuid primary key default gen_random_uuid(),
++  user_id uuid,
++  email text,
++  reason text not null,
++  detail text,
++  created_at timestamptz not null default now()
++);
++
++create index if not exists account_deletion_feedback_created_at_idx
++  on public.account_deletion_feedback (created_at desc);
++
++alter table public.account_deletion_feedback enable row level security;
++
++-- Authenticated users may insert a row for themselves only (no select/update/delete for clients).
++drop policy if exists account_deletion_feedback_insert_own on public.account_deletion_feedback;
++create policy account_deletion_feedback_insert_own
++  on public.account_deletion_feedback
++  for insert
++  to authenticated
++  with check (user_id = auth.uid());
++
++create or replace function public.submit_account_deletion_feedback(
++  p_reason text,
++  p_detail text default null
++)
++returns void
++language plpgsql
++security definer
++set search_path = public
++as $$
++declare
++  uid uuid := auth.uid();
++  mail text;
++begin
++  if uid is null then
++    raise exception 'Not authenticated';
++  end if;
++
++  if p_reason is null or length(trim(p_reason)) = 0 then
++    raise exception 'Reason required';
++  end if;
++
++  select email into mail from auth.users where id = uid;
++
++  insert into public.account_deletion_feedback (user_id, email, reason, detail)
++  values (uid, mail, trim(p_reason), nullif(trim(coalesce(p_detail, '')), ''));
++end;
++$$;
++
++grant execute on function public.submit_account_deletion_feedback(text, text) to authenticated;
+diff --git a/types/database.ts b/types/database.ts
+index 6031bc4..5ea9e02 100644
+--- a/types/database.ts
++++ b/types/database.ts
+@@ -461,6 +461,10 @@ export type Database = {
+         Args: Record<string, never>;
+         Returns: undefined;
+       };
++      submit_account_deletion_feedback: {
++        Args: { p_reason: string; p_detail?: string | null };
++        Returns: undefined;
++      };
+       is_household_member: {
+         Args: { target_household: string };
+         Returns: boolean;
+-- 
+2.43.0
+

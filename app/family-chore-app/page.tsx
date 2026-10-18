@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Family Chore App — ChoreMaxx',
   description:
     'ChoreMaxx is the modern family chore app. Assign tasks, track completion, reward good behavior, and keep the household running smoothly.',
-  canonical: 'https://mytikas73.com/family-chore-app',
+  alternates: { canonical: 'https://www.choremaxx.app/family-chore-app' },
 };
 
 const whyLoveIt = [
@@ -29,17 +29,17 @@ export default function FamilyChoreApp() {
       heading="Family Chore App for Modern Households"
       sub="Transforms household work into a fair, transparent, and rewarding experience."
     >
-      <p className="text-white/70 text-lg leading-relaxed mb-10 max-w-2xl">
+      <p className="text-[#5A4438] text-lg leading-relaxed mb-10 max-w-2xl">
         Assign chores, track who completes them, award points, and unlock real rewards your family actually wants.
         No more sticky notes, forgotten tasks, or arguments about fairness.
       </p>
 
       {/* Why families love it */}
-      <h2 className="text-white font-bold text-2xl mb-5">Why families love ChoreMaxx</h2>
+      <h2 className="text-[#2A1A12] font-bold text-2xl mb-5">Why families love ChoreMaxx</h2>
       <div className="glass-card p-8 mb-10">
         <ul className="flex flex-col gap-4">
           {whyLoveIt.map(([strong, rest]) => (
-            <li key={strong} className="flex items-start gap-3 text-sm text-white/65">
+            <li key={strong} className="flex items-start gap-3 text-sm text-[#5A4438]">
               <span
                 style={{
                   width: 20, height: 20, borderRadius: '50%',
@@ -51,27 +51,27 @@ export default function FamilyChoreApp() {
                   <path d="M1.5 4.5l2 2 4-4" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
-              <span><strong className="text-white/90 font-semibold">{strong}:</strong> {rest}</span>
+              <span><strong className="text-[#5A4438] font-semibold">{strong}:</strong> {rest}</span>
             </li>
           ))}
         </ul>
       </div>
 
       {/* How it works */}
-      <h2 className="text-white font-bold text-2xl mb-5">How it works</h2>
+      <h2 className="text-[#2A1A12] font-bold text-2xl mb-5">How it works</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-14">
         {howSteps.map(({ n, title, body }) => (
           <div key={n} className="glass-tile p-6 flex flex-col gap-3">
-            <span style={{ fontSize: '2rem', fontWeight: 800, color: 'rgba(255,255,255,0.10)', lineHeight: 1 }}>{n}</span>
-            <h3 className="text-white font-semibold text-sm">{title}</h3>
-            <p className="text-xs text-white/60 leading-relaxed">{body}</p>
+            <span style={{ fontSize: '2rem', fontWeight: 800, color: 'rgba(120,70,40,0.10)', lineHeight: 1 }}>{n}</span>
+            <h3 className="text-[#2A1A12] font-semibold text-sm">{title}</h3>
+            <p className="text-xs text-[#5A4438] leading-relaxed">{body}</p>
           </div>
         ))}
       </div>
 
       {/* CTA */}
       <div className="glass-card p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-        <p className="text-white font-semibold max-w-sm">Better than sticky notes and allowance lists.</p>
+        <p className="text-[#2A1A12] font-semibold max-w-sm">Better than sticky notes and allowance lists.</p>
         <div className="flex gap-3">
           <Link href="/download"    className="btn-primary">Get the app</Link>
           <Link href="/how-it-works" className="btn-outline">Learn more</Link>

@@ -60,33 +60,33 @@ export default function HowItWorks() {
               style={{
                 fontSize: '2.5rem',
                 fontWeight: 800,
-                color: 'rgba(255,255,255,0.10)',
+                color: 'rgba(120,70,40,0.10)',
                 lineHeight: 1,
               }}
             >
               {n}
             </span>
-            <h3 className="text-white font-bold text-base">{title}</h3>
-            <p className="text-sm text-white/60 leading-relaxed">{body}</p>
+            <h3 className="text-[#2A1A12] font-bold text-base">{title}</h3>
+            <p className="text-sm text-[#5A4438] leading-relaxed">{body}</p>
           </div>
         ))}
       </div>
 
       {/* Who it's for */}
-      <h2 className="text-white text-2xl font-bold mb-6">Who is it for?</h2>
+      <h2 className="text-[#2A1A12] text-2xl font-bold mb-6">Who is it for?</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-16">
         {whoFor.map(({ label, desc }) => (
           <div key={label} className="glass-tile p-6 flex flex-col gap-3">
-            <h3 className="text-white font-semibold">{label}</h3>
-            <p className="text-sm text-white/60 leading-relaxed">{desc}</p>
+            <h3 className="text-[#2A1A12] font-semibold">{label}</h3>
+            <p className="text-sm text-[#5A4438] leading-relaxed">{desc}</p>
           </div>
         ))}
       </div>
 
       {/* Goal card */}
       <div className="glass-card p-10 flex flex-col gap-4">
-        <h2 className="text-white text-2xl font-bold">The goal</h2>
-        <p className="text-white/65 leading-relaxed max-w-2xl">
+        <h2 className="text-[#2A1A12] text-2xl font-bold">The goal</h2>
+        <p className="text-[#5A4438] leading-relaxed max-w-2xl">
           ChoreMaxx is not about perfection. It is about bringing clarity and fairness to household work so no
           one person carries it all. Less arguing. More time together.
         </p>
