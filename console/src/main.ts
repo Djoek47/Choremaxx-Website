@@ -438,7 +438,7 @@ const V = {
       ${chips.map(([k, t, c]) => `<button class="chip" type="button" data-filter="${k}" aria-pressed="${S.filter === k}">${t} <span class="num">${c}</span></button>`).join('')}
     </div>
     <div class="tablewrap"><table>
-      <thead><tr><th>Household</th><th>Status</th><th>Plan</th><th>Time left</th><th>Poppins actions</th><th>People</th><th>Last active</th></tr></thead>
+      <thead><tr><th>Household</th><th>Status</th><th>Plan</th><th>Time left</th><th>AI tokens</th><th>People</th><th>Last active</th></tr></thead>
       <tbody>${
         rows.map((h) => `
         <tr data-open="${esc(h.code)}" tabindex="0">
@@ -446,7 +446,7 @@ const V = {
           <td data-label="Status">${pill(h.status)}</td>
           <td data-label="Plan">${plan(h) === 'yearly' ? 'Yearly' : plan(h) === 'monthly' ? 'Monthly' : '—'}</td>
           <td data-label="Time left">${daysCell(h)}</td>
-          <td data-label="Poppins actions">${creditsCell(h)}</td>
+          <td data-label="AI tokens">${creditsCell(h)}</td>
           <td class="num" data-label="People">${h.members}${h.shared_devices ? ` <span class="hint">+${h.shared_devices} tablet</span>` : ''}</td>
           <td class="num" data-label="Last active">${ago(h.last_active)}</td>
         </tr>`).join('') || '<tr><td colspan="7" class="empty">No households match.</td></tr>'
@@ -562,16 +562,16 @@ const V = {
     const kindName: Record<string, string> = { task: 'Tasks', grocery: 'Groceries', event: 'Calendar', homework: 'Homework', itinerary_stop: 'Trips', place_save: 'Places', complete: 'Completions', reward: 'Rewards' };
     return `
     <div class="grid kpis">
-      <div class="card kpi"><div class="label">Actions used this month</div><div class="value num">${usedMonth.toLocaleString()}</div><div class="delta">across ${H.filter((h) => h.actions_this_month).length} households</div></div>
-      <div class="card kpi"><div class="label">Bought, not yet spent</div><div class="value num">${banked.toLocaleString()}</div><div class="delta">bought actions never expire</div></div>
+      <div class="card kpi"><div class="label">Tokens used this month</div><div class="value num">${usedMonth.toLocaleString()}</div><div class="delta">across ${H.filter((h) => h.actions_this_month).length} households</div></div>
+      <div class="card kpi"><div class="label">Bought, not yet spent</div><div class="value num">${banked.toLocaleString()}</div><div class="delta">bought tokens never expire</div></div>
       <div class="card kpi"><div class="label">Packs sold this month</div><div class="value num">${counts.reduce((a, b) => a + b, 0)}</div><div class="delta">$${month.reduce((s, p) => s + p.packs * (PACK_PRICE[p.pack] ?? 0), 0).toFixed(2)} list price</div></div>
     </div>
     <div class="grid two" style="margin-top:14px">
       <div class="card chart"><div class="section-title" style="margin-top:0"><h2>Packs sold</h2><p class="hint">this month, by size</p></div>
-        ${barSeries(counts, sizes.map((k) => `${PACK_SIZE[k]} actions`), (n) => String(n), `Packs sold this month: ${counts.join(', ')}`)}</div>
-      <div class="card"><div class="section-title" style="margin-top:0"><h2>What Poppins was asked to do</h2><p class="hint">this month, share of actions</p></div>
+        ${barSeries(counts, sizes.map((k) => `${PACK_SIZE[k]} tokens`), (n) => String(n), `Packs sold this month: ${counts.join(', ')}`)}</div>
+      <div class="card"><div class="section-title" style="margin-top:0"><h2>What Poppins was asked to do</h2><p class="hint">this month, share of tokens</p></div>
         ${S.mix.length ? `<div class="stack" style="height:14px">${S.mix.map((m, i) => `<i style="width:${(m.actions / totalActs) * 100}%;background:${colors[i % colors.length]}"></i>`).join('')}</div>
-        <div class="legend">${S.mix.map((m, i) => `<span style="--c:${colors[i % colors.length]}">${esc(kindName[m.act_kind] ?? m.act_kind)} ${Math.round((m.actions / totalActs) * 100)}%</span>`).join('')}</div>` : '<p class="empty">No Poppins actions this month yet.</p>'}
+        <div class="legend">${S.mix.map((m, i) => `<span style="--c:${colors[i % colors.length]}">${esc(kindName[m.act_kind] ?? m.act_kind)} ${Math.round((m.actions / totalActs) * 100)}%</span>`).join('')}</div>` : '<p class="empty">No Poppins use this month yet.</p>'}
         <p class="hint" style="margin-top:14px">Counts only. What people said to Poppins is never read.</p>
       </div>
     </div>
@@ -632,7 +632,7 @@ function drawer(code: string) {
       : `<button class="btn reveal-btn" type="button" data-reveal="${esc(code)}">Show name &amp; emails</button><p class="hint" style="margin-top:-6px">Only for helping this customer. It’s recorded in the audit log.</p>`}
     <div class="kv-grid">
       <div class="card kv"><div class="k">Plan</div><div class="v">${pill(h.status)} <span class="hint">${plan(h) === 'yearly' ? 'Yearly · $49.99' : plan(h) === 'monthly' ? 'Monthly · $6.99' : 'No plan'}</span></div>${daysCell(h)}<div class="hint">Renewal ${h.will_renew === null ? 'unknown' : h.will_renew ? 'on' : 'off'}</div></div>
-      <div class="card kv"><div class="k">Poppins actions</div>${creditsCell(h)}<div class="hint">Bought ${h.bought_actions.toLocaleString()} · spent ${h.spent_bought_actions.toLocaleString()} · ${h.actions_this_month} this month</div></div>
+      <div class="card kv"><div class="k">AI tokens</div>${creditsCell(h)}<div class="hint">Bought ${h.bought_actions.toLocaleString()} · spent ${h.spent_bought_actions.toLocaleString()} · ${h.actions_this_month} this month</div></div>
       <div class="card kv"><div class="k">Activity</div><div class="v">${ago(h.last_active)}</div><div class="hint">${h.members} people${h.shared_devices ? ` · ${h.shared_devices} shared tablet` : ''} · ${plural(errors, 'error')} in 30 days</div></div>
       <div class="card kv"><div class="k">Owner</div><div class="v">${owner ? esc(open ? owner.display_name || '—' : owner.user_code) : '—'}</div><div class="hint mono">${owner ? esc(open ? owner.email ?? 'no email' : maskEmail(owner.email)) : ''}</div></div>
     </div>
@@ -650,7 +650,7 @@ function drawer(code: string) {
 const KPI_MOJI: [RegExp, string][] = [
   [/paying/i, 'crown'], [/trial/i, 'seedling'], [/revenue/i, 'gem'], [/credit packs|packs sold/i, 'gift'],
   [/^people$/i, 'heartHome'], [/active this week/i, 'fire'], [/wrote to support/i, 'mic'], [/hit an error/i, 'tools'],
-  [/support/i, 'mic'], [/actions used/i, 'sparkles'], [/not yet spent/i, 'basket'],
+  [/support/i, 'mic'], [/tokens used/i, 'sparkles'], [/not yet spent/i, 'basket'],
 ];
 function decorate() {
   document.querySelectorAll<HTMLElement>('#view .kpi:not([data-m])').forEach((el) => {
@@ -687,7 +687,7 @@ const SUB: Record<typeof S.view, string> = {
   households: 'Plans, time left and AI use — no household content',
   users: 'Everyone in a household: role, plan, last active',
   support: 'App messages and emails to support@choremaxx.app',
-  credits: 'Packs bought and actions spent',
+  credits: 'Packs bought and tokens spent',
   errors: 'Error reports, and why people leave',
 };
 const openIn = (k: Section) => S.tickets.filter((t) => t.status === 'new' && sectionOf(t) === k).length;
