@@ -653,23 +653,25 @@ html { overflow-x: hidden; }
 /* Footer and anything pinned to the bottom clear the home indicator / gesture bar. */
 footer { padding-bottom: env(safe-area-inset-bottom); }
 
-/* ── Store logo beside "Start free" (PlatformGlyph) ──────────────────────────────────
- * <html data-platform> is set before paint: iPhone/iPad → Apple, Android → Android.
- * No platform (computers, unknown) → the two crossfade every few seconds. */
+/* ── Store logo (PlatformGlyph) — header badge + hero "Start free" ───────────────────
+ * <html data-platform> before paint: iPhone/iPad → Apple, Android → Android.
+ * Computers: one `data-store-logo` clock (layout.tsx) so every glyph stays in sync. */
 .pg { position: relative; display: inline-grid; flex: none; line-height: 0; }
 .pg > span { grid-area: 1 / 1; display: grid; place-items: center; }
 .pg > span > svg { width: 100%; height: 100%; }
+.pg-apple, .pg-android { transition: opacity 0.55s ease-in-out; }
 .pg-android { opacity: 0; }
-html:not([data-platform]) .pg-apple { animation: pg-apple 7s ease-in-out infinite; }
-html:not([data-platform]) .pg-android { animation: pg-android 7s ease-in-out infinite; }
-@keyframes pg-apple { 0%, 42% { opacity: 1; } 50%, 92% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes pg-android { 0%, 42% { opacity: 0; } 50%, 92% { opacity: 1; } 100% { opacity: 0; } }
+html:not([data-platform])[data-store-logo='apple'] .pg-apple { opacity: 1; }
+html:not([data-platform])[data-store-logo='apple'] .pg-android { opacity: 0; }
+html:not([data-platform])[data-store-logo='android'] .pg-apple { opacity: 0; }
+html:not([data-platform])[data-store-logo='android'] .pg-android { opacity: 1; }
 html[data-platform='ios'] .pg-android, html[data-platform='android'] .pg-apple { display: none; }
 html[data-platform='android'] .pg-android { opacity: 1; }
 /* Reduced motion on a computer: show both logos side by side instead of fading. */
 @media (prefers-reduced-motion: reduce) {
   html:not([data-platform]) .pg { display: inline-flex; gap: 4px; width: auto !important; }
-  html:not([data-platform]) .pg > span { animation: none; opacity: 1; }
+  html:not([data-platform]) .pg-apple,
+  html:not([data-platform]) .pg-android { transition: none; opacity: 1 !important; }
 }
 @media (max-width: 480px) {
   .about-body > div > div:first-child { padding: 24px !important; border-radius: 24px !important; }

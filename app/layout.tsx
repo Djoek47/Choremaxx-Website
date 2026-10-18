@@ -79,12 +79,21 @@ export const metadata: Metadata = {
  * Tab favicon always uses the colored plate icon-{palette}.png (color match only —
  * not day/night). */
 /** Sets <html data-platform="ios|android"> before first paint so the store logo
- *  next to "Start free" never flickers. No cookie needed: the user agent is
- *  available on every visit. iPadOS reports "Macintosh", hence the touch check. */
-const PLATFORM_SCRIPT = `(function(){try{var u=navigator.userAgent||'',p='';
+ *  next to "Start free" / the header badge never flickers. No cookie needed: the
+ *  user agent is available on every visit. iPadOS reports "Macintosh", hence the
+ *  touch check. On computers (no platform), one `data-store-logo` clock drives
+ *  every PlatformGlyph so the header and hero stay in sync. */
+const PLATFORM_SCRIPT = `(function(){try{var u=navigator.userAgent||'',p='',root=document.documentElement;
 if(/Android/i.test(u))p='android';
 else if(/iPhone|iPad|iPod/.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1))p='ios';
-if(p)document.documentElement.setAttribute('data-platform',p);}catch(e){}})();`;
+if(p){root.setAttribute('data-platform',p);return;}
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var half=3500;
+function tick(){root.setAttribute('data-store-logo',(Math.floor(Date.now()/half)%2)?'android':'apple');}
+tick();
+var wait=half-(Date.now()%half);
+setTimeout(function(){tick();setInterval(tick,half);},wait);
+}catch(e){}})();`;
 
 const PALETTE_BOOTSTRAP_SCRIPT = `(function(){
   var palettes = ${JSON.stringify(PALETTES)};

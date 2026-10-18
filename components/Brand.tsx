@@ -64,10 +64,11 @@ export function AndroidLogo({ size = 18, color = 'currentColor' }: { size?: numb
 }
 
 /**
- * The visitor's store logo next to a free-trial button. Which one shows is pure CSS
- * keyed on <html data-platform> (set before first paint in app/layout.tsx):
+ * The visitor's store logo next to a free-trial / download button.
+ * Which one shows is pure CSS keyed on <html> (set in app/layout.tsx):
  * iPhone/iPad → Apple, Android (Samsung included) → Android,
- * anything else (computers, unknown) → the two crossfade.
+ * computers/unknown → Apple ↔ Android crossfade driven by one
+ * `data-store-logo` clock so every glyph on the page stays in sync.
  */
 export function PlatformGlyph({ size = 18 }: { size?: number }) {
   return (
@@ -81,6 +82,7 @@ export function PlatformGlyph({ size = 18 }: { size?: number }) {
 /**
  * Store download control — frosted glass pill (not the generic Apple badge,
  * not the coral primary CTA). Day/night tokens live on `.btn-store`.
+ * Logo uses PlatformGlyph so the header badge cycles with the hero CTA on PC.
  */
 export function AppStoreBadge({
   href = '/download',
@@ -93,10 +95,11 @@ export function AppStoreBadge({
 }) {
   const external = href.startsWith('http');
   const cls = `btn-store${large ? ' btn-store-lg' : ''}${className ? ` ${className}` : ''}`;
+  const glyph = large ? 26 : 20;
   const inner = (
     <>
       <span className="btn-store-glyph" aria-hidden>
-        <AppleLogo size={large ? 26 : 20} color="currentColor" />
+        <PlatformGlyph size={glyph} />
       </span>
       <span className="btn-store-copy">
         <span className="btn-store-kicker">Download on the</span>
