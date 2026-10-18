@@ -45,9 +45,12 @@ Add more staff the same way with `role = 'support'`. Remove someone:
 
 **Staff sign-in is three factors** (not the app magic link):
 
-1. Email a **console-only** 8-digit code (`console-auth` edge function → Resend)
-2. Console **password** (set on the Auth user in Supabase)
+1. Work email + console **password** (set on the Auth user in Supabase)
+2. **Console-only** 8-digit email code (`console-auth` → Resend)
 3. **Authenticator app** TOTP — first sign-in shows a QR to enroll; later sign-ins ask for the 6-digit code
+
+Wrong password / wrong email code / wrong authenticator code each return a clear error on the form.
+Use **Start over** (or resend) if a mid-flow challenge expires.
 
 ```bash
 supabase functions deploy console-auth --no-verify-jwt
@@ -55,7 +58,7 @@ supabase functions deploy console-auth --no-verify-jwt
 ```
 
 Staff passwords: Supabase → Authentication → Users → set a password for each `console_staff` email
-(or `update user` with a password). Magic-link-only users cannot pass step 2 until a password exists.
+(or `update user` with a password). Magic-link-only users cannot pass step 1 until a password exists.
 
 ## 2. Resend — receive support@choremaxx.app
 

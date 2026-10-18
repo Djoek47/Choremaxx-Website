@@ -67,6 +67,29 @@ h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; letter-
 .keep-row strong { display: block; font-size: 14px; color: var(--fg); }
 .keep-hint { display: block; margin-top: 3px; font-size: 12.5px; color: var(--subtle); line-height: 1.4; }
 #auth-restart { width: 100%; }
+.auth-steps {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+}
+.auth-steps li {
+  font-size: 11.5px; font-weight: 700; text-align: center;
+  padding: 8px 6px; border-radius: 999px; color: var(--muted);
+  background: var(--sunk); border: 1px solid transparent;
+}
+.auth-steps li.is-current {
+  color: #fff; background: var(--accent); border-color: var(--accent);
+}
+.auth-steps li.is-done {
+  color: var(--accent); background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+#signin-note.signin-error {
+  color: var(--bad); font-weight: 600; background: var(--bad-soft);
+  border-radius: 10px; padding: 10px 12px;
+}
+#signin-note.signin-ok {
+  color: var(--good); font-weight: 600; background: var(--good-soft);
+  border-radius: 10px; padding: 10px 12px;
+}
 
 /* ── Shell ─────────────────────────────────────────────── */
 #app { display: grid; grid-template-columns: 228px 1fr; min-height: 100%; }
