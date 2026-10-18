@@ -52,8 +52,8 @@ export function AppleLogo({ size = 18, color = 'currentColor' }: { size?: number
 }
 
 /**
- * Store download control — Moji UI ink plate (not the generic Apple badge,
- * not the coral primary CTA). Inverts cleanly for night mode via CSS.
+ * Store download control — frosted glass pill (not the generic Apple badge,
+ * not the coral primary CTA). Day/night tokens live on `.btn-store`.
  */
 export function AppStoreBadge({
   href = '/download',

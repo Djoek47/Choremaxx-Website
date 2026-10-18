@@ -31,9 +31,13 @@
   --grad-end: #FFF7EC;
   --header-fade: #FBF4EEee;
   --footer-bg: #F6E9DF;
-  --store-fg: #FFF7EC;
-  --store-bg: #2A1A12;
-  --store-lip: #1A100C;
+  /* Frosted glass store CTA */
+  --store-fg: #2A1A12;
+  --store-bg: rgba(255, 255, 255, 0.42);
+  --store-bg-hover: rgba(255, 255, 255, 0.58);
+  --store-edge: rgba(255, 255, 255, 0.72);
+  --store-rim: rgba(120, 70, 40, 0.14);
+  --store-glow: rgba(120, 60, 30, 0.18);
   --tint-1: #FBE3D6;
   --tint-2: #FFEBCB;
   --tint-3: #DDEBFA;
@@ -264,10 +268,13 @@ html[data-appearance='night'] {
   --grad-end: #241812;
   --header-fade: #140C08ee;
   --footer-bg: #100A08;
-  /* Store button stays ink-on-cream text — elevated dark plate, not inverted cream */
+  /* Frosted glass on dark — light text, soft luminous plate */
   --store-fg: #FFF3E6;
-  --store-bg: #2A1C14;
-  --store-lip: #0A0604;
+  --store-bg: rgba(255, 236, 220, 0.10);
+  --store-bg-hover: rgba(255, 236, 220, 0.16);
+  --store-edge: rgba(255, 236, 220, 0.28);
+  --store-rim: rgba(255, 220, 190, 0.16);
+  --store-glow: rgba(0, 0, 0, 0.35);
   --tint-1: color-mix(in srgb, #FBE3D6 22%, #1A100C);
   --tint-2: color-mix(in srgb, #FFEBCB 20%, #1A100C);
   --tint-3: color-mix(in srgb, #DDEBFA 22%, #120E18);
@@ -350,8 +357,9 @@ html[data-appearance='night'] .home-shell .rounded-\[22px\].bg-white {
 .footer-newsletter input::placeholder { color: var(--txm); }
 .footer-newsletter-go { background: var(--p); }
 
-/* Store download — ink plate that matches Moji UI lips (not Apple's stock badge) */
+/* Store download — frosted glass pill (not Apple stock badge, not solid ink) */
 .btn-store {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
@@ -359,25 +367,60 @@ html[data-appearance='night'] .home-shell .rounded-\[22px\].bg-white {
   color: var(--store-fg);
   border-radius: 999px;
   padding: 0.5rem 1.15rem 0.5rem 0.95rem;
-  border: 1px solid color-mix(in srgb, var(--store-fg) 14%, transparent);
-  box-shadow: 0 3px 0 var(--store-lip), 0 12px 22px -12px color-mix(in srgb, var(--ink-deep) 40%, transparent);
+  border: 1px solid var(--store-rim);
+  box-shadow:
+    inset 0 1px 0 var(--store-edge),
+    inset 0 -1px 0 color-mix(in srgb, var(--ink-deep) 6%, transparent),
+    0 10px 28px -14px var(--store-glow);
+  backdrop-filter: blur(18px) saturate(1.35);
+  -webkit-backdrop-filter: blur(18px) saturate(1.35);
   font-family: inherit;
-  transition: transform .12s ease, box-shadow .12s ease, background .2s ease, border-color .2s;
+  transition: transform .15s ease, box-shadow .15s ease, background .2s ease, border-color .2s;
   text-decoration: none;
+  isolation: isolate;
+  overflow: hidden;
 }
+.btn-store::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--store-edge) 70%, transparent) 0%,
+    transparent 42%,
+    transparent 58%,
+    color-mix(in srgb, var(--p) 10%, transparent) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+.btn-store > * { position: relative; z-index: 1; }
 .btn-store:hover {
   transform: translateY(-1px);
-  border-color: color-mix(in srgb, var(--store-fg) 28%, transparent);
+  background: var(--store-bg-hover);
+  border-color: color-mix(in srgb, var(--store-rim) 70%, var(--p) 30%);
+  box-shadow:
+    inset 0 1px 0 var(--store-edge),
+    inset 0 -1px 0 color-mix(in srgb, var(--ink-deep) 6%, transparent),
+    0 14px 32px -12px var(--store-glow);
 }
 .btn-store:active {
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 var(--store-lip), 0 6px 14px -10px color-mix(in srgb, var(--ink-deep) 40%, transparent);
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 var(--store-edge),
+    0 6px 16px -12px var(--store-glow);
 }
 .btn-store-lg {
   border-radius: 22px;
   padding: 0.85rem 1.5rem 0.85rem 1.2rem;
   gap: 0.9rem;
-  box-shadow: 0 4px 0 var(--store-lip), 0 16px 28px -12px color-mix(in srgb, var(--ink-deep) 45%, transparent);
+  backdrop-filter: blur(22px) saturate(1.4);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+  box-shadow:
+    inset 0 1px 0 var(--store-edge),
+    inset 0 -1px 0 color-mix(in srgb, var(--ink-deep) 8%, transparent),
+    0 16px 36px -14px var(--store-glow);
 }
 .btn-store-glyph {
   display: grid;
@@ -385,6 +428,7 @@ html[data-appearance='night'] .home-shell .rounded-\[22px\].bg-white {
   flex-shrink: 0;
   line-height: 0;
   margin-top: -1px;
+  filter: drop-shadow(0 1px 0 color-mix(in srgb, var(--store-edge) 40%, transparent));
 }
 .btn-store-copy { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.05; gap: 0.22rem; }
 .btn-store-kicker {
@@ -392,7 +436,7 @@ html[data-appearance='night'] .home-shell .rounded-\[22px\].bg-white {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.7;
+  opacity: 0.72;
   font-family: inherit;
 }
 .btn-store-title {
