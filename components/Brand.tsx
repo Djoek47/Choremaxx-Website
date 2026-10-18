@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
 
@@ -21,16 +20,17 @@ export function Moji({ name, size = 28, style, className }: { name: string; size
   );
 }
 
-/** App icon + "chore" in gold, "maxx" in coral, exactly like the app. */
+/**
+ * House mark + wordmark — icon swaps with palette × day/night via `.brand-logo`;
+ * “chore” uses `--sec`, “maxx” uses `--p` (Orbit lockups).
+ */
 export function Logo({ size = 34, text = 'text-xl' }: { size?: number; text?: string }) {
   return (
     <Link href="/" className="flex items-center gap-2.5 flex-shrink-0" aria-label="ChoreMaxx home">
-      <Image
-        src="/brand/choremaxx-app-icon.png"
-        alt=""
-        width={size}
-        height={size}
-        style={{ width: size, height: size, borderRadius: size * 0.28, boxShadow: '0 6px 14px -6px rgba(168,65,31,.55)' }}
+      <span
+        className="brand-logo"
+        aria-hidden
+        style={{ width: size, height: size, borderRadius: size * 0.28 }}
       />
       <span className={`wordmark ${text}`}>
         <span className="w-chore">chore</span>

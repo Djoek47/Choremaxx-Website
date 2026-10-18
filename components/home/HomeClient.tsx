@@ -165,14 +165,14 @@ export default function HomeClient() {
   return (
     <div className="home-shell" style={{ background: PAPER, color: INK }}>
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden" style={{ minHeight: '92vh' }}>
+      <section className="hero-stage relative overflow-hidden" style={{ minHeight: '92vh' }}>
         <div aria-hidden className="absolute inset-0 paper-dots" style={{ maskImage: 'radial-gradient(ellipse at 70% 40%, #000 0%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse at 70% 40%, #000 0%, transparent 70%)' }} />
         <div aria-hidden className="blob blob-purple" style={{ width: 520, height: 520, top: -160, right: -60, opacity: 0.55 }} />
         <div aria-hidden className="blob blob-blue" style={{ width: 380, height: 380, bottom: -80, left: -120, opacity: 0.45 }} />
 
         <div className="container-page relative z-10" style={{ paddingTop: '3.5rem', paddingBottom: '5rem' }}>
-          <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-6">
-            <div className="flex-1 flex flex-col gap-7 max-w-xl">
+          <div className="flex flex-col lg:flex-row items-center gap-10 sm:gap-14 lg:gap-6">
+            <div className="flex-1 flex flex-col gap-7 max-w-xl w-full">
               <div className="chip self-start hero-in" style={{ animationDelay: '.05s' }}>
                 <span className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: 'var(--pl)' }}><Moji name="heartHome" size={16} /></span>
                 Built for real families with high standards
@@ -184,7 +184,7 @@ export default function HomeClient() {
                   <span className="relative inline-block" style={{ color: CORAL }}>
                     rules
                     <svg aria-hidden className="absolute left-0 -bottom-2 w-full" height="14" viewBox="0 0 200 14" preserveAspectRatio="none">
-                      <path d="M3 9 C 50 2, 120 2, 197 8" stroke="#FAC775" strokeWidth="6" fill="none" strokeLinecap="round" />
+                      <path d="M3 9 C 50 2, 120 2, 197 8" stroke="var(--sec)" strokeWidth="6" fill="none" strokeLinecap="round" />
                     </svg>
                   </span>
                   .
@@ -192,11 +192,11 @@ export default function HomeClient() {
                 Actually followed.
               </h1>
 
-              <p className="text-lg hero-in" style={{ color: SOFT, maxWidth: 470, animationDelay: '.2s' }}>
+              <p className="text-base sm:text-lg hero-in" style={{ color: SOFT, maxWidth: 470, animationDelay: '.2s' }}>
                 With ChoreMaxx, hand out the work, track who actually did it, and make it worth doing. You stay in charge — the app just stops the arguing.
               </p>
 
-              <div className="flex flex-wrap items-center gap-4 hero-in" style={{ animationDelay: '.28s' }}>
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 hero-in" style={{ animationDelay: '.28s' }}>
                 <Link href="/download" className="btn-primary" style={{ padding: '1rem 1.6rem' }}>
                   <span className="sm:hidden">Start free</span>
                   <span className="hidden sm:inline">Start 7 days free</span>
@@ -208,9 +208,9 @@ export default function HomeClient() {
             </div>
 
             {/* The app in a phone, with live widgets around it */}
-            <div className="flex-1 relative flex items-center justify-center w-full" style={{ minHeight: 640 }}>
-              <div aria-hidden className="absolute rounded-full" style={{ width: 460, height: 460, background: 'radial-gradient(circle, #FAC77588, #FAC77500 70%)' }} />
-              <div className="hero-in relative z-10" style={{ animationDelay: '.25s', ['--r' as string]: '-2deg' }}>
+            <div className="hero-phone-wrap flex-1 relative flex items-center justify-center w-full" style={{ minHeight: 640 }}>
+              <div aria-hidden className="absolute rounded-full" style={{ width: 'min(460px, 90vw)', height: 'min(460px, 90vw)', background: 'radial-gradient(circle, color-mix(in srgb, var(--sec) 55%, transparent), transparent 70%)' }} />
+              <div className="hero-in relative z-10 scale-[0.82] sm:scale-90 md:scale-100 origin-center" style={{ animationDelay: '.25s', ['--r' as string]: '-2deg' }}>
                 <Phone width={300}>
                   <AppHomeScreen />
                 </Phone>
@@ -349,29 +349,29 @@ export default function HomeClient() {
       </section>
 
       {/* ── TROPHIES ─────────────────────────────────────────────────────── */}
-      <section className="section" style={{ background: INK }}>
+      <section className="section inv-panel" style={{ background: 'var(--inv-bg)' }}>
         <div className="container-page">
-          <div className="grid lg:grid-cols-2 gap-14 items-center">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
             <div>
-              <h2 className="text-balance mb-5" style={{ color: 'var(--cream)' }}>Somebody wins the week</h2>
-              <p className="text-lg leading-relaxed" style={{ color: 'var(--cream-mute)' }}>
+              <h2 className="text-balance mb-5" style={{ color: 'var(--inv-fg)' }}>Somebody wins the week</h2>
+              <p className="text-base sm:text-lg leading-relaxed" style={{ color: 'var(--inv-muted)' }}>
                 The Week&rsquo;s Crown goes to the highest XP of the week. The Monthly Sovereign takes the month. Gold, silver, bronze — and a Champion&rsquo;s Record anyone in the house can open: tasks completed, how many were on time, how many were late.
               </p>
-              <p className="text-lg leading-relaxed mt-4" style={{ color: 'var(--cream-mute)' }}>
+              <p className="text-base sm:text-lg leading-relaxed mt-4" style={{ color: 'var(--inv-muted)' }}>
                 Only one child? They compete against their own best week. That&rsquo;s usually harder.
               </p>
             </div>
             <div ref={xpRef} className="flex flex-col gap-4">
               {TROPHIES.map(({ moji, title, sub }, i) => (
-                <div key={title} className="rounded-[26px] px-6 py-5 flex items-center gap-5 transition-transform hover:-translate-y-1" style={{ background: 'var(--ink-panel)', border: '1px solid var(--ink-panel-2)', transform: `rotate(${(i - 1) * 1.2}deg)` }}>
-                  <span className="w-14 h-14 rounded-[18px] flex items-center justify-center flex-shrink-0" style={{ background: 'var(--ink-panel-2)' }}><Moji name={moji} size={34} /></span>
-                  <div className="flex-1">
-                    <p className={`text-xl font-extrabold ${i === 0 ? 'sweep-text' : ''}`} style={i === 0 ? { letterSpacing: '-0.02em' } : { color: 'var(--cream)', letterSpacing: '-0.02em' }}>{title}</p>
-                    <p className="text-sm mt-0.5" style={{ color: 'var(--cream-mute)' }}>{sub}</p>
+                <div key={title} className="rounded-[26px] px-5 sm:px-6 py-5 flex items-center gap-4 sm:gap-5 transition-transform hover:-translate-y-1" style={{ background: 'var(--inv-panel)', border: '1px solid var(--inv-panel-2)', transform: `rotate(${(i - 1) * 1.2}deg)` }}>
+                  <span className="w-14 h-14 rounded-[18px] flex items-center justify-center flex-shrink-0" style={{ background: 'var(--inv-panel-2)' }}><Moji name={moji} size={34} /></span>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-lg sm:text-xl font-extrabold ${i === 0 ? 'sweep-text' : ''}`} style={i === 0 ? { letterSpacing: '-0.02em' } : { color: 'var(--inv-fg)', letterSpacing: '-0.02em' }}>{title}</p>
+                    <p className="text-sm mt-0.5" style={{ color: 'var(--inv-muted)' }}>{sub}</p>
                   </div>
                   {i === 0 && (
-                    <div aria-hidden className="hidden sm:block w-24 h-2.5 rounded-full overflow-hidden" style={{ background: 'var(--ink-panel-2)' }}>
-                      <div className="h-full rounded-full" style={{ width: xpSeen ? '78%' : '0%', transition: 'width 1.4s cubic-bezier(.2,.8,.2,1)', background: 'linear-gradient(90deg, #D85A30, #EF9F27, #FAC775)' }} />
+                    <div aria-hidden className="hidden sm:block w-24 h-2.5 rounded-full overflow-hidden flex-shrink-0" style={{ background: 'var(--inv-panel-2)' }}>
+                      <div className="h-full rounded-full" style={{ width: xpSeen ? '78%' : '0%', transition: 'width 1.4s cubic-bezier(.2,.8,.2,1)', background: 'linear-gradient(90deg, var(--p), var(--sec), #FAC775)' }} />
                     </div>
                   )}
                 </div>
@@ -430,13 +430,13 @@ export default function HomeClient() {
                 It answers, and it acts. Kids don&rsquo;t get access to it. Kids get their tasks.
               </p>
             </div>
-            <div className="rounded-[32px] p-8" style={{ background: INK, boxShadow: '0 6px 0 var(--ink-deep), 0 40px 60px -30px color-mix(in srgb, var(--ink-deep) 55%, transparent)' }}>
+            <div className="inv-panel rounded-[32px] p-6 sm:p-8" style={{ background: 'var(--inv-bg)', boxShadow: '0 6px 0 var(--inv-bg), 0 40px 60px -30px color-mix(in srgb, var(--inv-bg) 55%, transparent)' }}>
               <div className="flex items-center gap-3 mb-5">
                 <Orb size={44} />
-                <p className="text-lg font-extrabold" style={{ color: 'var(--cream)' }}>Poppins</p>
-                <span className="ml-auto text-xs font-bold rounded-full px-3 py-1" style={{ background: 'var(--ink-panel)', color: 'var(--gold)' }}>Parents only</span>
+                <p className="text-lg font-extrabold" style={{ color: 'var(--inv-fg)' }}>Poppins</p>
+                <span className="ml-auto text-xs font-bold rounded-full px-3 py-1" style={{ background: 'var(--inv-panel)', color: 'var(--sec)' }}>Parents only</span>
               </div>
-              <p className="text-lg leading-relaxed italic" style={{ color: '#F3E3D6' }}>
+              <p className="text-base sm:text-lg leading-relaxed italic" style={{ color: 'var(--inv-muted)' }}>
                 &ldquo;Assigned Saturday yard work to Noah and moved Sunday dishes to Emma. Reminder set for 30 minutes before tonight&rsquo;s deadline.&rdquo;
               </p>
             </div>
@@ -508,14 +508,14 @@ export default function HomeClient() {
                     <p className="text-base font-extrabold" style={{ color: highlight ? 'var(--gold)' : INK }}>{title}</p>
                   </div>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-5xl font-extrabold" style={{ color: highlight ? 'var(--cream)' : INK, letterSpacing: '-0.05em' }}>{price}</span>
-                    <span className="text-sm" style={{ color: highlight ? 'var(--cream-mute)' : MUTED }}>{period}</span>
+                    <span className="text-5xl font-extrabold" style={{ color: highlight ? 'var(--inv-fg)' : INK, letterSpacing: '-0.05em' }}>{price}</span>
+                    <span className="text-sm" style={{ color: highlight ? 'var(--inv-muted)' : MUTED }}>{period}</span>
                   </div>
-                  <p className="text-sm mt-2 leading-relaxed" style={{ color: highlight ? 'var(--cream-mute)' : MUTED }}>{note}</p>
+                  <p className="text-sm mt-2 leading-relaxed" style={{ color: highlight ? 'var(--inv-muted)' : MUTED }}>{note}</p>
                 </div>
                 <ul className="flex flex-col gap-3 flex-1">
                   {BULLETS.map((f) => (
-                    <li key={f} className="flex items-center gap-2.5 text-sm font-medium" style={{ color: highlight ? 'var(--cream)' : SOFT }}>
+                    <li key={f} className="flex items-center gap-2.5 text-sm font-medium" style={{ color: highlight ? 'var(--inv-fg)' : SOFT }}>
                       <span className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: highlight ? CORAL : '#2E9E7422' }}>
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={highlight ? '#fff' : '#2E9E74'} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7" /></svg>
                       </span>
