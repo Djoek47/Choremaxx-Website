@@ -4,7 +4,7 @@ import LegalDocument from '@/components/LegalDocument';
 export const metadata: Metadata = {
   title: 'Privacy Policy — ChoreMaxx',
   description: 'ChoreMaxx privacy policy. Your data, your control.',
-  canonical: 'https://mytikas73.com/privacy',
+  alternates: { canonical: 'https://www.choremaxx.app/privacy' },
   robots: 'index, follow',
 };
 

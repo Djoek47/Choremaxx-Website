@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'AI Family Organizer — ChoreMaxx with Nova',
   description:
     'Nova is your AI family organizer. Daily briefings, smart task suggestions, and household insights.',
-  canonical: 'https://mytikas73.com/ai-family-organizer',
+  alternates: { canonical: 'https://www.choremaxx.app/ai-family-organizer' },
 };
 
 const novaFeatures = [
@@ -30,17 +30,17 @@ export default function AIFamilyOrganizer() {
       heading="Nova: Your AI Family Organizer"
       sub="Daily briefings, smart task suggestions, and household insights that keep everyone coordinated."
     >
-      <p className="text-white/70 text-lg leading-relaxed mb-10 max-w-2xl">
+      <p className="text-[#5A4438] text-lg leading-relaxed mb-10 max-w-2xl">
         Every morning, Nova sends a briefing. She notices when someone is overloaded, suggests task adjustments, and
         learns your household patterns. You stay in control — the mental load gets lighter.
       </p>
 
       {/* What Nova does */}
-      <h2 className="text-white font-bold text-2xl mb-5">What Nova does</h2>
+      <h2 className="text-[#2A1A12] font-bold text-2xl mb-5">What Nova does</h2>
       <div className="glass-card p-8 mb-10">
         <ul className="flex flex-col gap-4">
           {novaFeatures.map(([strong, rest]) => (
-            <li key={strong} className="flex items-start gap-3 text-sm text-white/65">
+            <li key={strong} className="flex items-start gap-3 text-sm text-[#5A4438]">
               <span
                 style={{
                   width: 20, height: 20, borderRadius: '50%',
@@ -53,20 +53,20 @@ export default function AIFamilyOrganizer() {
                   <path d="M1.5 4.5l2 2 4-4" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
-              <span><strong className="text-white/90 font-semibold">{strong}:</strong> {rest}</span>
+              <span><strong className="text-[#5A4438] font-semibold">{strong}:</strong> {rest}</span>
             </li>
           ))}
         </ul>
 
         {/* Sample briefing */}
         <div
-          style={{ borderTop: '1px solid rgba(255,255,255,0.10)' }}
+          style={{ borderTop: '1px solid rgba(120,70,40,0.10)' }}
           className="mt-8 pt-6"
         >
-          <p className="text-xs text-white/40 uppercase tracking-widest mb-3">Sample briefing from Nova</p>
+          <p className="text-xs text-[#5A4438] uppercase tracking-widest mb-3">Sample briefing from Nova</p>
           <p
-            className="text-sm text-white/65 italic leading-relaxed p-4 rounded-xl"
-            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}
+            className="text-sm text-[#5A4438] italic leading-relaxed p-4 rounded-xl"
+            style={{ background: '#FBF4EE', border: '1px solid rgba(120,70,40,0.10)' }}
           >
             Good morning, Sarah. Your household momentum is strong — 87 XP earned this month. Two tasks are
             overdue. James has 5 tasks due today — you might reassign one to keep it fair. Soccer pickup is at
@@ -76,12 +76,12 @@ export default function AIFamilyOrganizer() {
       </div>
 
       {/* How it works */}
-      <h2 className="text-white font-bold text-2xl mb-5">How it works</h2>
+      <h2 className="text-[#2A1A12] font-bold text-2xl mb-5">How it works</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-14">
         {howItWorks.map(({ title, body }) => (
           <div key={title} className="glass-tile p-6 flex flex-col gap-2">
-            <h3 className="text-white font-semibold text-sm">{title}</h3>
-            <p className="text-xs text-white/60 leading-relaxed">{body}</p>
+            <h3 className="text-[#2A1A12] font-semibold text-sm">{title}</h3>
+            <p className="text-xs text-[#5A4438] leading-relaxed">{body}</p>
           </div>
         ))}
       </div>
@@ -89,8 +89,8 @@ export default function AIFamilyOrganizer() {
       {/* CTA */}
       <div className="glass-card p-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
-          <p className="text-white font-semibold mb-1">Not a replacement. An assistant.</p>
-          <p className="text-sm text-white/60">Privacy-first · Bias-aware · Transparent</p>
+          <p className="text-[#2A1A12] font-semibold mb-1">Not a replacement. An assistant.</p>
+          <p className="text-sm text-[#5A4438]">Privacy-first · Bias-aware · Transparent</p>
         </div>
         <div className="flex gap-3">
           <Link href="/download" className="btn-primary">Try ChoreMaxx & Nova</Link>

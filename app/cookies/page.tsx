@@ -4,7 +4,7 @@ import LegalDocument from '@/components/LegalDocument';
 export const metadata: Metadata = {
   title: 'Cookie Notice — ChoreMaxx',
   description: 'ChoreMaxx cookie and storage notice.',
-  canonical: 'https://mytikas73.com/cookies',
+  alternates: { canonical: 'https://www.choremaxx.app/cookies' },
   robots: 'index, follow',
 };
 
