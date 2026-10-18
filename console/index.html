@@ -29,13 +29,20 @@
 
     <div id="step-email" class="signin-step">
       <div class="field"><label for="email">Work email</label><input class="input" id="email" type="email" placeholder="you@choremaxx.app" autocomplete="username" ></div>
+      <label class="keep-row" for="keep-signed-in">
+        <input id="keep-signed-in" type="checkbox" checked>
+        <span>
+          <strong>Keep me signed in</strong>
+          <span class="keep-hint">Stay signed in on this browser so you don’t need a new email code every visit.</span>
+        </span>
+      </label>
       <button class="btn" type="submit" data-step="email">Email me a sign-in code</button>
     </div>
 
     <div id="step-otp" class="signin-step" hidden>
       <div class="field"><label for="otp">Code from email</label><input class="input" id="otp" inputmode="numeric" pattern="[0-9 ]*" autocomplete="one-time-code" placeholder="8-digit code" maxlength="19"></div>
       <button class="btn" type="submit" data-step="otp">Continue</button>
-      <button class="btn ghost" type="button" id="otp-resend" style="margin-top:8px">Send a new code</button>
+      <button class="btn ghost" type="button" id="otp-resend">Send a new code</button>
     </div>
 
     <div id="step-password" class="signin-step" hidden>
@@ -56,7 +63,8 @@
       <button class="btn" type="submit" data-step="totp">Sign in</button>
     </div>
 
-    <p class="hint" id="signin-note" style="margin:0" aria-live="polite">Only addresses on the staff list can sign in.</p>
+    <button class="btn ghost" type="button" id="auth-restart" hidden>Start over</button>
+    <p class="hint" id="signin-note" style="margin:0" aria-live="polite">Only addresses on the staff list can sign in. Finish all three steps (email code, password, authenticator) to get in.</p>
   </form>
 </section>
 

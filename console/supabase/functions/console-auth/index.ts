@@ -385,6 +385,34 @@ Deno.serve(async (req) => {
     });
   }
 
+  // ── Cancel an unfinished challenge so staff can start the three steps over ─
+  if (action === 'cancel-challenge') {
+    const challengeId = String(body.challengeId ?? '');
+    const stepToken = String(body.stepToken ?? '');
+    if (!challengeId) return json(origin, { ok: true });
+    // Best-effort: accept with or without a valid step token (expired mid-flow).
+    const { data } = await admin.from('console_auth_challenges').select('*').eq('id', challengeId).maybeSingle();
+    if (data && !data.consumed_at) {
+      let ok = true;
+      if (data.step_token_hash && stepToken) {
+        const hash = await sha256Hex(stepToken);
+        ok = hash === data.step_token_hash;
+      }
+      if (ok || !data.step_token_hash) {
+        await admin
+          .from('console_auth_challenges')
+          .update({
+            consumed_at: new Date().toISOString(),
+            pending_access_token: null,
+            pending_refresh_token: null,
+            step_token_hash: null,
+          })
+          .eq('id', challengeId);
+      }
+    }
+    return json(origin, { ok: true, next: 'email' });
+  }
+
   // ── 5. Verify TOTP → session ──────────────────────────────────────────────
   if (action === 'verify-totp') {
     const challengeId = String(body.challengeId ?? '');
