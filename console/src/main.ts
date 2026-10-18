@@ -13,7 +13,101 @@ import QRCode from 'qrcode';
 // ── Supabase ────────────────────────────────────────────────────────────────────────────
 const URL_ = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
-const sb = URL_ && KEY ? createClient(URL_, KEY, { auth: { persistSession: true, detectSessionInUrl: false, flowType: 'pkce' } }) : null;
+
+/** Prefer localStorage when "Keep me signed in" is on; otherwise session only. */
+const KEEP_KEY = 'cm_console_keep_signed_in';
+function readKeepSignedIn(): boolean {
+  try {
+    const v = localStorage.getItem(KEEP_KEY);
+    return v !== '0'; // default on
+  } catch {
+    return true;
+  }
+}
+function writeKeepSignedIn(on: boolean) {
+  try {
+    localStorage.setItem(KEEP_KEY, on ? '1' : '0');
+  } catch {
+    /* ignore */
+  }
+}
+function syncKeepCheckbox() {
+  const el = document.getElementById('keep-signed-in') as HTMLInputElement | null;
+  if (el) el.checked = readKeepSignedIn();
+}
+function authBucket(): Storage {
+  try {
+    return readKeepSignedIn() ? localStorage : sessionStorage;
+  } catch {
+    return localStorage;
+  }
+}
+/** Clear any leftover Supabase auth keys from both storages (used when keep is off). */
+function clearPersistedAuth() {
+  const keys: string[] = [];
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && (k.includes('auth-token') || k.startsWith('sb-'))) keys.push(k);
+    }
+  } catch {
+    /* ignore */
+  }
+  for (const k of keys) {
+    try {
+      localStorage.removeItem(k);
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+const sb =
+  URL_ && KEY
+    ? createClient(URL_, KEY, {
+        auth: {
+          persistSession: true,
+          detectSessionInUrl: false,
+          flowType: 'pkce',
+          storage: {
+            getItem: (key) => {
+              try {
+                return authBucket().getItem(key);
+              } catch {
+                return null;
+              }
+            },
+            setItem: (key, value) => {
+              try {
+                // Always write to the active bucket; drop the other so keep-off can't leak.
+                const keep = readKeepSignedIn();
+                if (keep) {
+                  localStorage.setItem(key, value);
+                  sessionStorage.removeItem(key);
+                } else {
+                  sessionStorage.setItem(key, value);
+                  localStorage.removeItem(key);
+                }
+              } catch {
+                /* ignore */
+              }
+            },
+            removeItem: (key) => {
+              try {
+                localStorage.removeItem(key);
+              } catch {
+                /* ignore */
+              }
+              try {
+                sessionStorage.removeItem(key);
+              } catch {
+                /* ignore */
+              }
+            },
+          },
+        },
+      })
+    : null;
 
 /** Staff auth challenge held between email-code → password → TOTP steps. */
 type AuthChallenge = {
@@ -21,32 +115,68 @@ type AuthChallenge = {
   stepToken: string;
   email: string;
 };
-let authChallenge: AuthChallenge | null = null;
-
 type AuthStep = 'email' | 'otp' | 'password' | 'enroll' | 'totp';
+let authChallenge: AuthChallenge | null = null;
+let authStep: AuthStep = 'email';
+
 function showAuthStep(step: AuthStep) {
+  authStep = step;
   for (const id of ['step-email', 'step-otp', 'step-password', 'step-enroll', 'step-totp']) {
     const el = document.getElementById(id);
     if (el) el.hidden = id !== `step-${step}`;
   }
+  const restart = document.getElementById('auth-restart') as HTMLButtonElement | null;
+  if (restart) restart.hidden = step === 'email';
   const title = $('#signin-title');
   const sub = $('#signin-sub');
   if (step === 'email') {
     title.textContent = 'Sign in to support';
     sub.textContent = 'Staff only. Three steps: email code, password, authenticator app.';
+    syncKeepCheckbox();
   } else if (step === 'otp') {
     title.textContent = 'Enter your email code';
-    sub.textContent = 'We sent a console-only code (not the ChoreMaxx app sign-in email).';
+    sub.textContent = 'Step 1 of 3 — console-only code (not the ChoreMaxx app sign-in email).';
   } else if (step === 'password') {
     title.textContent = 'Enter your password';
-    sub.textContent = 'Your staff password for the console.';
+    sub.textContent = 'Step 2 of 3 — your staff password for the console.';
   } else if (step === 'enroll') {
     title.textContent = 'Set up authenticator';
-    sub.textContent = 'Scan the QR once, then confirm with a 6-digit code.';
+    sub.textContent = 'Step 3 of 3 — scan the QR once, then confirm with a 6-digit code.';
   } else {
     title.textContent = 'Authenticator code';
-    sub.textContent = 'Open your authenticator app and enter the 6-digit code.';
+    sub.textContent = 'Step 3 of 3 — open your authenticator app and enter the 6-digit code.';
   }
+}
+
+/** Abandon an unfinished three-step challenge and return to email. */
+async function resetAuthFlow(note = 'Start again whenever you’re ready — email code, then password, then authenticator.') {
+  const pending = authChallenge;
+  authChallenge = null;
+  for (const id of ['otp', 'password', 'enroll-code', 'totp']) {
+    const el = document.getElementById(id) as HTMLInputElement | null;
+    if (el) el.value = '';
+  }
+  const qr = document.getElementById('totp-qr');
+  if (qr) qr.innerHTML = '';
+  const secret = document.getElementById('totp-secret');
+  if (secret) secret.textContent = '';
+  if (pending?.challengeId) {
+    try {
+      await consoleAuth({
+        action: 'cancel-challenge',
+        challengeId: pending.challengeId,
+        stepToken: pending.stepToken,
+      });
+    } catch {
+      /* best-effort */
+    }
+  }
+  showAuthStep('email');
+  $('#signin-note').textContent = note;
+}
+
+function shouldRestartAuth(message: string): boolean {
+  return /start (sign-in|again)|session expired|start over|no longer valid/i.test(message);
 }
 
 async function consoleAuth(body: Record<string, unknown>) {
@@ -728,9 +858,11 @@ async function loadShots() {
 // ── Auth ────────────────────────────────────────────────────────────────────────────────
 function showSignin(note?: string) {
   S.session = null;
+  authChallenge = null;
   $('#app').hidden = true;
   $('#signin').hidden = false;
   showAuthStep('email');
+  syncKeepCheckbox();
   if (note) $('#signin-note').textContent = note;
 }
 async function enter(session: Session) {
@@ -745,12 +877,28 @@ async function enter(session: Session) {
   }
   S.session = session;
   authChallenge = null;
+  authStep = 'email';
   $('#who').textContent = session.user.email ?? '';
   $('#signin').hidden = true;
   $('#app').hidden = false;
   render();
   await loadAll();
   subscribeLive();
+}
+
+/** Apply the Keep-me-signed-in choice, then attach the finished three-step session. */
+async function finishSignIn(tokens: { access_token: string; refresh_token: string }) {
+  const keepEl = document.getElementById('keep-signed-in') as HTMLInputElement | null;
+  const keep = keepEl ? keepEl.checked : readKeepSignedIn();
+  writeKeepSignedIn(keep);
+  if (!keep) clearPersistedAuth();
+  const { data: set, error } = await sb!.auth.setSession({
+    access_token: tokens.access_token,
+    refresh_token: tokens.refresh_token,
+  });
+  if (error || !set.session) throw new Error(error?.message ?? 'Could not start session.');
+  authChallenge = null;
+  await enter(set.session);
 }
 
 let channel: ReturnType<NonNullable<typeof sb>['channel']> | null = null;
@@ -863,10 +1011,12 @@ document.addEventListener('submit', async (e) => {
       if (step === 'email') {
         const email = ($('#email') as HTMLInputElement).value.trim().toLowerCase();
         if (!email.includes('@')) { note.textContent = 'Enter your work email.'; return; }
+        const keepEl = document.getElementById('keep-signed-in') as HTMLInputElement | null;
+        writeKeepSignedIn(keepEl ? keepEl.checked : true);
         await consoleAuth({ action: 'request-otp', email });
         authChallenge = { challengeId: '', stepToken: '', email };
         showAuthStep('otp');
-        note.textContent = `If ${email} is on the staff list, check your inbox for a console sign-in code.`;
+        note.textContent = `If ${email} is on the staff list, check your inbox for a console sign-in code. Finish all three steps to get in.`;
         ($('#otp') as HTMLInputElement).focus();
         return;
       }
@@ -876,12 +1026,15 @@ document.addEventListener('submit', async (e) => {
         const data = await consoleAuth({ action: 'verify-otp', email, code });
         authChallenge = { challengeId: String(data.challengeId), stepToken: String(data.stepToken), email };
         showAuthStep('password');
-        note.textContent = 'Email code accepted. Enter your console password.';
+        note.textContent = 'Email code accepted. Next: console password.';
         ($('#password') as HTMLInputElement).focus();
         return;
       }
       if (step === 'password') {
-        if (!authChallenge?.challengeId) { note.textContent = 'Start again from your email.'; showAuthStep('email'); return; }
+        if (!authChallenge?.challengeId) {
+          await resetAuthFlow('That sign-in expired. Start again from your email.');
+          return;
+        }
         const password = ($('#password') as HTMLInputElement).value;
         const data = await consoleAuth({
           action: 'verify-password',
@@ -892,7 +1045,7 @@ document.addEventListener('submit', async (e) => {
         authChallenge.stepToken = String(data.stepToken);
         if (data.next === 'enroll-totp') {
           showAuthStep('enroll');
-          note.textContent = 'Scan the QR, then confirm with a code from your authenticator.';
+          note.textContent = 'Last step: scan the QR, then confirm with a code from your authenticator.';
           const qrHost = $('#totp-qr');
           qrHost.innerHTML = '';
           const canvas = document.createElement('canvas');
@@ -902,13 +1055,16 @@ document.addEventListener('submit', async (e) => {
           ($('#enroll-code') as HTMLInputElement).focus();
         } else {
           showAuthStep('totp');
-          note.textContent = 'Enter the 6-digit code from your authenticator app.';
+          note.textContent = 'Last step: enter the 6-digit code from your authenticator app.';
           ($('#totp') as HTMLInputElement).focus();
         }
         return;
       }
       if (step === 'enroll') {
-        if (!authChallenge?.challengeId) { note.textContent = 'Start again from your email.'; showAuthStep('email'); return; }
+        if (!authChallenge?.challengeId) {
+          await resetAuthFlow('That sign-in expired. Start again from your email.');
+          return;
+        }
         const totpCode = ($('#enroll-code') as HTMLInputElement).value.trim();
         const data = await consoleAuth({
           action: 'confirm-enroll',
@@ -916,19 +1072,15 @@ document.addEventListener('submit', async (e) => {
           stepToken: authChallenge.stepToken,
           totpCode,
         });
-        const session = data.session as { access_token: string; refresh_token: string };
-        const { data: set, error } = await sb.auth.setSession({
-          access_token: session.access_token,
-          refresh_token: session.refresh_token,
-        });
-        if (error || !set.session) throw new Error(error?.message ?? 'Could not start session.');
-        authChallenge = null;
-        await enter(set.session);
+        await finishSignIn(data.session as { access_token: string; refresh_token: string });
         note.textContent = '';
         return;
       }
       if (step === 'totp') {
-        if (!authChallenge?.challengeId) { note.textContent = 'Start again from your email.'; showAuthStep('email'); return; }
+        if (!authChallenge?.challengeId) {
+          await resetAuthFlow('That sign-in expired. Start again from your email.');
+          return;
+        }
         const totpCode = ($('#totp') as HTMLInputElement).value.trim();
         const data = await consoleAuth({
           action: 'verify-totp',
@@ -936,19 +1088,17 @@ document.addEventListener('submit', async (e) => {
           stepToken: authChallenge.stepToken,
           totpCode,
         });
-        const session = data.session as { access_token: string; refresh_token: string };
-        const { data: set, error } = await sb.auth.setSession({
-          access_token: session.access_token,
-          refresh_token: session.refresh_token,
-        });
-        if (error || !set.session) throw new Error(error?.message ?? 'Could not start session.');
-        authChallenge = null;
-        await enter(set.session);
+        await finishSignIn(data.session as { access_token: string; refresh_token: string });
         note.textContent = '';
         return;
       }
     } catch (err) {
-      note.textContent = err instanceof Error ? err.message : 'Sign-in failed.';
+      const message = err instanceof Error ? err.message : 'Sign-in failed.';
+      if (shouldRestartAuth(message) && authStep !== 'email') {
+        await resetAuthFlow(`${message} Use Start over, or begin again from your email.`);
+      } else {
+        note.textContent = message;
+      }
     } finally {
       disable(false);
     }
@@ -992,26 +1142,51 @@ $('#signout').addEventListener('click', async () => {
   authChallenge = null;
   $('#layer').innerHTML = '';
   await sb?.auth.signOut();
-  showSignin('Signed out.');
+  clearPersistedAuth();
+  showSignin('Signed out. Sign in again with the three steps when you’re ready.');
 });
 
 $('#otp-resend')?.addEventListener('click', async () => {
   const email = authChallenge?.email ?? ($('#email') as HTMLInputElement).value.trim().toLowerCase();
   if (!email.includes('@')) { $('#signin-note').textContent = 'Enter your work email first.'; return; }
   try {
+    // Drop any half-finished challenge so the new code starts a clean loop.
+    if (authChallenge?.challengeId) {
+      try {
+        await consoleAuth({
+          action: 'cancel-challenge',
+          challengeId: authChallenge.challengeId,
+          stepToken: authChallenge.stepToken,
+        });
+      } catch {
+        /* ignore */
+      }
+    }
     await consoleAuth({ action: 'request-otp', email });
     authChallenge = { challengeId: '', stepToken: '', email };
+    ($('#otp') as HTMLInputElement).value = '';
     showAuthStep('otp');
-    $('#signin-note').textContent = `New console code sent to ${email} (if on the staff list).`;
+    $('#signin-note').textContent = `New console code sent to ${email} (if on the staff list). Then continue with password and authenticator.`;
   } catch (err) {
     $('#signin-note').textContent = err instanceof Error ? err.message : 'Could not resend.';
   }
+});
+
+$('#auth-restart')?.addEventListener('click', () => {
+  void resetAuthFlow('Sign-in cleared. Start again: email code → password → authenticator.');
+});
+
+document.getElementById('keep-signed-in')?.addEventListener('change', (e) => {
+  writeKeepSignedIn((e.target as HTMLInputElement).checked);
 });
 
 // ── Boot ────────────────────────────────────────────────────────────────────────────────
 (async () => {
   if (!sb) { console.error('ChoreMaxx Console: Supabase URL / anon key not set for this deployment.'); showSignin(); return; }
   showSignin();
+  syncKeepCheckbox();
+  // Keep off → do not restore a long-lived localStorage session.
+  if (!readKeepSignedIn()) clearPersistedAuth();
   const { data } = await sb.auth.getSession();
   if (data.session) await enter(data.session);
   sb.auth.onAuthStateChange((event, session) => {
