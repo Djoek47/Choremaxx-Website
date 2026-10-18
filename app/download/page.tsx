@@ -33,9 +33,9 @@ export default function Download() {
                 <path d="M19.5 7.5c-1.9-2.4-4.6-2.3-5.5-2.3-1.1 0-2.2.3-3.1.6-1.4.5-2.6.5-3.5 0C5.5 4.7 2 5.5.5 9c-1.5 3.5-.3 9.1 2 12 1 1.3 2.3 2.5 4 2.5 1.1 0 1.9-.3 2.7-.6.9-.3 1.7-.5 2.8-.5 1.1 0 1.8.2 2.7.5.8.3 1.6.6 2.7.6 1.7 0 3-1.2 4-2.5 1-1.4 1.5-2.9 1.8-4.5-1.2-.5-3.5-1.9-3.7-5z" fill="rgba(255,255,255,0.80)" />
               </svg>
             </div>
-            <h2 className="text-white font-bold text-xl">iOS</h2>
+            <h2 className="text-[#2A1A12] font-bold text-xl">iOS</h2>
           </div>
-          <p className="text-sm text-white/65">iOS 14 or later. Join our TestFlight beta to try it first.</p>
+          <p className="text-sm text-[#5A4438]">iOS 14 or later. Join our TestFlight beta to try it first.</p>
           <div className="flex flex-col gap-3">
             <button disabled className="btn-primary opacity-50 cursor-not-allowed text-sm">
               App Store — coming soon
@@ -56,9 +56,9 @@ export default function Download() {
                 <circle cx="15" cy="11" r="1" fill="rgba(255,255,255,0.80)" />
               </svg>
             </div>
-            <h2 className="text-white font-bold text-xl">Android</h2>
+            <h2 className="text-[#2A1A12] font-bold text-xl">Android</h2>
           </div>
-          <p className="text-sm text-white/65">Android 12 or later. Early access available now.</p>
+          <p className="text-sm text-[#5A4438]">Android 12 or later. Early access available now.</p>
           <div className="flex flex-col gap-3">
             <button disabled className="btn-primary opacity-50 cursor-not-allowed text-sm">
               Google Play — coming soon
@@ -72,10 +72,10 @@ export default function Download() {
 
       {/* Included features */}
       <div className="glass-card p-8 mb-10">
-        <h2 className="text-white font-bold text-xl mb-6">What is included — free</h2>
+        <h2 className="text-[#2A1A12] font-bold text-xl mb-6">What is included — free</h2>
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {included.map((item) => (
-            <li key={item} className="flex items-center gap-3 text-sm text-white/70">
+            <li key={item} className="flex items-center gap-3 text-sm text-[#5A4438]">
               <span
                 style={{
                   width: 18, height: 18, borderRadius: '50%',
@@ -95,9 +95,9 @@ export default function Download() {
       </div>
 
       {/* Help link */}
-      <p className="text-sm text-white/45 text-center">
+      <p className="text-sm text-[#5A4438] text-center">
         Questions?{' '}
-        <Link href="/support" className="text-purple-300 hover:text-white transition-colors">
+        <Link href="/support" className="text-purple-300 hover:text-[#2A1A12] transition-colors">
           Visit our help center
         </Link>
       </p>

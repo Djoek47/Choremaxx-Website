@@ -4,7 +4,7 @@ import LegalDocument from '@/components/LegalDocument';
 export const metadata: Metadata = {
   title: 'Copyright — ChoreMaxx',
   description: 'ChoreMaxx copyright and intellectual property information.',
-  canonical: 'https://mytikas73.com/copyright',
+  alternates: { canonical: 'https://www.choremaxx.app/copyright' },
   robots: 'index, follow',
 };
 
