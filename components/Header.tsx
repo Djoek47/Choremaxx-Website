@@ -24,12 +24,12 @@ export default function Header() {
   ];
 
   return (
-    <header className="site-header sticky top-0 z-50 pointer-events-none">
+    <header className="site-header sticky top-0 z-50 pointer-events-none" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
       <div className="container-page py-4 flex items-center justify-between gap-4 pointer-events-auto">
         <Logo />
 
         <nav
-          className="hidden md:flex items-center gap-1 nav-pill px-2 py-1.5"
+          className="hidden lg:flex items-center gap-1 nav-pill px-2 py-1.5"
           aria-label="Main navigation"
         >
           {navLinks.map(({ label, href }) => (
@@ -43,13 +43,14 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-3 flex-shrink-0">
+        <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
           <PaletteDots />
           <AppStoreBadge />
         </div>
 
         <button
-          className="md:hidden menu-toggle p-2 rounded-xl"
+          className="lg:hidden menu-toggle rounded-xl flex items-center justify-center"
+          style={{ width: 44, height: 44 }}
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle navigation"
           aria-expanded={mobileOpen}
@@ -64,12 +65,13 @@ export default function Header() {
       </div>
 
       {mobileOpen && (
-        <div className="mobile-menu md:hidden mx-4 mb-2 rounded-2xl p-5 flex flex-col gap-3 pointer-events-auto">
+        <div className="mobile-menu lg:hidden mx-4 mb-2 rounded-2xl p-5 flex flex-col gap-1 pointer-events-auto">
           {navLinks.map(({ label, href }) => (
             <Link
               key={href}
               href={href}
-              className="nav-link text-sm font-medium px-3 py-2 rounded-xl transition-colors"
+              className="nav-link text-base font-semibold px-3 rounded-xl transition-colors flex items-center"
+              style={{ minHeight: 48 }}
               onClick={() => setMobileOpen(false)}
             >
               {label}

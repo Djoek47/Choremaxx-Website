@@ -165,12 +165,12 @@ export default function HomeClient() {
   return (
     <div className="home-shell" style={{ background: PAPER, color: INK }}>
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="hero-stage relative overflow-hidden" style={{ minHeight: '92vh' }}>
+      <section className="hero-stage relative overflow-hidden lg:min-h-[92vh]">
         <div aria-hidden className="absolute inset-0 paper-dots" style={{ maskImage: 'radial-gradient(ellipse at 70% 40%, #000 0%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse at 70% 40%, #000 0%, transparent 70%)' }} />
         <div aria-hidden className="blob blob-purple" style={{ width: 520, height: 520, top: -160, right: -60, opacity: 0.55 }} />
         <div aria-hidden className="blob blob-blue" style={{ width: 380, height: 380, bottom: -80, left: -120, opacity: 0.45 }} />
 
-        <div className="container-page relative z-10" style={{ paddingTop: '3.5rem', paddingBottom: '5rem' }}>
+        <div className="container-page relative z-10 hero-pad">
           <div className="flex flex-col lg:flex-row items-center gap-10 sm:gap-14 lg:gap-6">
             <div className="flex-1 flex flex-col gap-7 max-w-xl w-full">
               <div className="chip self-start hero-in" style={{ animationDelay: '.05s' }}>
@@ -208,15 +208,17 @@ export default function HomeClient() {
             </div>
 
             {/* The app in a phone, with live widgets around it */}
-            <div className="hero-phone-wrap flex-1 relative flex items-center justify-center w-full" style={{ minHeight: 640 }}>
+            <div className="hero-phone-wrap flex-1 relative flex items-center justify-center w-full">
               <div aria-hidden className="absolute rounded-full" style={{ width: 'min(460px, 90vw)', height: 'min(460px, 90vw)', background: 'radial-gradient(circle, color-mix(in srgb, var(--sec) 55%, transparent), transparent 70%)' }} />
-              <div className="hero-in relative z-10 scale-[0.82] sm:scale-90 md:scale-100 origin-center" style={{ animationDelay: '.25s', ['--r' as string]: '-2deg' }}>
+              <div className="hero-phone relative z-10">
+                <div className="hero-in" style={{ animationDelay: '.25s', ['--r' as string]: '-2deg' }}>
                 <Phone width={300}>
                   <AppHomeScreen />
                 </Phone>
               </div>
+                </div>
 
-              <div className="glass-card p-4 absolute hidden md:block hero-in" style={{ width: 178, zIndex: 20, left: '-3%', top: 30, animationDelay: '.5s', ['--r' as string]: '-4deg' }}>
+              <div className="glass-card p-4 absolute hidden lg:block hero-in" style={{ width: 178, zIndex: 20, left: '-3%', top: 30, animationDelay: '.5s', ['--r' as string]: '-4deg' }}>
                 <p className="text-sm font-extrabold mb-2 flex items-center gap-1.5" style={{ color: INK }}><Moji name="cart" size={18} />Grocery List</p>
                 {['Milk', 'Eggs', 'Bread', 'Bananas'].map((item, i) => (
                   <button key={item} onClick={() => setHeroGroc((g) => g.map((v, j) => (j === i ? !v : v)))} className="flex w-full items-center gap-2 py-1 text-left">
@@ -226,7 +228,7 @@ export default function HomeClient() {
                 ))}
               </div>
 
-              <div className="glass-card p-4 absolute hidden md:block hero-in" style={{ width: 200, zIndex: 20, right: '-5%', top: 90, animationDelay: '.62s', ['--r' as string]: '3deg' }}>
+              <div className="glass-card p-4 absolute hidden lg:block hero-in" style={{ width: 200, zIndex: 20, right: '-5%', top: 90, animationDelay: '.62s', ['--r' as string]: '3deg' }}>
                 <div className="flex items-center gap-2 mb-1.5">
                   <Orb size={26} />
                   <span className="text-sm font-extrabold" style={{ color: CORAL }}>Poppins</span>
@@ -236,12 +238,12 @@ export default function HomeClient() {
                 <p className="text-sm" style={{ color: '#2E9E74', fontWeight: 700 }}>Sarah earned +80 XP</p>
               </div>
 
-              <div className="glass-card p-4 absolute hidden md:block hero-in" style={{ width: 168, zIndex: 20, left: '0%', bottom: 60, animationDelay: '.74s', ['--r' as string]: '2deg' }}>
+              <div className="glass-card p-4 absolute hidden lg:block hero-in" style={{ width: 168, zIndex: 20, left: '0%', bottom: 60, animationDelay: '.74s', ['--r' as string]: '2deg' }}>
                 <p className="text-xs font-bold mb-1 flex items-center gap-1.5" style={{ color: MUTED }}><Moji name="fire" size={16} />Streaks</p>
                 <p className="text-3xl font-extrabold" style={{ color: INK, letterSpacing: '-0.04em' }}>12 days</p>
               </div>
 
-              <div className="glass-card p-4 absolute hidden md:block hero-in" style={{ width: 186, zIndex: 20, right: '-4%', bottom: 110, animationDelay: '.86s', ['--r' as string]: '-3deg' }}>
+              <div className="glass-card p-4 absolute hidden lg:block hero-in" style={{ width: 186, zIndex: 20, right: '-4%', bottom: 110, animationDelay: '.86s', ['--r' as string]: '-3deg' }}>
                 <p className="text-xs font-bold mb-1 flex items-center gap-1.5" style={{ color: MUTED }}><Moji name="crown" size={16} />The Week&rsquo;s Crown</p>
                 <p className="text-base font-extrabold" style={{ color: INK }}>Liam leads</p>
               </div>
@@ -277,8 +279,8 @@ export default function HomeClient() {
               {DOES.map(({ moji, label, sub }, i) => {
                 const on = does === i;
                 return (
+                  <div key={label} className="flex flex-col gap-3">
                   <button
-                    key={label}
                     role="tab"
                     aria-selected={on}
                     onClick={() => setDoes(i)}
@@ -298,10 +300,20 @@ export default function HomeClient() {
                       <span className="block text-sm leading-relaxed mt-1" style={{ color: on ? 'var(--cream-mute)' : MUTED }}>{sub}</span>
                     </span>
                   </button>
+                  {on ? (
+                    // Phones and folded foldables: the demo opens right under what you tapped.
+                    <div className="lg:hidden relative rounded-[26px] p-5 overflow-hidden" style={{ background: `linear-gradient(160deg, ${TINT[i]}, var(--grad-end))`, border: '1px solid color-mix(in srgb, var(--p) 22%, transparent)' }}>
+                      <div aria-hidden className="absolute inset-0 paper-dots opacity-60" />
+                      <div key={`m-${does}`} className="relative hero-in" style={{ animationDuration: '.4s' }}>
+                        <DoesDemo i={i} />
+                      </div>
+                    </div>
+                  ) : null}
+                  </div>
                 );
               })}
             </div>
-            <div className="relative rounded-[32px] p-6 md:p-10 flex flex-col justify-center overflow-hidden" style={{ background: `linear-gradient(160deg, ${TINT[does]}, var(--grad-end))`, border: '1px solid color-mix(in srgb, var(--p) 22%, transparent)', minHeight: 420, transition: 'background .4s' }}>
+            <div className="hidden lg:flex relative rounded-[32px] p-6 md:p-10 flex-col justify-center overflow-hidden" style={{ background: `linear-gradient(160deg, ${TINT[does]}, var(--grad-end))`, border: '1px solid color-mix(in srgb, var(--p) 22%, transparent)', minHeight: 420, transition: 'background .4s' }}>
               <div aria-hidden className="absolute inset-0 paper-dots opacity-60" />
               <div key={does} className="relative hero-in" style={{ animationDuration: '.45s' }}>
                 <DoesDemo i={does} />
@@ -336,9 +348,9 @@ export default function HomeClient() {
               No waiting on a parent to log in and bless it. Your child finishes, taps, and the points land. You get notified and can ask for a photo afterward if something looks suspiciously clean.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="snap-row sm:grid sm:grid-cols-2 lg:grid-cols-5 gap-4" role="list" aria-label="Points that mean something">
             {POINTS.map(({ moji, label, sub }, i) => (
-              <div key={label} className="rounded-[26px] p-6 flex flex-col gap-3 transition-transform duration-200 hover:-translate-y-1" style={{ ...card, boxShadow: '0 5px 0 var(--bd)' }}>
+              <div key={label} role="listitem" className="snap-card rounded-[26px] p-6 flex flex-col gap-3 transition-transform duration-200 hover:-translate-y-1" style={{ ...card, boxShadow: '0 5px 0 var(--bd)' }}>
                 <span className="w-12 h-12 rounded-[16px] flex items-center justify-center" style={{ background: TINT[i] }}><Moji name={moji} size={28} /></span>
                 <p className="text-base font-extrabold" style={{ color: INK }}>{label}</p>
                 <p className="text-sm leading-relaxed" style={{ color: MUTED }}>{sub}</p>
@@ -541,7 +553,7 @@ export default function HomeClient() {
       </section>
 
       {/* ── CLOSE ────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden py-28" style={{ background: CORAL }}>
+      <section className="relative overflow-hidden py-20 sm:py-28" style={{ background: CORAL }}>
         <div aria-hidden className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,.14) 1.4px, transparent 1.5px)', backgroundSize: '24px 24px' }} />
         {[
           ['broom', '8%', '18%', -14, 64], ['basket', '86%', '14%', 10, 70], ['star', '14%', '72%', 8, 52],

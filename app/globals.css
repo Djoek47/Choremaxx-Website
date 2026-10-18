@@ -606,3 +606,53 @@ html { overflow-x: hidden; }
   background: var(--bgs);
   border-color: var(--bd);
 }
+
+/* ── Phones, Android, foldables (cover + open) and the iPhone Duo ─────────────────────── */
+.hero-pad { padding-top: 1.25rem; padding-bottom: 3rem; }
+@media (min-width: 640px) { .hero-pad { padding-top: 2.5rem; padding-bottom: 4rem; } }
+@media (min-width: 1024px) { .hero-pad { padding-top: 3.5rem; padding-bottom: 5rem; } }
+
+/* The phone mock-up: sized to the screen, never a fixed 640px box (that left a gap on phones). */
+.hero-phone-wrap { min-height: 0; padding: 0.5rem 0 0; }
+.hero-phone { transform: scale(0.8); transform-origin: top center; margin-bottom: -124px; }
+@media (min-width: 380px) { .hero-phone { transform: scale(0.86); margin-bottom: -86px; } }
+@media (min-width: 640px) { .hero-phone { transform: scale(0.92); margin-bottom: -50px; } }
+@media (min-width: 1024px) { .hero-phone-wrap { min-height: 640px; } .hero-phone { transform: none; margin-bottom: 0; } }
+
+/* Headline sizes that fit a 344px folded cover screen without a 5-line wrap. */
+@media (max-width: 420px) {
+  h1 { font-size: clamp(2.35rem, 11vw, 3rem); line-height: 1; }
+  h2 { font-size: clamp(1.75rem, 8.4vw, 2.2rem); }
+  .chip { font-size: 0.8rem; }
+}
+@media (max-width: 768px) {
+  .section { padding-top: 3.75rem; padding-bottom: 3.75rem; }
+  .section-heading { margin-bottom: 2.25rem; }
+  .container-page { padding-left: max(1.1rem, env(safe-area-inset-left)); padding-right: max(1.1rem, env(safe-area-inset-right)); }
+  .btn-primary, .btn-ghost, .btn-outline { min-height: 48px; }
+}
+
+/* Swipeable row on phones (points cards). From 640px it's a grid. */
+.snap-row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  margin-left: -1.1rem; margin-right: -1.1rem; padding: 0 1.1rem 0.75rem; scrollbar-width: none; }
+.snap-row::-webkit-scrollbar { display: none; }
+.snap-card { flex: 0 0 78%; scroll-snap-align: start; }
+@media (min-width: 640px) {
+  .snap-row { display: grid; overflow: visible; margin: 0; padding: 0; }
+  .snap-card { flex: initial; }
+}
+
+/* Deadline demo: three choices in one row down to the narrowest phones. */
+@media (max-width: 480px) {
+  .choice-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 8px !important; }
+  .choice-grid > * { padding-left: 4px !important; padding-right: 4px !important; }
+}
+@media (max-width: 360px) { .choice-grid > * { font-size: 0.85em; } }
+
+/* Foldables open (600–1023px): two columns where it reads well, never the desktop header. */
+@media (min-width: 600px) and (max-width: 1023px) {
+  .container-page { max-width: 760px; }
+}
+
+/* Footer and anything pinned to the bottom clear the home indicator / gesture bar. */
+footer { padding-bottom: env(safe-area-inset-bottom); }
