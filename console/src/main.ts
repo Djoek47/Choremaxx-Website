@@ -660,18 +660,24 @@ async function loadShots() {
 
 // ── Auth ────────────────────────────────────────────────────────────────────────────────
 function showSignin(note?: string) {
+  S.session = null;
   $('#app').hidden = true;
   $('#signin').hidden = false;
+  showAuthStep('email');
   if (note) $('#signin-note').textContent = note;
 }
 async function enter(session: Session) {
-  S.session = session;
+  // Keep the dashboard hidden until staff check passes (avoids signed-in + signed-out flash).
+  $('#app').hidden = true;
+  $('#signin').hidden = false;
   const { data: isStaff, error } = await sb!.rpc('is_console_staff');
   if (error || !isStaff) {
     await sb!.auth.signOut();
     showSignin(error ? `Could not check access: ${error.message}` : 'This address isn’t on the staff list.');
     return;
   }
+  S.session = session;
+  authChallenge = null;
   $('#who').textContent = session.user.email ?? '';
   $('#signin').hidden = true;
   $('#app').hidden = false;
@@ -919,13 +925,12 @@ $('#otp-resend')?.addEventListener('click', async () => {
 // ── Boot ────────────────────────────────────────────────────────────────────────────────
 (async () => {
   if (!sb) { console.error('ChoreMaxx Console: Supabase URL / anon key not set for this deployment.'); showSignin(); return; }
-  showAuthStep('email');
+  showSignin();
   const { data } = await sb.auth.getSession();
   if (data.session) await enter(data.session);
-  else showSignin();
   sb.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' && session && !S.session) void enter(session);
-    if (event === 'SIGNED_OUT') S.session = null;
+    if (event === 'SIGNED_OUT') showSignin();
   });
 })();
 

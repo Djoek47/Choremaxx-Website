@@ -1,4 +1,5 @@
-[hidden] { display: none !important; }
+/* Author #signin/#app { display:grid } beats the UA [hidden] rule — force exclusivity. */
+[hidden], #signin[hidden], #app[hidden] { display: none !important; }
 
 /* Layout: a fixed left rail of sections, a sticky top bar, and a working pane that opens a
    detail drawer on the right — the shape of a support desk, not a marketing page. */
