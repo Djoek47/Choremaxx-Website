@@ -4,7 +4,6 @@ import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PaletteProvider from '@/components/theme/PaletteProvider';
-import { generalSans } from '@/lib/fonts';
 
 const SITE_URL = 'https://www.choremaxx.app';
 const APP_STORE_URL = 'https://apps.apple.com/app/id6796850110';
@@ -177,7 +176,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`scroll-smooth ${generalSans.variable}`}
+      className="scroll-smooth"
       data-palette={DEFAULT_PALETTE}
       data-appearance="day"
       style={{ background: 'var(--color-bg)' }}
@@ -235,13 +234,13 @@ export default function RootLayout({
             offers: [
               {
                 '@type': 'Offer',
-                price: '4.99',
+                price: '6.99',
                 priceCurrency: 'USD',
                 category: 'Monthly subscription',
               },
               {
                 '@type': 'Offer',
-                price: '48',
+                price: '49.99',
                 priceCurrency: 'USD',
                 category: 'Annual subscription',
               },
