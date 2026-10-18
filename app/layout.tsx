@@ -87,6 +87,7 @@ const PLATFORM_SCRIPT = `(function(){try{var u=navigator.userAgent||'',p='',root
 if(/Android/i.test(u))p='android';
 else if(/iPhone|iPad|iPod/.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1))p='ios';
 if(p){root.setAttribute('data-platform',p);return;}
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
 var half=3500;
 function tick(){root.setAttribute('data-store-logo',(Math.floor(Date.now()/half)%2)?'android':'apple');}
 tick();
