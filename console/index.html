@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>ChoreMaxx Console</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+</head>
+<body>
+
+
+<!-- Staff sign-in: email code → password → authenticator (custom email, not the app magic link). -->
+<section id="signin">
+  <div class="signin-art" aria-hidden="true">
+    <div class="art-dots"></div>
+    <div class="art-tiles"></div>
+    <div class="art-mark"><img src="/logo.png" alt=""/></div>
+  </div>
+  <form class="signin-card" id="signin-form" novalidate>
+    <div class="brand">
+      <div class="brand-mark logo" aria-hidden="true"><img src="/logo.png" alt=""/></div>
+      <div class="brand-name">chore<span>maxx</span> console</div>
+    </div>
+    <div>
+      <h1 id="signin-title" style="font-size:26px;font-weight:800">Sign in to support</h1>
+      <p class="hint" id="signin-sub" style="margin:6px 0 0">Staff only. Three steps: email code, password, authenticator app.</p>
+    </div>
+
+    <div id="step-email" class="signin-step">
+      <div class="field"><label for="email">Work email</label><input class="input" id="email" type="email" placeholder="you@choremaxx.app" autocomplete="username" ></div>
+      <button class="btn" type="submit" data-step="email">Email me a sign-in code</button>
+    </div>
+
+    <div id="step-otp" class="signin-step" hidden>
+      <div class="field"><label for="otp">Code from email</label><input class="input" id="otp" inputmode="numeric" pattern="[0-9 ]*" autocomplete="one-time-code" placeholder="8-digit code" maxlength="19"></div>
+      <button class="btn" type="submit" data-step="otp">Continue</button>
+      <button class="btn ghost" type="button" id="otp-resend" style="margin-top:8px">Send a new code</button>
+    </div>
+
+    <div id="step-password" class="signin-step" hidden>
+      <div class="field"><label for="password">Console password</label><input class="input" id="password" type="password" autocomplete="current-password" placeholder="Your staff password"></div>
+      <button class="btn" type="submit" data-step="password">Continue</button>
+    </div>
+
+    <div id="step-enroll" class="signin-step" hidden>
+      <p class="hint" style="margin:0 0 10px">Scan this QR with Google Authenticator, 1Password, or Authy. Then enter the 6-digit code to finish setup.</p>
+      <div id="totp-qr" class="totp-qr" aria-label="Authenticator QR code"></div>
+      <p class="hint mono" id="totp-secret" style="margin:10px 0;word-break:break-all"></p>
+      <div class="field"><label for="enroll-code">Authenticator code</label><input class="input" id="enroll-code" inputmode="numeric" autocomplete="one-time-code" placeholder="6-digit code" maxlength="8"></div>
+      <button class="btn" type="submit" data-step="enroll">Confirm authenticator</button>
+    </div>
+
+    <div id="step-totp" class="signin-step" hidden>
+      <div class="field"><label for="totp">Authenticator code</label><input class="input" id="totp" inputmode="numeric" autocomplete="one-time-code" placeholder="6-digit code" maxlength="8"></div>
+      <button class="btn" type="submit" data-step="totp">Sign in</button>
+    </div>
+
+    <p class="hint" id="signin-note" style="margin:0" aria-live="polite">Only addresses on the staff list can sign in.</p>
+  </form>
+</section>
+
+<div id="app" hidden>
+  <aside class="rail">
+    <div class="brand"><div class="brand-mark logo" aria-hidden="true"><img src="/logo.png" alt=""/></div><div class="brand-name">chore<span>maxx</span></div></div>
+    <nav id="nav" aria-label="Sections"></nav>
+    <div class="rail-foot">
+      <div class="privacy">
+        <div><strong style="color:var(--fg)">Show names</strong><br><span id="privacy-hint">Off — households are codes</span></div>
+        <button class="switch" id="privacy" role="switch" aria-checked="false" aria-label="Show household names"></button>
+      </div>
+      <div class="who">Signed in as <strong id="who">support@choremaxx.app</strong></div>
+      <button class="btn ghost small" id="signout" type="button">Sign out</button>
+    </div>
+  </aside>
+  <main>
+    <div class="topbar">
+      <div><h1 id="view-title">Overview</h1><div class="sub" id="view-sub"></div></div>
+      <div class="grow"></div>
+      <span class="example" id="live-dot" style="color:var(--good);background:var(--good-soft)">Live</span>
+      <input class="input search" id="search" type="search" placeholder="Search code, ticket, email…" aria-label="Search">
+    </div>
+    <div id="view"></div>
+  </main>
+</div>
+<div id="layer"></div>
+
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

@@ -10,7 +10,7 @@ A **premium, production-ready marketing website** for ChoreMaxx built with Apple
 ✅ **Multiple landing pages** — Homepage, How it Works, Features, Download, Support, + 3 SEO pages
 ✅ **Email assets** — Logo hosting at `/emails/logo-mark.png`
 ✅ **Support infrastructure** — FAQ with schema markup, contact pages
-✅ **Custom domain ready** — mytikas73.com
+✅ **Custom domain ready** — www.choremaxx.app
 
 ## Deployment Steps
 
@@ -39,7 +39,7 @@ vercel --prod
 
 In Vercel dashboard:
 1. **Project Settings** → **Domains**
-2. Add `mytikas73.com`
+2. Add `www.choremaxx.app`
 3. Follow DNS instructions for your registrar
 4. Point to Vercel nameservers (or add CNAME)
 
@@ -49,22 +49,22 @@ When submitting to App Store & Google Play, use:
 
 **Privacy Policy:**
 ```
-https://mytikas73.com/privacy
+https://www.choremaxx.app/privacy
 ```
 
 **Terms of Service:**
 ```
-https://mytikas73.com/terms
+https://www.choremaxx.app/terms
 ```
 
 **Support URL:**
 ```
-https://mytikas73.com/support
+https://www.choremaxx.app/support
 ```
 
 **App Privacy Policy URL (if separate):**
 ```
-https://mytikas73.com/privacy
+https://www.choremaxx.app/privacy
 ```
 
 These URLs must be publicly accessible without login.
@@ -141,7 +141,7 @@ Use these in:
 ## SEO Optimization
 
 ✅ **Metadata:** Unique title & description per page
-✅ **Canonical URLs:** All point to apex domain (mytikas73.com)
+✅ **Canonical URLs:** All point to apex domain (www.choremaxx.app)
 ✅ **Structured Data:** Organization, FAQPage schema
 ✅ **Open Graph:** Social sharing images ready
 ✅ **Twitter Cards:** summary_large_image
@@ -184,7 +184,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: "Page Title",
   description: "Meta description",
-  canonical: "https://mytikas73.com/new-page",
+  canonical: "https://www.choremaxx.app/new-page",
 };
 
 export default function NewPage() {
@@ -257,7 +257,7 @@ pnpm start  # Runs production build locally
 ## Next Steps
 
 ### After Deployment
-1. ✅ Verify mytikas73.com loads correctly
+1. ✅ Verify www.choremaxx.app loads correctly
 2. ✅ Test all pages on mobile
 3. ✅ Submit `/sitemap.xml` to Google Search Console
 4. ✅ Add app store links to `/download` page
@@ -266,10 +266,10 @@ pnpm start  # Runs production build locally
 
 ### App Store Submission
 Before submitting ChoreMaxx to stores:
-- [ ] Privacy Policy URL: https://mytikas73.com/privacy ✓
-- [ ] Terms URL: https://mytikas73.com/terms ✓
+- [ ] Privacy Policy URL: https://www.choremaxx.app/privacy ✓
+- [ ] Terms URL: https://www.choremaxx.app/terms ✓
 - [ ] Support email: support@choremaxx.app ✓
-- [ ] Support page: https://mytikas73.com/support ✓
+- [ ] Support page: https://www.choremaxx.app/support ✓
 - [ ] Screenshots/preview ready
 
 ### Marketing
@@ -296,7 +296,7 @@ Before submitting ChoreMaxx to stores:
 ```bash
 git push origin main
 # Check Vercel dashboard for deployment status
-# View live at https://mytikas73.com in ~60 seconds
+# View live at https://www.choremaxx.app in ~60 seconds
 ```
 
 Congratulations! Your ChoreMaxx marketing website is ready for the world. 🚀
