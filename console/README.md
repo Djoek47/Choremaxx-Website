@@ -23,6 +23,8 @@ supabase db push                                   # or paste the files below in
 #   supabase/migrations/20261008130000_console_live.sql
 #   supabase/migrations/20261008140000_household_email_log.sql
 #   supabase/migrations/20261008150000_support_attachments.sql   (screenshots in the console)
+#   supabase/migrations/20261017120000_console_users_routing.sql (Users view + sends each message
+#                                                                 and error to the right section)
 
 supabase functions deploy support-inbound --no-verify-jwt
 supabase functions deploy support-reply
@@ -77,12 +79,9 @@ but don't commit it anyway.
 2. Environment variables (Production and Preview):
    - `VITE_SUPABASE_URL` = `https://<project-ref>.supabase.co`
    - `VITE_SUPABASE_ANON_KEY` = the project's **anon** key (Settings → API). Never the service role key.
-3. Deploy. Domain **`https://console.choremaxx.app`** is attached to the Vercel project `choremaxx-console`.
+3. Deploy. Then Settings → Domains → add `console.choremaxx.app` and the CNAME it shows.
 
 `vercel.json` already sets the build, SPA routing, and `noindex` + no-framing headers.
-
-**Live URL:** https://console.choremaxx.app  
-(also https://choremaxx-console.vercel.app)
 
 ## 5. Check it
 
@@ -113,3 +112,20 @@ npm run build                # typecheck + production build into dist/
 
 Revenue is an estimate from list prices (USD) before Apple's cut. Real proceeds: App Store
 Connect → Sales and Trends.
+
+## Where things land
+
+Every message is filed automatically, whether it came from the app's Support screen or as an
+email to support@choremaxx.app through Resend:
+
+- **Credits & billing**: anything about credits, packs, purchases, refunds, charges, the
+  subscription or trial, and app errors in the Billing or Poppins category. Shows under
+  Support → Credits & billing and on the Credits & AI page.
+- **Errors & bugs**: messages with errors attached, or about crashes and things not working.
+  Errors attached in the app's feedback tool also appear on the Errors page, linked to the ticket.
+- **Support**: everything else (questions, feedback, requests).
+
+To move a ticket by hand, change its section from the dropdown next to its status.
+The app side (filing attached errors, app version on error reports) is in the app repo's
+`send-support-feedback` function; redeploy it with
+`supabase functions deploy send-support-feedback`.

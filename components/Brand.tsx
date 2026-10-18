@@ -51,35 +51,44 @@ export function AppleLogo({ size = 18, color = 'currentColor' }: { size?: number
   );
 }
 
-/** Apple-style black "Download on the App Store" badge. */
+/**
+ * Store download control — Moji UI ink plate (not the generic Apple badge,
+ * not the coral primary CTA). Inverts cleanly for night mode via CSS.
+ */
 export function AppStoreBadge({
-  href = 'https://apps.apple.com/app/id6796850110',
+  href = '/download',
   large = false,
+  className = '',
 }: {
   href?: string;
   large?: boolean;
+  className?: string;
 }) {
   const external = href.startsWith('http');
-  return (
-    <Link
-      href={href}
-      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-      aria-label="Download on the App Store"
-      className="inline-flex items-center gap-2.5 transition-transform active:translate-y-[2px]"
-      style={{
-        background: '#000',
-        color: '#fff',
-        borderRadius: large ? 16 : 13,
-        padding: large ? '0.7rem 1.35rem 0.7rem 1.05rem' : '0.5rem 1rem 0.5rem 0.8rem',
-        border: '1px solid #A6A6A6',
-        boxShadow: '0 4px 0 #2A1A12, 0 14px 26px -12px rgba(0,0,0,.5)',
-      }}
-    >
-      <AppleLogo size={large ? 30 : 22} color="#fff" />
-      <span className="flex flex-col leading-none text-left">
-        <span style={{ fontSize: large ? 12 : 10, fontWeight: 500, letterSpacing: '0.01em', color: '#fff' }}>Download on the</span>
-        <span style={{ fontSize: large ? 24 : 18, fontWeight: 600, letterSpacing: '-0.02em', marginTop: 2, color: '#fff', fontFamily: '-apple-system, "SF Pro Display", "Helvetica Neue", sans-serif' }}>App Store</span>
+  const cls = `btn-store${large ? ' btn-store-lg' : ''}${className ? ` ${className}` : ''}`;
+  const inner = (
+    <>
+      <span className="btn-store-glyph" aria-hidden>
+        <AppleLogo size={large ? 26 : 20} color="currentColor" />
       </span>
+      <span className="btn-store-copy">
+        <span className="btn-store-kicker">Download on the</span>
+        <span className="btn-store-title">App Store</span>
+      </span>
+    </>
+  );
+
+  if (external) {
+    return (
+      <a href={href} className={cls} aria-label="Download on the App Store" rel="noopener noreferrer">
+        {inner}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} className={cls} aria-label="Download on the App Store">
+      {inner}
     </Link>
   );
 }

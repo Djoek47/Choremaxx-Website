@@ -9,7 +9,7 @@ type Outcome = {
   weekXp: string; bar: number; streak: string; streakTone: string; state: string; crown: string; poppins: string;
 };
 
-const TONE = { good: '#5BD6BD', warn: '#FFD166', bad: '#FF6B81' };
+const TONE = { good: '#2E9E74', warn: '#EF9F27', bad: '#E0465E' };
 
 const OUTCOMES: Outcome[] = [
   {

@@ -26,10 +26,10 @@ const columns = [
   {
     heading: 'Legal',
     links: [
-      { label: 'Help Center', href: '/support'   },
-      { label: 'Privacy',     href: '/privacy'   },
-      { label: 'Terms',       href: '/terms'     },
-      { label: 'Cookies',     href: '/cookies'   },
+      { label: 'Help Center', href: '/support' },
+      { label: 'Privacy',     href: '/privacy' },
+      { label: 'Terms',       href: '/terms'   },
+      { label: 'Cookies',     href: '/cookies' },
     ],
   },
 ];
@@ -42,7 +42,7 @@ export default function Footer() {
   }
 
   return (
-    <footer style={{ background: '#F6E9DF', borderTop: '1px solid rgba(200,160,135,0.25)' }}>
+    <footer className="site-footer">
       <div className="container-page py-16">
 
         {/* Main grid: brand + 3 link columns + newsletter */}
@@ -51,32 +51,22 @@ export default function Footer() {
           {/* Brand column */}
           <div className="md:col-span-1 flex flex-col gap-5">
             <Logo size={30} text="text-lg" />
-            <p className="text-sm leading-relaxed" style={{ color: '#8F7A6C', maxWidth: 180 }}>
-              AI Household Operating System for a better, happier home.
+            <p className="text-sm leading-relaxed footer-mute" style={{ maxWidth: 180 }}>
+              The chore app for families with standards.
             </p>
-            {/* App store badge */}
             <div className="mt-1"><AppStoreBadge /></div>
           </div>
 
           {/* Link columns */}
           {columns.map(({ heading, links }) => (
             <div key={heading} className="md:col-span-1">
-              <h4
-                className="text-sm font-bold mb-5"
-                style={{ color: '#8F7A6C' }}
-              >
+              <h4 className="text-sm font-bold mb-5 footer-mute">
                 {heading}
               </h4>
               <ul className="flex flex-col gap-3">
                 {links.map(({ label, href }) => (
                   <li key={label}>
-                    <Link
-                      href={href}
-                      className="text-sm transition-colors duration-200"
-                      style={{ color: '#5A4438' }}
-                      onMouseEnter={e => (e.currentTarget.style.color = '#D85A30')}
-                      onMouseLeave={e => (e.currentTarget.style.color = '#5A4438')}
-                    >
+                    <Link href={href} className="footer-link text-sm transition-colors duration-200">
                       {label}
                     </Link>
                   </li>
@@ -87,36 +77,25 @@ export default function Footer() {
 
           {/* Newsletter column */}
           <div className="md:col-span-1">
-            <h4
-              className="text-sm font-bold mb-5"
-              style={{ color: '#8F7A6C' }}
-            >
+            <h4 className="text-sm font-bold mb-5 footer-mute">
               Stay in the loop
             </h4>
-            <p className="text-sm mb-4" style={{ color: '#5A4438' }}>
+            <p className="text-sm mb-4 footer-body">
               Get updates and tips for your home.
             </p>
             <form
               onSubmit={e => e.preventDefault()}
-              className="flex items-center gap-2"
-              style={{
-                background: '#FFFFFF',
-                border: '1px solid rgba(200,160,135,0.45)',
-                borderRadius: 9999,
-                padding: '0.375rem 0.375rem 0.375rem 1rem',
-              }}
+              className="footer-newsletter flex items-center gap-2"
             >
               <input
                 type="email"
                 placeholder="Email address"
                 aria-label="Email address"
                 className="flex-1 bg-transparent text-sm outline-none min-w-0"
-                style={{ color: '#2A1A12' }}
               />
               <button
                 type="submit"
-                className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{ background: '#D85A30' }}
+                className="footer-newsletter-go w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
                 aria-label="Subscribe"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -137,12 +116,9 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div
-          className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8"
-          style={{ borderTop: '1px solid rgba(200,160,135,0.30)' }}
-        >
-          <p className="text-xs" style={{ color: '#8F7A6C' }}>
-            © 2025 ChoreMaxx. All rights reserved.
+        <div className="footer-bottom flex flex-col sm:flex-row items-center justify-between gap-4 pt-8">
+          <p className="text-xs footer-mute">
+            © 2026 ChoreMaxx. All rights reserved.
           </p>
           <div className="flex items-center gap-5">
             {[
@@ -150,14 +126,7 @@ export default function Footer() {
               { label: 'Terms',   href: '/terms'   },
               { label: 'Cookies', href: '/cookies' },
             ].map(({ label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                className="text-xs transition-colors"
-                style={{ color: '#8F7A6C' }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#D85A30')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#8F7A6C')}
-              >
+              <Link key={label} href={href} className="footer-link text-xs transition-colors">
                 {label}
               </Link>
             ))}

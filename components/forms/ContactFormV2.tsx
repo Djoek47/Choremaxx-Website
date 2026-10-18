@@ -97,17 +97,7 @@ export default function ContactFormV2({
       {/* Bot trap — the route silently no-ops if this arrives non-empty. */}
       <input name="company" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" value={company} onChange={(e) => setCompany(e.target.value)} style={honeypotStyle} />
 
-      <button
-        type="submit"
-        disabled={sending}
-        style={{
-          marginTop: 4, padding: 14, borderRadius: 999, border: 'none',
-          background: 'linear-gradient(180deg, color-mix(in srgb,#fff 18%,var(--p)) 0%, var(--p) 60%)',
-          color: '#fff', fontSize: 14.5, fontWeight: 650, fontFamily: 'inherit',
-          cursor: sending ? 'progress' : 'pointer', opacity: sending ? 0.6 : 1,
-          boxShadow: '0 1px 0 rgba(255,255,255,.35) inset, 0 8px 26px color-mix(in srgb,var(--p) 42%,transparent)',
-        }}
-      >
+      <button type="submit" className="btn-primary" disabled={sending} style={{ marginTop: 4, opacity: sending ? 0.65 : 1, cursor: sending ? 'progress' : 'pointer' }}>
         {sending ? 'Sending…' : submitLabel}
       </button>
 

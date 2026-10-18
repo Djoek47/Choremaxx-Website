@@ -12,12 +12,12 @@ export default function PageShell({
   sub?: string;
 }) {
   return (
-    <div className="relative" style={{ background: '#FBF4EE', minHeight: '100vh' }}>
+    <div className="relative" style={{ background: 'var(--bg)', minHeight: '100vh' }}>
       {/* Warm paper + a few Moji */}
       <div aria-hidden className="absolute inset-x-0 top-0 h-[420px] paper-dots pointer-events-none" style={{ maskImage: 'linear-gradient(#000, transparent)', WebkitMaskImage: 'linear-gradient(#000, transparent)' }} />
       <div aria-hidden className="absolute right-[6%] top-16 hidden lg:flex gap-4 pointer-events-none">
         {[['broom', -12, 0], ['sparkles', 8, 40], ['basket', -6, 8]].map(([m, r, y]) => (
-          <span key={m as string} className="w-20 h-20 rounded-[24px] bg-white flex items-center justify-center floaty" style={{ ['--r' as string]: `${r}deg`, marginTop: y as number, boxShadow: '0 5px 0 rgba(120,70,40,.08)' }}>
+          <span key={m as string} className="w-20 h-20 rounded-[24px] flex items-center justify-center floaty" style={{ background: 'var(--bgs)', ['--r' as string]: `${r}deg`, marginTop: y as number, boxShadow: '0 5px 0 var(--bd)' }}>
             <Moji name={m as string} size={44} />
           </span>
         ))}
@@ -29,9 +29,9 @@ export default function PageShell({
         style={{ paddingTop: '4rem', paddingBottom: '2.5rem', zIndex: 1 }}
       >
         <div className="flex flex-col gap-3 max-w-3xl">
-          <h1 className="text-balance" style={{ color: '#2A1A12' }}>{heading}</h1>
+          <h1 className="text-balance" style={{ color: 'var(--tx)' }}>{heading}</h1>
           {sub && (
-            <p className="text-lg leading-relaxed max-w-2xl" style={{ color: '#8F7A6C' }}>{sub}</p>
+            <p className="text-lg leading-relaxed max-w-2xl" style={{ color: 'var(--txm)' }}>{sub}</p>
           )}
         </div>
       </div>
