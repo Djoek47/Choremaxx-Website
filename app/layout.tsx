@@ -78,6 +78,14 @@ export const metadata: Metadata = {
  * Appearance follows prefers-color-scheme and updates live when the OS theme flips.
  * Tab favicon always uses the colored plate icon-{palette}.png (color match only —
  * not day/night). */
+/** Sets <html data-platform="ios|android"> before first paint so the store logo
+ *  next to "Start free" never flickers. No cookie needed: the user agent is
+ *  available on every visit. iPadOS reports "Macintosh", hence the touch check. */
+const PLATFORM_SCRIPT = `(function(){try{var u=navigator.userAgent||'',p='';
+if(/Android/i.test(u))p='android';
+else if(/iPhone|iPad|iPod/.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1))p='ios';
+if(p)document.documentElement.setAttribute('data-platform',p);}catch(e){}})();`;
+
 const PALETTE_BOOTSTRAP_SCRIPT = `(function(){
   var palettes = ${JSON.stringify(PALETTES)};
   var primaries = { sky: '#378ADD', citrus: '#EF9F27', coral: '#D85A30', berry: '#7F77DD' };
@@ -196,6 +204,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#1A0C08" media="(prefers-color-scheme: dark)" />
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script dangerouslySetInnerHTML={{ __html: PALETTE_BOOTSTRAP_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: PLATFORM_SCRIPT }} />
         <script type="application/ld+json">
           {JSON.stringify({
             '@context': 'https://schema.org',

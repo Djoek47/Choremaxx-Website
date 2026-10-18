@@ -1,8 +1,10 @@
 'use client';
 
-import SiteFooter from './SiteFooter';
-import SiteHeader from './SiteHeader';
-
+/**
+ * Simple content page (About). The site-wide Header and Footer come from
+ * app/layout.tsx, like every other page, so this shell only draws the title
+ * block and the content column with the shared page margins.
+ */
 export default function PageShellV2({
   kicker,
   heading,
@@ -17,43 +19,36 @@ export default function PageShellV2({
   children: React.ReactNode;
 }) {
   return (
-    <div style={{ minHeight: 'var(--vh-full)', background: 'var(--bg)', overflowX: 'clip' }}>
-      <SiteHeader />
-
-      <section
-        style={{
-          position: 'relative',
-          padding: `calc(120px + var(--cm-header-y)) var(--side-pad) 44px`,
-          overflow: 'hidden',
-        }}
-      >
+    <div style={{ background: 'var(--bg)', overflowX: 'clip' }}>
+      <section style={{ position: 'relative', overflow: 'hidden' }}>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
           <div
             className="cm-hero-blob"
             style={{
               position: 'absolute', top: -260, right: -160, width: 660, height: 660, borderRadius: '50%',
-              filter: 'blur(90px)', animation: 'cmDrift 30s ease-in-out infinite alternate',
+              filter: 'blur(90px)',
               background: 'radial-gradient(circle, color-mix(in srgb,var(--p) 22%,transparent) 0%, transparent 70%)',
             }}
           />
         </div>
-        <div style={{ position: 'relative', maxWidth: 1180, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div
+          className="container-page"
+          style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 14, paddingTop: 'clamp(36px, 8vw, 96px)', paddingBottom: 40 }}
+        >
           {kicker ? (
             <p style={{ margin: 0, fontSize: 11.5, fontWeight: 650, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--p)' }}>{kicker}</p>
           ) : null}
-          <h1 style={{ margin: 0, fontSize: 'clamp(34px,4.6vw,62px)', fontWeight: 700, letterSpacing: '-.045em', lineHeight: 1.02, color: 'var(--tx)', textWrap: 'balance' }}>
+          <h1 style={{ margin: 0, fontSize: 'clamp(34px,4.6vw,62px)', fontWeight: 700, letterSpacing: '-.045em', lineHeight: 1.04, color: 'var(--tx)', textWrap: 'balance' }}>
             {heading}
           </h1>
-          {sub ? <p style={{ margin: 0, maxWidth: 620, fontSize: 18, lineHeight: 1.6, color: 'var(--txm)' }}>{sub}</p> : null}
+          {sub ? <p style={{ margin: 0, maxWidth: 620, fontSize: 'clamp(16px, 2.2vw, 18px)', lineHeight: 1.6, color: 'var(--txm)' }}>{sub}</p> : null}
           {stamp ? <p style={{ margin: '2px 0 0', fontSize: 13, color: 'var(--txm)' }}>{stamp}</p> : null}
         </div>
       </section>
 
-      <section style={{ padding: `0 var(--side-pad) var(--sec-pad)` }}>
-        <div style={{ maxWidth: 1180, margin: '0 auto' }}>{children}</div>
+      <section className="container-page about-body" style={{ paddingBottom: 'clamp(64px, 10vw, 112px)' }}>
+        {children}
       </section>
-
-      <SiteFooter />
     </div>
   );
 }

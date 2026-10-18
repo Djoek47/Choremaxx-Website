@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
-import { AppStoreBadge, Moji } from '@/components/Brand';
+import { AppStoreBadge, Moji, PlatformGlyph } from '@/components/Brand';
 import { AppHomeScreen, Orb, Phone } from '@/components/Phone';
 
 const DeadlineDemo = dynamic(() => import('@/components/home/DeadlineDemo'));
@@ -198,6 +198,7 @@ export default function HomeClient() {
 
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 hero-in" style={{ animationDelay: '.28s' }}>
                 <Link href="/download" className="btn-primary" style={{ padding: '1rem 1.6rem' }}>
+                  <PlatformGlyph size={18} />
                   <span className="sm:hidden">Start free</span>
                   <span className="hidden sm:inline">Start 7 days free</span>
                 </Link>
@@ -535,7 +536,7 @@ export default function HomeClient() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/download" className={highlight ? 'btn-primary' : 'btn-ghost'}>Start 7 days free</Link>
+                <Link href="/download" className={highlight ? 'btn-primary' : 'btn-ghost'}><PlatformGlyph size={17} />Start 7 days free</Link>
               </div>
             ))}
           </div>

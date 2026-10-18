@@ -51,6 +51,33 @@ export function AppleLogo({ size = 18, color = 'currentColor' }: { size?: number
   );
 }
 
+// Android robot head (Material "android" glyph; the robot is CC BY 3.0 by Google).
+const ANDROID =
+  'M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85a.637.637 0 0 0-.83.22l-1.88 3.24a11.46 11.46 0 0 0-8.94 0L5.65 5.67a.643.643 0 0 0-.87-.2c-.28.18-.37.54-.22.83L6.4 9.48A10.78 10.78 0 0 0 1 18h22a10.78 10.78 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z';
+
+export function AndroidLogo({ size = 18, color = 'currentColor' }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color} aria-hidden>
+      <path d={ANDROID} />
+    </svg>
+  );
+}
+
+/**
+ * The visitor's store logo next to a free-trial button. Which one shows is pure CSS
+ * keyed on <html data-platform> (set before first paint in app/layout.tsx):
+ * iPhone/iPad → Apple, Android (Samsung included) → Android,
+ * anything else (computers, unknown) → the two crossfade.
+ */
+export function PlatformGlyph({ size = 18 }: { size?: number }) {
+  return (
+    <span className="pg" style={{ width: size, height: size }} aria-hidden>
+      <span className="pg-apple"><AppleLogo size={size} /></span>
+      <span className="pg-android"><AndroidLogo size={size} /></span>
+    </span>
+  );
+}
+
 /**
  * Store download control — frosted glass pill (not the generic Apple badge,
  * not the coral primary CTA). Day/night tokens live on `.btn-store`.
