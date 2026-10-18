@@ -8,11 +8,62 @@ import { moji } from './moji';
  */
 import './styles.css';
 import { createClient, type Session } from '@supabase/supabase-js';
+import QRCode from 'qrcode';
 
 // ── Supabase ────────────────────────────────────────────────────────────────────────────
 const URL_ = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
-const sb = URL_ && KEY ? createClient(URL_, KEY, { auth: { persistSession: true, detectSessionInUrl: true, flowType: 'pkce' } }) : null;
+const sb = URL_ && KEY ? createClient(URL_, KEY, { auth: { persistSession: true, detectSessionInUrl: false, flowType: 'pkce' } }) : null;
+
+/** Staff auth challenge held between email-code → password → TOTP steps. */
+type AuthChallenge = {
+  challengeId: string;
+  stepToken: string;
+  email: string;
+};
+let authChallenge: AuthChallenge | null = null;
+
+type AuthStep = 'email' | 'otp' | 'password' | 'enroll' | 'totp';
+function showAuthStep(step: AuthStep) {
+  for (const id of ['step-email', 'step-otp', 'step-password', 'step-enroll', 'step-totp']) {
+    const el = document.getElementById(id);
+    if (el) el.hidden = id !== `step-${step}`;
+  }
+  const title = $('#signin-title');
+  const sub = $('#signin-sub');
+  if (step === 'email') {
+    title.textContent = 'Sign in to support';
+    sub.textContent = 'Staff only. Three steps: email code, password, authenticator app.';
+  } else if (step === 'otp') {
+    title.textContent = 'Enter your email code';
+    sub.textContent = 'We sent a console-only code (not the ChoreMaxx app sign-in email).';
+  } else if (step === 'password') {
+    title.textContent = 'Enter your password';
+    sub.textContent = 'Your staff password for the console.';
+  } else if (step === 'enroll') {
+    title.textContent = 'Set up authenticator';
+    sub.textContent = 'Scan the QR once, then confirm with a 6-digit code.';
+  } else {
+    title.textContent = 'Authenticator code';
+    sub.textContent = 'Open your authenticator app and enter the 6-digit code.';
+  }
+}
+
+async function consoleAuth(body: Record<string, unknown>) {
+  if (!URL_ || !KEY) throw new Error('Console is not configured.');
+  const res = await fetch(`${URL_}/functions/v1/console-auth`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      apikey: KEY,
+      Authorization: `Bearer ${KEY}`,
+    },
+    body: JSON.stringify(body),
+  });
+  const data = (await res.json().catch(() => ({}))) as Record<string, unknown>;
+  if (!res.ok) throw new Error(String(data.error ?? `Request failed (${res.status})`));
+  return data;
+}
 
 // ── Types (shapes returned by the console functions) ────────────────────────────────────
 type Status = 'paid' | 'trial' | 'cancel' | 'lapsed' | 'never';
@@ -708,13 +759,105 @@ document.addEventListener('submit', async (e) => {
   const form = e.target as HTMLFormElement;
   if (form.id === 'signin-form') {
     if (!sb) { $('#signin-note').textContent = 'Sign-in isn’t available right now. Try again later.'; return; }
-    const email = ($('#email') as HTMLInputElement).value.trim();
-    if (!email.includes('@')) { $('#signin-note').textContent = 'Enter your work email.'; return; }
-    const btn = form.querySelector('button')!;
-    btn.disabled = true;
-    const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: window.location.origin } });
-    btn.disabled = false;
-    $('#signin-note').textContent = error ? `Couldn’t send the link: ${error.message}` : `Check ${email} for your sign-in link.`;
+    const submitter = (e as SubmitEvent).submitter as HTMLButtonElement | null;
+    const step = (submitter?.dataset.step ?? 'email') as AuthStep;
+    const note = $('#signin-note');
+    const disable = (on: boolean) => form.querySelectorAll('button').forEach((b) => (b.disabled = on));
+
+    try {
+      disable(true);
+      if (step === 'email') {
+        const email = ($('#email') as HTMLInputElement).value.trim().toLowerCase();
+        if (!email.includes('@')) { note.textContent = 'Enter your work email.'; return; }
+        await consoleAuth({ action: 'request-otp', email });
+        authChallenge = { challengeId: '', stepToken: '', email };
+        showAuthStep('otp');
+        note.textContent = `If ${email} is on the staff list, check your inbox for a console sign-in code.`;
+        ($('#otp') as HTMLInputElement).focus();
+        return;
+      }
+      if (step === 'otp') {
+        const email = authChallenge?.email ?? ($('#email') as HTMLInputElement).value.trim().toLowerCase();
+        const code = ($('#otp') as HTMLInputElement).value.trim();
+        const data = await consoleAuth({ action: 'verify-otp', email, code });
+        authChallenge = { challengeId: String(data.challengeId), stepToken: String(data.stepToken), email };
+        showAuthStep('password');
+        note.textContent = 'Email code accepted. Enter your console password.';
+        ($('#password') as HTMLInputElement).focus();
+        return;
+      }
+      if (step === 'password') {
+        if (!authChallenge?.challengeId) { note.textContent = 'Start again from your email.'; showAuthStep('email'); return; }
+        const password = ($('#password') as HTMLInputElement).value;
+        const data = await consoleAuth({
+          action: 'verify-password',
+          challengeId: authChallenge.challengeId,
+          stepToken: authChallenge.stepToken,
+          password,
+        });
+        authChallenge.stepToken = String(data.stepToken);
+        if (data.next === 'enroll-totp') {
+          showAuthStep('enroll');
+          note.textContent = 'Scan the QR, then confirm with a code from your authenticator.';
+          const qrHost = $('#totp-qr');
+          qrHost.innerHTML = '';
+          const canvas = document.createElement('canvas');
+          qrHost.appendChild(canvas);
+          await QRCode.toCanvas(canvas, String(data.otpauth), { width: 180, margin: 1 });
+          $('#totp-secret').textContent = `Manual key: ${String(data.secret)}`;
+          ($('#enroll-code') as HTMLInputElement).focus();
+        } else {
+          showAuthStep('totp');
+          note.textContent = 'Enter the 6-digit code from your authenticator app.';
+          ($('#totp') as HTMLInputElement).focus();
+        }
+        return;
+      }
+      if (step === 'enroll') {
+        if (!authChallenge?.challengeId) { note.textContent = 'Start again from your email.'; showAuthStep('email'); return; }
+        const totpCode = ($('#enroll-code') as HTMLInputElement).value.trim();
+        const data = await consoleAuth({
+          action: 'confirm-enroll',
+          challengeId: authChallenge.challengeId,
+          stepToken: authChallenge.stepToken,
+          totpCode,
+        });
+        const session = data.session as { access_token: string; refresh_token: string };
+        const { data: set, error } = await sb.auth.setSession({
+          access_token: session.access_token,
+          refresh_token: session.refresh_token,
+        });
+        if (error || !set.session) throw new Error(error?.message ?? 'Could not start session.');
+        authChallenge = null;
+        await enter(set.session);
+        note.textContent = '';
+        return;
+      }
+      if (step === 'totp') {
+        if (!authChallenge?.challengeId) { note.textContent = 'Start again from your email.'; showAuthStep('email'); return; }
+        const totpCode = ($('#totp') as HTMLInputElement).value.trim();
+        const data = await consoleAuth({
+          action: 'verify-totp',
+          challengeId: authChallenge.challengeId,
+          stepToken: authChallenge.stepToken,
+          totpCode,
+        });
+        const session = data.session as { access_token: string; refresh_token: string };
+        const { data: set, error } = await sb.auth.setSession({
+          access_token: session.access_token,
+          refresh_token: session.refresh_token,
+        });
+        if (error || !set.session) throw new Error(error?.message ?? 'Could not start session.');
+        authChallenge = null;
+        await enter(set.session);
+        note.textContent = '';
+        return;
+      }
+    } catch (err) {
+      note.textContent = err instanceof Error ? err.message : 'Sign-in failed.';
+    } finally {
+      disable(false);
+    }
     return;
   }
   if (form.id === 'reply-form') {
@@ -754,13 +897,29 @@ $('#signout').addEventListener('click', async () => {
   await sb?.auth.signOut();
   channel?.unsubscribe();
   channel = null;
+  authChallenge = null;
   $('#layer').innerHTML = '';
+  showAuthStep('email');
   showSignin('Signed out.');
+});
+
+$('#otp-resend')?.addEventListener('click', async () => {
+  const email = authChallenge?.email ?? ($('#email') as HTMLInputElement).value.trim().toLowerCase();
+  if (!email.includes('@')) { $('#signin-note').textContent = 'Enter your work email first.'; return; }
+  try {
+    await consoleAuth({ action: 'request-otp', email });
+    authChallenge = { challengeId: '', stepToken: '', email };
+    showAuthStep('otp');
+    $('#signin-note').textContent = `New console code sent to ${email} (if on the staff list).`;
+  } catch (err) {
+    $('#signin-note').textContent = err instanceof Error ? err.message : 'Could not resend.';
+  }
 });
 
 // ── Boot ────────────────────────────────────────────────────────────────────────────────
 (async () => {
   if (!sb) { console.error('ChoreMaxx Console: Supabase URL / anon key not set for this deployment.'); showSignin(); return; }
+  showAuthStep('email');
   const { data } = await sb.auth.getSession();
   if (data.session) await enter(data.session);
   else showSignin();

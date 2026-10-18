@@ -43,8 +43,19 @@ select id, email, 'owner' from auth.users where email = 'you@choremaxx.app';
 Add more staff the same way with `role = 'support'`. Remove someone:
 `delete from public.console_staff where email = '…';`
 
-**Allow the console's sign-in links.** Supabase → Authentication → URL Configuration → Redirect
-URLs → add `https://console.choremaxx.app` (and your `*.vercel.app` preview URL).
+**Staff sign-in is three factors** (not the app magic link):
+
+1. Email a **console-only** 8-digit code (`console-auth` edge function → Resend)
+2. Console **password** (set on the Auth user in Supabase)
+3. **Authenticator app** TOTP — first sign-in shows a QR to enroll; later sign-ins ask for the 6-digit code
+
+```bash
+supabase functions deploy console-auth --no-verify-jwt
+# RESEND_API_KEY must already be set (same secret as other Resend functions).
+```
+
+Staff passwords: Supabase → Authentication → Users → set a password for each `console_staff` email
+(or `update user` with a password). Magic-link-only users cannot pass step 2 until a password exists.
 
 ## 2. Resend — receive support@choremaxx.app
 

@@ -307,6 +307,18 @@ p.empty { display: flex; align-items: center; gap: 12px; }
 body { margin: 0; }
 .art-mark { box-shadow: 0 0 0 3px #fff, 0 6px 0 3px #A8411F; }
 .field label { text-transform: none; letter-spacing: 0; font-size: 13px; }
+.signin-step { display: flex; flex-direction: column; gap: 12px; }
+.totp-qr {
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 4px 0 var(--lip);
+}
+.totp-qr canvas, .totp-qr img { width: 180px; height: 180px; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; }
 .refs { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
 .refs a.pill { text-decoration: none; }
 .pill.sec-credits { background: #FFEBCB; color: #8A5A0B; }
