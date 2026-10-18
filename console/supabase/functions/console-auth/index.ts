@@ -8,6 +8,7 @@ import {
   b32encode,
   totpValid,
   staffEmailHtml,
+  FROM,
   OTP_TTL_MS,
   STEP_TTL_MS,
   type Challenge,
@@ -15,9 +16,18 @@ import {
 
 Deno.serve(async (req) => {
   const origin = req.headers.get('Origin');
-  if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(origin) });
-  if (req.method !== 'POST') return json(origin, { error: 'POST only' }, 405);
+  try {
+    if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(origin) });
+    if (req.method !== 'POST') return json(origin, { error: 'POST only' }, 405);
 
+    return await handle(req, origin);
+  } catch (err) {
+    console.error('console-auth unhandled', err);
+    return json(origin, { error: 'Sign-in failed unexpectedly. Try again.' }, 500);
+  }
+});
+
+async function handle(req: Request, origin: string | null): Promise<Response> {
   const url = Deno.env.get('SUPABASE_URL')!;
   const service = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
   const anon = Deno.env.get('SUPABASE_ANON_KEY')!;
@@ -406,4 +416,4 @@ Deno.serve(async (req) => {
   }
 
   return json(origin, { error: 'Unknown action' }, 400);
-});
+}
