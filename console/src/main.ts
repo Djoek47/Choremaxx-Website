@@ -122,6 +122,12 @@ const S = {
   section: 'all' as 'all' | Section,
   users: [] as User[],
   reveal: false,
+  /** Households whose names/emails were shown one at a time (each logged). */
+  revealed: new Set<string>(),
+  /** The view to return to when the search box is cleared. */
+  prevView: null as null | 'overview' | 'households' | 'users' | 'support' | 'credits' | 'errors',
+  /** Support on phones: a ticket the person tapped (shows the thread instead of the list). */
+  picked: false,
   q: '',
   filter: 'all' as 'all' | Status,
   selected: null as string | null,
@@ -159,8 +165,9 @@ function ago(iso: string | null): string {
 }
 const hues = ['#D9620B', '#2F6FB5', '#1F8A55', '#8E44AD', '#B7700A', '#C2372B', '#0E7C86', '#5D6D7E'];
 const hueFor = (code: string) => hues[[...code].reduce((a, c) => a + c.charCodeAt(0), 0) % hues.length];
-const label = (h: Household) => (S.reveal ? h.household_name : h.code);
-const initials = (h: Household) => (S.reveal ? h.household_name.replace(/^The /i, '').slice(0, 2) : h.code.slice(3, 5));
+const shown = (code: string | null | undefined) => Boolean(code) && (S.reveal || S.revealed.has(code!));
+const label = (h: Household) => (shown(h.code) ? h.household_name : h.code);
+const initials = (h: Household) => (shown(h.code) ? h.household_name.replace(/^The /i, '').slice(0, 2) : h.code.slice(3, 5));
 const plan = (h: Household) => (h.product_id?.includes('yearly') ? 'yearly' : h.product_id?.includes('monthly') ? 'monthly' : null);
 const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`;
 const maskEmail = (e: string | null) => (e ? e.replace(/^(.)[^@]*/, '$1•••') : '—');
@@ -376,11 +383,50 @@ const V = {
     <div class="card"><div class="list">${S.tickets.slice(0, 4).map(ticketRow).join('') || '<p class="empty">No support messages yet.</p>'}</div></div>`;
   },
 
+  /**
+   * Find a customer. Searches what staff can't see too (household names, people's names and
+   * emails), but a hit only says *what* matched — the name or email itself shows once the
+   * household is opened and revealed (logged), or when Show names is on.
+   */
+  find() {
+    const q = S.q;
+    const ownerOf = (code: string) => S.users.find((u) => u.household_code === code && u.role === 'owner');
+    const hits: { h: Household; why: string[] }[] = [];
+    for (const h of S.households) {
+      const why: string[] = [];
+      if (h.code.toLowerCase().includes(q)) why.push('code');
+      if (h.household_name.toLowerCase().includes(q)) why.push('household name');
+      const people = S.users.filter((u) => u.household_code === h.code);
+      if (people.some((u) => (u.display_name ?? '').toLowerCase().includes(q))) why.push('a person’s name');
+      if (people.some((u) => (u.email ?? '').toLowerCase().includes(q))) why.push('an email');
+      if (people.some((u) => u.user_code.toLowerCase().includes(q))) why.push('person code');
+      if (S.tickets.some((t) => t.household_code === h.code && (t.from_email ?? '').toLowerCase().includes(q))) {
+        if (!why.includes('an email')) why.push('a support email');
+      }
+      if (why.length) hits.push({ h, why });
+    }
+    const tickets = S.tickets.filter((t) =>
+      `${t.ref} ${t.subject} ${t.from_email ?? ''} ${t.from_name ?? ''}`.toLowerCase().includes(q)
+    );
+    const unlinked = tickets.filter((t) => !t.household_code);
+    return `
+    <div class="find-head"><h2>Results for “${esc(S.q)}”</h2><button class="btn ghost small" type="button" id="clear-search">Clear</button></div>
+    <div class="section-title" style="margin-top:6px"><h2>Households</h2><p class="hint">${plural(hits.length, 'match')}</p></div>
+    <div class="card"><div class="list">${
+      hits.slice(0, 30).map(({ h, why }) => {
+        const owner = ownerOf(h.code);
+        return `<div class="row" data-open="${esc(h.code)}" role="button" tabindex="0">${avatar(h)}<div class="grow"><div class="title">${esc(label(h))}</div><div class="meta">${esc(h.code)} · ${h.members} people${owner ? ` · owner ${esc(shown(h.code) ? owner.email ?? '—' : maskEmail(owner.email))}` : ''}</div><div class="meta" style="color:var(--accent)">Matched ${why.join(', ')}</div></div>${pill(h.status)}</div>`;
+      }).join('') || '<p class="empty">No household matches. Try an email, a name, or a code like HH-ABCD.</p>'
+    }</div></div>
+    ${tickets.length ? `<div class="section-title"><h2>Support messages</h2><p class="hint">${plural(tickets.length, 'match')}${unlinked.length ? ` · ${unlinked.length} not linked to a household` : ''}</p></div>
+    <div class="card"><div class="list">${tickets.slice(0, 12).map(ticketRow).join('')}</div></div>` : ''}`;
+  },
+
   households() {
     const q = S.q;
     const rows = S.households
       .filter((h) => S.filter === 'all' || h.status === S.filter)
-      .filter((h) => !q || `${h.code} ${S.reveal ? h.household_name : ''}`.toLowerCase().includes(q))
+      .filter((h) => !q || `${h.code} ${shown(h.code) ? h.household_name : ''}`.toLowerCase().includes(q))
       .sort((a, b) => (b.last_active ?? '').localeCompare(a.last_active ?? ''));
     const n = (s: Status) => S.households.filter((h) => h.status === s).length;
     const chips: [string, string, number][] = [
@@ -396,13 +442,13 @@ const V = {
       <tbody>${
         rows.map((h) => `
         <tr data-open="${esc(h.code)}" tabindex="0">
-          <td><div class="hh">${avatar(h)}<div><div style="font-weight:600">${esc(label(h))}</div><div class="mono" style="color:var(--subtle)">${S.reveal ? esc(h.code) + ' · ' : ''}${esc(h.environment ?? '')}</div></div></div></td>
-          <td>${pill(h.status)}</td>
-          <td>${plan(h) === 'yearly' ? 'Yearly' : plan(h) === 'monthly' ? 'Monthly' : '—'}</td>
-          <td>${daysCell(h)}</td>
-          <td>${creditsCell(h)}</td>
-          <td class="num">${h.members}${h.shared_devices ? ` <span class="hint">+${h.shared_devices} tablet</span>` : ''}</td>
-          <td class="num">${ago(h.last_active)}</td>
+          <td class="cell-main"><div class="hh">${avatar(h)}<div><div style="font-weight:600">${esc(label(h))}</div><div class="mono" style="color:var(--subtle)">${shown(h.code) ? esc(h.code) + ' · ' : ''}${esc(h.environment ?? '')}</div></div></div></td>
+          <td data-label="Status">${pill(h.status)}</td>
+          <td data-label="Plan">${plan(h) === 'yearly' ? 'Yearly' : plan(h) === 'monthly' ? 'Monthly' : '—'}</td>
+          <td data-label="Time left">${daysCell(h)}</td>
+          <td data-label="Poppins actions">${creditsCell(h)}</td>
+          <td class="num" data-label="People">${h.members}${h.shared_devices ? ` <span class="hint">+${h.shared_devices} tablet</span>` : ''}</td>
+          <td class="num" data-label="Last active">${ago(h.last_active)}</td>
         </tr>`).join('') || '<tr><td colspan="7" class="empty">No households match.</td></tr>'
       }</tbody></table></div>
     <p class="hint" style="margin-top:10px">Plans, dates and counts only. Tasks, messages, photos and children’s names are never read.</p>`;
@@ -410,7 +456,7 @@ const V = {
 
   users() {
     const q = S.q;
-    const show = (u: User) => (S.reveal ? u.display_name || '—' : u.user_code);
+    const show = (u: User) => (shown(u.household_code) ? u.display_name || '—' : u.user_code);
     const rows = S.users
       .filter((u) => !q || `${u.user_code} ${u.household_code} ${u.role} ${S.reveal ? `${u.display_name ?? ''} ${u.email ?? ''}` : ''}`.toLowerCase().includes(q))
       .sort((a, b) => (b.last_seen_at ?? '').localeCompare(a.last_seen_at ?? ''));
@@ -428,17 +474,17 @@ const V = {
       <tbody>${
         rows.map((u) => `
         <tr data-open="${esc(u.household_code)}" tabindex="0">
-          <td><div style="font-weight:600">${esc(show(u))}</div><div class="mono" style="color:var(--subtle)">${S.reveal ? esc(u.email ?? 'no email') : esc(maskEmail(u.email))}</div></td>
-          <td>${esc(ROLE[u.role] ?? u.role)}${u.member_status !== 'active' ? ` <span class="hint">${esc(u.member_status)}</span>` : ''}</td>
-          <td class="mono">${esc(S.reveal ? (hhByCode(u.household_code)?.household_name ?? u.household_code) : u.household_code)}</td>
-          <td>${pill(u.household_status)}</td>
-          <td class="num">${ago(u.last_seen_at ?? u.last_sign_in_at)}</td>
-          <td class="num">${fmt(u.joined_at, { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-          <td class="num">${u.tickets || '—'}</td>
-          <td class="num">${u.errors_30d ? `<span style="color:var(--bad);font-weight:700">${u.errors_30d}</span>` : '—'}</td>
+          <td class="cell-main"><div style="font-weight:600">${esc(show(u))}</div><div class="mono" style="color:var(--subtle)">${shown(u.household_code) ? esc(u.email ?? 'no email') : esc(maskEmail(u.email))}</div></td>
+          <td data-label="Role">${esc(ROLE[u.role] ?? u.role)}${u.member_status !== 'active' ? ` <span class="hint">${esc(u.member_status)}</span>` : ''}</td>
+          <td class="mono" data-label="Household">${esc(shown(u.household_code) ? (hhByCode(u.household_code)?.household_name ?? u.household_code) : u.household_code)}</td>
+          <td data-label="Plan">${pill(u.household_status)}</td>
+          <td class="num" data-label="Last active">${ago(u.last_seen_at ?? u.last_sign_in_at)}</td>
+          <td class="num" data-label="Joined">${fmt(u.joined_at, { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+          <td class="num" data-label="Support">${u.tickets || '—'}</td>
+          <td class="num" data-label="Errors (30d)">${u.errors_30d ? `<span style="color:var(--bad);font-weight:700">${u.errors_30d}</span>` : '—'}</td>
         </tr>`).join('') || `<tr><td colspan="8" class="empty">${S.loaded.users && !S.users.length ? 'No people yet.' : 'No people match.'}</td></tr>`
       }</tbody></table></div>
-    <p class="hint" style="margin-top:10px">Names and emails stay hidden until you turn on Show names. Tap a person to open their household.</p>`;
+    <p class="hint" style="margin-top:10px">Names and emails stay hidden. Search finds people by name or email anyway; open a household to show its details (logged).</p>`;
   },
 
   support() {
@@ -454,7 +500,7 @@ const V = {
     const h = hhByCode(t.household_code);
     const replies = S.replies.filter((r) => r.ticket_id === t.id);
     return `${chips}
-    <div class="inbox">
+    <div class="inbox ${S.picked ? 'picked' : ''}">
       <div class="tickets" role="listbox" aria-label="Tickets">${list.map((x) => `
         <button class="ticket ${x.status === 'new' ? 'unread' : ''}" role="option" aria-selected="${x.id === t.id}" data-ticket="${esc(x.id)}" type="button">
           <div class="top"><span class="subj">${esc(x.subject || '(no subject)')}</span><span class="when">${ago(x.received_at)}</span></div>
@@ -463,6 +509,7 @@ const V = {
         </button>`).join('')}
       </div>
       <div class="thread">
+        <button class="btn ghost small back-btn" data-back type="button">‹ All messages</button>
         <div class="card">
           <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between">
             <h2 style="font-size:19px">${esc(t.subject || '(no subject)')}</h2>
@@ -570,20 +617,30 @@ function drawer(code: string) {
   const h = hhByCode(code);
   if (!h) return;
   void audit('view_household', code);
+  const open = shown(code);
   const tickets = S.tickets.filter((t) => t.household_code === code);
+  const people = S.users.filter((u) => u.household_code === code);
+  const ROLE: Record<string, string> = { owner: 'Owner', admin: 'Admin', adult: 'Adult', child: 'Child', guest: 'Guest', 'shared-device': 'Shared tablet' };
+  const errors = people.reduce((sum, u) => sum + u.errors_30d, 0);
+  const owner = people.find((u) => u.role === 'owner');
   $('#layer').innerHTML = `<div class="scrim" data-close></div>
   <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="dr-title">
-    <button class="btn ghost small close" data-close type="button">Close</button>
-    <div class="hh">${avatar(h, 44)}<div><h2 id="dr-title" style="font-size:21px">${esc(label(h))}</h2><div class="mono" style="color:var(--subtle)">${esc(h.code)} · since ${fmt(h.created_at, { month: 'short', day: 'numeric', year: 'numeric' })}${h.environment ? ` · ${esc(h.environment)}` : ''}</div></div></div>
-    <div class="card" style="display:grid;gap:10px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">${pill(h.status)}<span class="hint">${plan(h) === 'yearly' ? 'Yearly · $49.99' : plan(h) === 'monthly' ? 'Monthly · $6.99' : 'No plan'}</span></div>
-      ${daysCell(h)}
-      <div class="hint">Renewal ${h.will_renew === null ? 'unknown' : h.will_renew ? 'on' : 'off'} · ${h.members} people${h.shared_devices ? ` · ${h.shared_devices} shared tablet` : ''} · last active ${ago(h.last_active)}</div>
+    <div class="drawer-bar"><button class="btn ghost small close" data-close type="button">Close</button></div>
+    <div class="hh">${avatar(h, 48)}<div style="min-width:0"><h2 id="dr-title" style="font-size:22px">${esc(label(h))}</h2><div class="mono" style="color:var(--subtle)">${esc(h.code)} · since ${fmt(h.created_at, { month: 'short', day: 'numeric', year: 'numeric' })}${h.environment ? ` · ${esc(h.environment)}` : ''}</div></div></div>
+    ${open
+      ? `<div class="reveal-note">Names and emails are showing for this household${S.reveal ? ' (Show names is on)' : ''}.${!S.reveal ? ' <button class="linkish" type="button" data-hide="' + esc(code) + '">Hide again</button>' : ''}</div>`
+      : `<button class="btn reveal-btn" type="button" data-reveal="${esc(code)}">Show name &amp; emails</button><p class="hint" style="margin-top:-6px">Only for helping this customer. It’s recorded in the audit log.</p>`}
+    <div class="kv-grid">
+      <div class="card kv"><div class="k">Plan</div><div class="v">${pill(h.status)} <span class="hint">${plan(h) === 'yearly' ? 'Yearly · $49.99' : plan(h) === 'monthly' ? 'Monthly · $6.99' : 'No plan'}</span></div>${daysCell(h)}<div class="hint">Renewal ${h.will_renew === null ? 'unknown' : h.will_renew ? 'on' : 'off'}</div></div>
+      <div class="card kv"><div class="k">Poppins actions</div>${creditsCell(h)}<div class="hint">Bought ${h.bought_actions.toLocaleString()} · spent ${h.spent_bought_actions.toLocaleString()} · ${h.actions_this_month} this month</div></div>
+      <div class="card kv"><div class="k">Activity</div><div class="v">${ago(h.last_active)}</div><div class="hint">${h.members} people${h.shared_devices ? ` · ${h.shared_devices} shared tablet` : ''} · ${plural(errors, 'error')} in 30 days</div></div>
+      <div class="card kv"><div class="k">Owner</div><div class="v">${owner ? esc(open ? owner.display_name || '—' : owner.user_code) : '—'}</div><div class="hint mono">${owner ? esc(open ? owner.email ?? 'no email' : maskEmail(owner.email)) : ''}</div></div>
     </div>
-    <div class="card" style="display:grid;gap:8px"><strong>Poppins actions</strong>${creditsCell(h)}<div class="hint">Bought ${h.bought_actions.toLocaleString()} · spent ${h.spent_bought_actions.toLocaleString()} · ${h.actions_this_month} used this month</div></div>
-    <div class="card" style="display:grid;gap:6px"><strong>People</strong>${S.users.filter((u) => u.household_code === code).map((u) => `<div class="row" style="padding:6px 0"><div class="grow"><div class="title">${esc(S.reveal ? u.display_name || '—' : u.user_code)}</div><div class="meta">${esc(u.role)} · last active ${ago(u.last_seen_at ?? u.last_sign_in_at)}</div></div>${u.errors_30d ? `<span class="pill p-lapsed">${plural(u.errors_30d, 'error')}</span>` : ''}</div>`).join('') || '<p class="hint">No one listed.</p>'}</div>
-    <div><strong>Support</strong><div class="list">${tickets.map(ticketRow).join('') || '<p class="empty">No messages from this household.</p>'}</div></div>
-    <p class="note">Read-only. Billing changes happen through Apple; this console can’t charge, refund or change a plan.</p>
+    <div class="card"><div class="section-title" style="margin:0 0 6px"><h2 style="font-size:16px">People</h2><span class="hint">${people.length}</span></div><div class="list">${
+      people.map((u) => `<div class="row person"><div class="grow"><div class="title">${esc(open ? u.display_name || '—' : u.user_code)} <span class="hint">· ${esc(ROLE[u.role] ?? u.role)}</span></div><div class="meta mono">${esc(open ? u.email ?? 'no email' : maskEmail(u.email))}</div><div class="meta">last active ${ago(u.last_seen_at ?? u.last_sign_in_at)} · joined ${fmt(u.joined_at, { month: 'short', year: 'numeric' })}${u.tickets ? ` · ${plural(u.tickets, 'message')}` : ''}</div></div>${u.errors_30d ? `<span class="pill p-lapsed">${plural(u.errors_30d, 'error')}</span>` : ''}${open && u.email ? `<button class="btn ghost small" type="button" data-copy="${esc(u.email)}" aria-label="Copy email">Copy</button>` : ''}</div>`).join('') || '<p class="hint">No one listed.</p>'
+    }</div></div>
+    <div class="card"><div class="section-title" style="margin:0 0 6px"><h2 style="font-size:16px">Support</h2><span class="hint">${tickets.length}</span></div><div class="list">${tickets.map(ticketRow).join('') || '<p class="empty">No messages from this household.</p>'}</div></div>
+    <p class="note">Read-only for billing. Plans change through Apple; this console can’t charge, refund or change a plan.</p>
   </aside>`;
   ($('#layer .drawer .close') as HTMLButtonElement).focus();
 }
@@ -616,6 +673,15 @@ const NAV: [typeof S.view, string, string][] = [
   ['credits', 'Credits & AI', 'sparkles'],
   ['errors', 'Errors & feedback', 'tools'],
 ];
+/** Bottom tab bar on phones: one word each. */
+const SHORT: Record<typeof S.view, string> = {
+  overview: 'Home',
+  households: 'Homes',
+  users: 'People',
+  support: 'Support',
+  credits: 'Credits',
+  errors: 'Errors',
+};
 const SUB: Record<typeof S.view, string> = {
   overview: '',
   households: 'Plans, time left and AI use — no household content',
@@ -627,12 +693,13 @@ const SUB: Record<typeof S.view, string> = {
 const openIn = (k: Section) => S.tickets.filter((t) => t.status === 'new' && sectionOf(t) === k).length;
 function render() {
   const unanswered = S.tickets.filter((t) => t.status === 'new').length;
-  $('#nav').innerHTML = NAV.map(([k, t, icon]) => `<button class="navbtn" type="button" data-go="${k}" ${k === S.view ? 'aria-current="page"' : ''}><span class="navicon">${moji(icon, 20)}</span><span class="label">${t}</span>${k === 'support' && unanswered ? `<span class="count">${unanswered}</span>` : ''}${k === 'credits' && openIn('credits') ? `<span class="count">${openIn('credits')}</span>` : ''}${k === 'errors' && openIn('errors') ? `<span class="count">${openIn('errors')}</span>` : ''}</button>`).join('');
-  $('#view-title').textContent = NAV.find((n) => n[0] === S.view)![1];
-  $('#view-sub').textContent = S.view === 'overview' ? (S.updatedAt ? `Updated ${fmtTime(S.updatedAt.toISOString())}` : '') : SUB[S.view];
+  $('#nav').innerHTML = NAV.map(([k, t, icon]) => `<button class="navbtn" type="button" data-go="${k}" ${k === S.view ? 'aria-current="page"' : ''}><span class="navicon">${moji(icon, 20)}</span><span class="label">${t}</span><span class="short" aria-hidden="true">${SHORT[k]}</span>${k === 'support' && unanswered ? `<span class="count">${unanswered}</span>` : ''}${k === 'credits' && openIn('credits') ? `<span class="count">${openIn('credits')}</span>` : ''}${k === 'errors' && openIn('errors') ? `<span class="count">${openIn('errors')}</span>` : ''}</button>`).join('');
+  const finding = S.q.length >= 2 && S.view !== 'support';
+  $('#view-title').textContent = finding ? 'Find a customer' : NAV.find((n) => n[0] === S.view)![1];
+  $('#view-sub').textContent = finding ? 'Households, people and support messages' : S.view === 'overview' ? (S.updatedAt ? `Updated ${fmtTime(S.updatedAt.toISOString())}` : '') : SUB[S.view];
   const ready = S.loaded.households && S.loaded.tickets && S.loaded.extras && S.loaded.users;
   queueMicrotask(loadShots);
-  $('#view').innerHTML = (S.error ? `<div class="err-banner">${esc(S.error)} <button class="btn ghost small" type="button" id="retry">Try again</button></div>` : '') + (ready ? V[S.view]() : S.error ? '' : '<p class="loading">Loading live data…</p>');
+  $('#view').innerHTML = (S.error ? `<div class="err-banner">${esc(S.error)} <button class="btn ghost small" type="button" id="retry">Try again</button></div>` : '') + (ready ? (finding ? V.find() : V[S.view]()) : S.error ? '' : '<p class="loading">Loading live data…</p>');
 }
 
 // ── Screenshots (private bucket, signed for 10 minutes) ─────────────────────────────────
@@ -714,16 +781,37 @@ function subscribeLive() {
 
 // ── Events ──────────────────────────────────────────────────────────────────────────────
 document.addEventListener('click', (e) => {
-  const t = (e.target as HTMLElement).closest<HTMLElement>('[data-go],[data-open],[data-ticket],[data-ticket-go],[data-filter],[data-section],[data-close],#retry,#close-ticket');
+  const t = (e.target as HTMLElement).closest<HTMLElement>('[data-go],[data-open],[data-ticket],[data-ticket-go],[data-filter],[data-section],[data-close],[data-reveal],[data-hide],[data-copy],[data-back],#retry,#close-ticket,#clear-search,#account-btn');
+  const body = document.body;
+  if (body.classList.contains('show-account') && t?.id !== 'account-btn' && !(e.target as HTMLElement).closest('.rail-foot')) {
+    body.classList.remove('show-account');
+    if (!t || !t.dataset.go) return;
+  }
   if (!t) return;
+  if (t.id === 'account-btn') { document.body.classList.toggle('show-account'); return; }
+  if (t.id === 'clear-search') { S.q = ''; ($('#search') as HTMLInputElement).value = ''; render(); return; }
+  if (t.dataset.reveal) {
+    const code = t.dataset.reveal;
+    S.revealed.add(code);
+    void audit('reveal_household', code);
+    drawer(code);
+    render();
+    return;
+  }
+  if (t.dataset.hide) { S.revealed.delete(t.dataset.hide); drawer(t.dataset.hide); render(); return; }
+  if (t.dataset.copy) {
+    void navigator.clipboard?.writeText(t.dataset.copy).then(() => toast('Email copied'), () => toast('Couldn’t copy'));
+    return;
+  }
+  if ('back' in t.dataset) { S.picked = false; render(); return; }
   if (t.matches('a')) e.preventDefault();
   if (t.id === 'retry') { void loadAll(); return; }
   if (t.id === 'close-ticket') { void setStatus('closed'); return; }
   if (t.dataset.section) { S.section = t.dataset.section as typeof S.section; S.selected = null; render(); return; }
-  if (t.dataset.go) { S.section = (t.dataset.sectionGo as typeof S.section) ?? 'all'; S.view = t.dataset.go as typeof S.view; S.q = ''; ($('#search') as HTMLInputElement).value = ''; render(); }
+  if (t.dataset.go) { document.body.classList.remove('show-account'); S.picked = false; S.section = (t.dataset.sectionGo as typeof S.section) ?? 'all'; S.view = t.dataset.go as typeof S.view; S.q = ''; ($('#search') as HTMLInputElement).value = ''; render(); window.scrollTo({ top: 0 }); }
   else if (t.dataset.open) drawer(t.dataset.open);
-  else if (t.dataset.ticket) { S.selected = t.dataset.ticket; const x = S.tickets.find((k) => k.id === S.selected); if (x?.status === 'new') void setStatus('open', true); render(); }
-  else if (t.dataset.ticketGo) { S.selected = t.dataset.ticketGo; S.view = 'support'; $('#layer').innerHTML = ''; render(); }
+  else if (t.dataset.ticket) { S.picked = true; S.selected = t.dataset.ticket; const x = S.tickets.find((k) => k.id === S.selected); if (x?.status === 'new') void setStatus('open', true); render(); }
+  else if (t.dataset.ticketGo) { S.picked = true; S.q = ''; ($('#search') as HTMLInputElement).value = ''; S.selected = t.dataset.ticketGo; S.view = 'support'; $('#layer').innerHTML = ''; render(); }
   else if (t.dataset.filter) { S.filter = t.dataset.filter as typeof S.filter; render(); }
   else if ('close' in t.dataset && !t.matches('button[type="submit"]')) $('#layer').innerHTML = '';
 });
@@ -889,13 +977,12 @@ document.addEventListener('submit', async (e) => {
 
 ($('#search') as HTMLInputElement).addEventListener('input', (e) => {
   S.q = (e.target as HTMLInputElement).value.trim().toLowerCase();
-  if (S.view !== 'households' && S.view !== 'support' && S.view !== 'users') S.view = 'households';
   render();
 });
 $('#privacy').addEventListener('click', (e) => {
   S.reveal = !S.reveal;
   (e.currentTarget as HTMLElement).setAttribute('aria-checked', String(S.reveal));
-  $('#privacy-hint').textContent = S.reveal ? 'On — logged for audit' : 'Off — households are codes';
+  $('#privacy-hint').textContent = S.reveal ? 'On for everyone — logged' : 'Off — open a household to show one';
   if (S.reveal) void audit('reveal_names');
   render();
 });

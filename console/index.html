@@ -66,7 +66,7 @@
     <nav id="nav" aria-label="Sections"></nav>
     <div class="rail-foot">
       <div class="privacy">
-        <div><strong style="color:var(--fg)">Show names</strong><br><span id="privacy-hint">Off — households are codes</span></div>
+        <div><strong style="color:var(--fg)">Show names</strong><br><span id="privacy-hint">Off — open a household to show one</span></div>
         <button class="switch" id="privacy" role="switch" aria-checked="false" aria-label="Show household names"></button>
       </div>
       <div class="who">Signed in as <strong id="who">support@choremaxx.app</strong></div>
@@ -78,7 +78,10 @@
       <div><h1 id="view-title">Overview</h1><div class="sub" id="view-sub"></div></div>
       <div class="grow"></div>
       <span class="example" id="live-dot" style="color:var(--good);background:var(--good-soft)">Live</span>
-      <input class="input search" id="search" type="search" placeholder="Search code, ticket, email…" aria-label="Search">
+      <input class="input search" id="search" type="search" placeholder="Find a customer or ticket" aria-label="Find a customer by name, email, household code or ticket" title="Search by name, email, household code or ticket" autocomplete="off" enterkeyhint="search">
+      <button class="account-btn" id="account-btn" type="button" aria-label="Account and privacy">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+      </button>
     </div>
     <div id="view"></div>
   </main>
