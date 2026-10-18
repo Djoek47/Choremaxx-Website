@@ -10,7 +10,7 @@
 <body>
 
 
-<!-- Staff sign-in: email code → password → authenticator (custom email, not the app magic link). -->
+<!-- Staff sign-in: password → email code → authenticator (custom email, not the app magic link). -->
 <section id="signin">
   <div class="signin-art" aria-hidden="true">
     <div class="art-dots"></div>
@@ -24,11 +24,18 @@
     </div>
     <div>
       <h1 id="signin-title" style="font-size:26px;font-weight:800">Sign in to support</h1>
-      <p class="hint" id="signin-sub" style="margin:6px 0 0">Staff only. Three steps: email code, password, authenticator app.</p>
+      <p class="hint" id="signin-sub" style="margin:6px 0 0">Staff only. Three steps: password, email code, authenticator app.</p>
     </div>
+
+    <ol class="auth-steps" id="auth-steps" aria-label="Sign-in progress">
+      <li data-auth-step="email" class="is-current">Password</li>
+      <li data-auth-step="otp">Email code</li>
+      <li data-auth-step="totp">Authenticator</li>
+    </ol>
 
     <div id="step-email" class="signin-step">
       <div class="field"><label for="email">Work email</label><input class="input" id="email" type="email" placeholder="you@choremaxx.app" autocomplete="username" ></div>
+      <div class="field"><label for="password">Console password</label><input class="input" id="password" type="password" autocomplete="current-password" placeholder="Your staff password"></div>
       <label class="keep-row" for="keep-signed-in">
         <input id="keep-signed-in" type="checkbox" checked>
         <span>
@@ -36,18 +43,13 @@
           <span class="keep-hint">Stay signed in on this browser so you don’t need a new email code every visit.</span>
         </span>
       </label>
-      <button class="btn" type="submit" data-step="email">Email me a sign-in code</button>
+      <button class="btn" type="submit" data-step="email">Continue</button>
     </div>
 
     <div id="step-otp" class="signin-step" hidden>
       <div class="field"><label for="otp">Code from email</label><input class="input" id="otp" inputmode="numeric" pattern="[0-9 ]*" autocomplete="one-time-code" placeholder="8-digit code" maxlength="19"></div>
       <button class="btn" type="submit" data-step="otp">Continue</button>
       <button class="btn ghost" type="button" id="otp-resend">Send a new code</button>
-    </div>
-
-    <div id="step-password" class="signin-step" hidden>
-      <div class="field"><label for="password">Console password</label><input class="input" id="password" type="password" autocomplete="current-password" placeholder="Your staff password"></div>
-      <button class="btn" type="submit" data-step="password">Continue</button>
     </div>
 
     <div id="step-enroll" class="signin-step" hidden>
@@ -64,7 +66,7 @@
     </div>
 
     <button class="btn ghost" type="button" id="auth-restart" hidden>Start over</button>
-    <p class="hint" id="signin-note" style="margin:0" aria-live="polite">Only addresses on the staff list can sign in. Finish all three steps (email code, password, authenticator) to get in.</p>
+    <p class="hint" id="signin-note" style="margin:0" aria-live="polite">Only addresses on the staff list can sign in. Finish all three steps to get in.</p>
   </form>
 </section>
 

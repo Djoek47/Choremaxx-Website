@@ -115,30 +115,53 @@ type AuthChallenge = {
   stepToken: string;
   email: string;
 };
-type AuthStep = 'email' | 'otp' | 'password' | 'enroll' | 'totp';
+type AuthStep = 'email' | 'otp' | 'enroll' | 'totp';
 let authChallenge: AuthChallenge | null = null;
 let authStep: AuthStep = 'email';
 
+function setSigninNote(message: string, kind: 'hint' | 'error' | 'ok' = 'hint') {
+  const note = $('#signin-note');
+  note.textContent = message;
+  note.classList.toggle('signin-error', kind === 'error');
+  note.classList.toggle('signin-ok', kind === 'ok');
+}
+
+function syncAuthProgress(step: AuthStep) {
+  const map: Record<AuthStep, 'email' | 'otp' | 'totp'> = {
+    email: 'email',
+    otp: 'otp',
+    enroll: 'totp',
+    totp: 'totp',
+  };
+  const current = map[step];
+  const order = ['email', 'otp', 'totp'] as const;
+  const idx = order.indexOf(current);
+  document.querySelectorAll<HTMLElement>('#auth-steps [data-auth-step]').forEach((el) => {
+    const key = el.dataset.authStep as (typeof order)[number];
+    const i = order.indexOf(key);
+    el.classList.toggle('is-current', i === idx);
+    el.classList.toggle('is-done', i < idx);
+  });
+}
+
 function showAuthStep(step: AuthStep) {
   authStep = step;
-  for (const id of ['step-email', 'step-otp', 'step-password', 'step-enroll', 'step-totp']) {
+  for (const id of ['step-email', 'step-otp', 'step-enroll', 'step-totp']) {
     const el = document.getElementById(id);
     if (el) el.hidden = id !== `step-${step}`;
   }
   const restart = document.getElementById('auth-restart') as HTMLButtonElement | null;
   if (restart) restart.hidden = step === 'email';
+  syncAuthProgress(step);
   const title = $('#signin-title');
   const sub = $('#signin-sub');
   if (step === 'email') {
     title.textContent = 'Sign in to support';
-    sub.textContent = 'Staff only. Three steps: email code, password, authenticator app.';
+    sub.textContent = 'Staff only. Three steps: password, email code, authenticator app.';
     syncKeepCheckbox();
   } else if (step === 'otp') {
     title.textContent = 'Enter your email code';
-    sub.textContent = 'Step 1 of 3 — console-only code (not the ChoreMaxx app sign-in email).';
-  } else if (step === 'password') {
-    title.textContent = 'Enter your password';
-    sub.textContent = 'Step 2 of 3 — your staff password for the console.';
+    sub.textContent = 'Step 2 of 3 — console-only code (not the ChoreMaxx app sign-in email).';
   } else if (step === 'enroll') {
     title.textContent = 'Set up authenticator';
     sub.textContent = 'Step 3 of 3 — scan the QR once, then confirm with a 6-digit code.';
@@ -148,14 +171,17 @@ function showAuthStep(step: AuthStep) {
   }
 }
 
-/** Abandon an unfinished three-step challenge and return to email. */
-async function resetAuthFlow(note = 'Start again whenever you’re ready — email code, then password, then authenticator.') {
+/** Abandon an unfinished three-step challenge and return to email + password. */
+async function resetAuthFlow(note = 'Start again whenever you’re ready — password, then email code, then authenticator.') {
   const pending = authChallenge;
   authChallenge = null;
-  for (const id of ['otp', 'password', 'enroll-code', 'totp']) {
+  for (const id of ['otp', 'enroll-code', 'totp']) {
     const el = document.getElementById(id) as HTMLInputElement | null;
     if (el) el.value = '';
   }
+  // Keep email; clear password so it must be re-entered.
+  const pw = document.getElementById('password') as HTMLInputElement | null;
+  if (pw) pw.value = '';
   const qr = document.getElementById('totp-qr');
   if (qr) qr.innerHTML = '';
   const secret = document.getElementById('totp-secret');
@@ -172,11 +198,31 @@ async function resetAuthFlow(note = 'Start again whenever you’re ready — ema
     }
   }
   showAuthStep('email');
-  $('#signin-note').textContent = note;
+  setSigninNote(note, /expired|wrong|failed|could not/i.test(note) ? 'error' : 'hint');
 }
 
 function shouldRestartAuth(message: string): boolean {
-  return /start (sign-in|again)|session expired|start over|no longer valid/i.test(message);
+  return /start (sign-in|again)|session expired|start over|no longer valid|sign-in order changed/i.test(message);
+}
+
+async function goToAuthenticator(data: Record<string, unknown>, noteOk: string) {
+  if (!authChallenge) return;
+  authChallenge.stepToken = String(data.stepToken);
+  if (data.next === 'enroll-totp') {
+    showAuthStep('enroll');
+    setSigninNote(noteOk || 'Last step: scan the QR, then confirm with a code from your authenticator.', 'ok');
+    const qrHost = $('#totp-qr');
+    qrHost.innerHTML = '';
+    const canvas = document.createElement('canvas');
+    qrHost.appendChild(canvas);
+    await QRCode.toCanvas(canvas, String(data.otpauth), { width: 180, margin: 1 });
+    $('#totp-secret').textContent = `Manual key: ${String(data.secret)}`;
+    ($('#enroll-code') as HTMLInputElement).focus();
+  } else {
+    showAuthStep('totp');
+    setSigninNote(noteOk || 'Last step: enter the 6-digit code from your authenticator app.', 'ok');
+    ($('#totp') as HTMLInputElement).focus();
+  }
 }
 
 async function consoleAuth(body: Record<string, unknown>) {
@@ -863,7 +909,8 @@ function showSignin(note?: string) {
   $('#signin').hidden = false;
   showAuthStep('email');
   syncKeepCheckbox();
-  if (note) $('#signin-note').textContent = note;
+  if (note) setSigninNote(note, /signed out|ready/i.test(note) ? 'hint' : 'error');
+  else setSigninNote('Only addresses on the staff list can sign in. Finish all three steps to get in.');
 }
 async function enter(session: Session) {
   // Keep the dashboard hidden until staff check passes (avoids signed-in + signed-out flash).
@@ -1000,72 +1047,60 @@ document.addEventListener('submit', async (e) => {
   e.preventDefault();
   const form = e.target as HTMLFormElement;
   if (form.id === 'signin-form') {
-    if (!sb) { $('#signin-note').textContent = 'Sign-in isn’t available right now. Try again later.'; return; }
+    if (!sb) { setSigninNote('Sign-in isn’t available right now. Try again later.', 'error'); return; }
     const submitter = (e as SubmitEvent).submitter as HTMLButtonElement | null;
-    const step = (submitter?.dataset.step ?? 'email') as AuthStep;
-    const note = $('#signin-note');
+    // Enter key often has no submitter — stay on the current step (never jump back to email).
+    const step = (submitter?.dataset.step ?? authStep) as AuthStep;
     const disable = (on: boolean) => form.querySelectorAll('button').forEach((b) => (b.disabled = on));
 
     try {
       disable(true);
       if (step === 'email') {
         const email = ($('#email') as HTMLInputElement).value.trim().toLowerCase();
-        if (!email.includes('@')) { note.textContent = 'Enter your work email.'; return; }
+        const password = ($('#password') as HTMLInputElement).value;
+        if (!email.includes('@')) { setSigninNote('Enter your work email.', 'error'); return; }
+        if (!password || password.length < 8) {
+          setSigninNote('Enter your console password (at least 8 characters).', 'error');
+          return;
+        }
         const keepEl = document.getElementById('keep-signed-in') as HTMLInputElement | null;
         writeKeepSignedIn(keepEl ? keepEl.checked : true);
-        await consoleAuth({ action: 'request-otp', email });
-        authChallenge = { challengeId: '', stepToken: '', email };
+        const data = await consoleAuth({ action: 'start-signin', email, password });
+        authChallenge = {
+          challengeId: String(data.challengeId),
+          stepToken: String(data.stepToken),
+          email,
+        };
         showAuthStep('otp');
-        note.textContent = `If ${email} is on the staff list, check your inbox for a console sign-in code. Finish all three steps to get in.`;
+        setSigninNote(String(data.message ?? `We sent a console sign-in code to ${email}.`), 'ok');
+        ($('#otp') as HTMLInputElement).value = '';
         ($('#otp') as HTMLInputElement).focus();
         return;
       }
       if (step === 'otp') {
-        const email = authChallenge?.email ?? ($('#email') as HTMLInputElement).value.trim().toLowerCase();
-        const code = ($('#otp') as HTMLInputElement).value.trim();
-        const data = await consoleAuth({ action: 'verify-otp', email, code });
-        authChallenge = { challengeId: String(data.challengeId), stepToken: String(data.stepToken), email };
-        showAuthStep('password');
-        note.textContent = 'Email code accepted. Next: console password.';
-        ($('#password') as HTMLInputElement).focus();
-        return;
-      }
-      if (step === 'password') {
         if (!authChallenge?.challengeId) {
-          await resetAuthFlow('That sign-in expired. Start again from your email.');
+          await resetAuthFlow('That sign-in expired. Start again with your email and password.');
           return;
         }
-        const password = ($('#password') as HTMLInputElement).value;
+        const code = ($('#otp') as HTMLInputElement).value.trim();
+        if (!code) { setSigninNote('Enter the 8-digit code from your email.', 'error'); return; }
         const data = await consoleAuth({
-          action: 'verify-password',
+          action: 'verify-otp',
           challengeId: authChallenge.challengeId,
           stepToken: authChallenge.stepToken,
-          password,
+          email: authChallenge.email,
+          code,
         });
-        authChallenge.stepToken = String(data.stepToken);
-        if (data.next === 'enroll-totp') {
-          showAuthStep('enroll');
-          note.textContent = 'Last step: scan the QR, then confirm with a code from your authenticator.';
-          const qrHost = $('#totp-qr');
-          qrHost.innerHTML = '';
-          const canvas = document.createElement('canvas');
-          qrHost.appendChild(canvas);
-          await QRCode.toCanvas(canvas, String(data.otpauth), { width: 180, margin: 1 });
-          $('#totp-secret').textContent = `Manual key: ${String(data.secret)}`;
-          ($('#enroll-code') as HTMLInputElement).focus();
-        } else {
-          showAuthStep('totp');
-          note.textContent = 'Last step: enter the 6-digit code from your authenticator app.';
-          ($('#totp') as HTMLInputElement).focus();
-        }
+        await goToAuthenticator(data, 'Email code accepted. Next: authenticator.');
         return;
       }
       if (step === 'enroll') {
         if (!authChallenge?.challengeId) {
-          await resetAuthFlow('That sign-in expired. Start again from your email.');
+          await resetAuthFlow('That sign-in expired. Start again with your email and password.');
           return;
         }
         const totpCode = ($('#enroll-code') as HTMLInputElement).value.trim();
+        if (!totpCode) { setSigninNote('Enter the 6-digit authenticator code.', 'error'); return; }
         const data = await consoleAuth({
           action: 'confirm-enroll',
           challengeId: authChallenge.challengeId,
@@ -1073,15 +1108,16 @@ document.addEventListener('submit', async (e) => {
           totpCode,
         });
         await finishSignIn(data.session as { access_token: string; refresh_token: string });
-        note.textContent = '';
+        setSigninNote('');
         return;
       }
       if (step === 'totp') {
         if (!authChallenge?.challengeId) {
-          await resetAuthFlow('That sign-in expired. Start again from your email.');
+          await resetAuthFlow('That sign-in expired. Start again with your email and password.');
           return;
         }
         const totpCode = ($('#totp') as HTMLInputElement).value.trim();
+        if (!totpCode) { setSigninNote('Enter the 6-digit authenticator code.', 'error'); return; }
         const data = await consoleAuth({
           action: 'verify-totp',
           challengeId: authChallenge.challengeId,
@@ -1089,15 +1125,16 @@ document.addEventListener('submit', async (e) => {
           totpCode,
         });
         await finishSignIn(data.session as { access_token: string; refresh_token: string });
-        note.textContent = '';
+        setSigninNote('');
         return;
       }
+      setSigninNote('Unknown sign-in step. Use Start over.', 'error');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Sign-in failed.';
       if (shouldRestartAuth(message) && authStep !== 'email') {
-        await resetAuthFlow(`${message} Use Start over, or begin again from your email.`);
+        await resetAuthFlow(`${message} Use Start over, or begin again with your email and password.`);
       } else {
-        note.textContent = message;
+        setSigninNote(message, 'error');
       }
     } finally {
       disable(false);
@@ -1147,33 +1184,34 @@ $('#signout').addEventListener('click', async () => {
 });
 
 $('#otp-resend')?.addEventListener('click', async () => {
-  const email = authChallenge?.email ?? ($('#email') as HTMLInputElement).value.trim().toLowerCase();
-  if (!email.includes('@')) { $('#signin-note').textContent = 'Enter your work email first.'; return; }
+  if (!authChallenge?.challengeId || !authChallenge.stepToken) {
+    setSigninNote('Start again with your email and password first.', 'error');
+    return;
+  }
   try {
-    // Drop any half-finished challenge so the new code starts a clean loop.
-    if (authChallenge?.challengeId) {
-      try {
-        await consoleAuth({
-          action: 'cancel-challenge',
-          challengeId: authChallenge.challengeId,
-          stepToken: authChallenge.stepToken,
-        });
-      } catch {
-        /* ignore */
-      }
-    }
-    await consoleAuth({ action: 'request-otp', email });
-    authChallenge = { challengeId: '', stepToken: '', email };
+    const data = await consoleAuth({
+      action: 'resend-otp',
+      challengeId: authChallenge.challengeId,
+      stepToken: authChallenge.stepToken,
+    });
+    authChallenge.stepToken = String(data.stepToken);
+    authChallenge.challengeId = String(data.challengeId ?? authChallenge.challengeId);
     ($('#otp') as HTMLInputElement).value = '';
     showAuthStep('otp');
-    $('#signin-note').textContent = `New console code sent to ${email} (if on the staff list). Then continue with password and authenticator.`;
+    setSigninNote(String(data.message ?? 'New console code sent. Then continue with authenticator.'), 'ok');
+    ($('#otp') as HTMLInputElement).focus();
   } catch (err) {
-    $('#signin-note').textContent = err instanceof Error ? err.message : 'Could not resend.';
+    const message = err instanceof Error ? err.message : 'Could not resend.';
+    if (shouldRestartAuth(message)) {
+      await resetAuthFlow(`${message} Start again with your email and password.`);
+    } else {
+      setSigninNote(message, 'error');
+    }
   }
 });
 
 $('#auth-restart')?.addEventListener('click', () => {
-  void resetAuthFlow('Sign-in cleared. Start again: email code → password → authenticator.');
+  void resetAuthFlow('Sign-in cleared. Start again: password → email code → authenticator.');
 });
 
 document.getElementById('keep-signed-in')?.addEventListener('change', (e) => {
