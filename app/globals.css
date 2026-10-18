@@ -670,7 +670,8 @@ html[data-platform='android'] .pg-android { opacity: 1; }
 /* Reduced motion on a computer: show both logos side by side instead of fading. */
 @media (prefers-reduced-motion: reduce) {
   html:not([data-platform]) .pg { display: inline-flex; gap: 4px; width: auto !important; }
-  html:not([data-platform]) .pg > span { transition: none; opacity: 1; }
+  html:not([data-platform]) .pg-apple,
+  html:not([data-platform]) .pg-android { transition: none; opacity: 1 !important; }
 }
 @media (max-width: 480px) {
   .about-body > div > div:first-child { padding: 24px !important; border-radius: 24px !important; }
