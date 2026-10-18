@@ -900,12 +900,11 @@ $('#privacy').addEventListener('click', (e) => {
   render();
 });
 $('#signout').addEventListener('click', async () => {
-  await sb?.auth.signOut();
   channel?.unsubscribe();
   channel = null;
   authChallenge = null;
   $('#layer').innerHTML = '';
-  showAuthStep('email');
+  await sb?.auth.signOut();
   showSignin('Signed out.');
 });
 
