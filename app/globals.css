@@ -438,16 +438,12 @@ html { overflow-x: hidden; }
 @media (max-width: 768px) {
   .container-page { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
   .home-shell .hero-stage { min-height: auto !important; }
-  .home-shell .hero-phone-wrap { min-height: 420px !important; }
+  /* Phone wrap height comes from .hero-phone-wrap / .hero-phone (mobile pass) — no fixed min-height */
   .btn-store { max-width: 100%; }
   .btn-store-lg { width: 100%; max-width: 22rem; justify-content: center; }
 }
 @media (max-width: 430px) {
   h1 { font-size: clamp(2.35rem, 11.5vw, 3.4rem) !important; }
-  .home-shell .hero-phone-wrap { min-height: 380px !important; }
-}
-@media (min-width: 768px) and (max-width: 1024px) {
-  .home-shell .hero-phone-wrap { min-height: 560px !important; }
 }
 
 /* Header / footer chrome */
