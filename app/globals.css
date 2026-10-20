@@ -406,6 +406,22 @@ html[data-appearance='night'] h1,
 html[data-appearance='night'] h2,
 html[data-appearance='night'] h3 { color: var(--tx) !important; }
 html[data-appearance='night'] p { color: var(--txs) !important; }
+/* Cream-day Tailwind / inline browns stay dark on night cards — remap to tokens */
+html[data-appearance='night'] .text-\[\#2A1A12\],
+html[data-appearance='night'] [style*='color: #2A1A12'],
+html[data-appearance='night'] [style*='color:#2A1A12'] {
+  color: var(--tx) !important;
+}
+html[data-appearance='night'] .text-\[\#5A4438\],
+html[data-appearance='night'] .text-\[\#8F7A6C\],
+html[data-appearance='night'] [style*='color: #5A4438'],
+html[data-appearance='night'] [style*='color:#5A4438'],
+html[data-appearance='night'] [style*='color: #8F7A6C'],
+html[data-appearance='night'] [style*='color:#8F7A6C'] {
+  color: var(--txs) !important;
+}
+html[data-appearance='night'] li { color: var(--txs); }
+html[data-appearance='night'] li strong { color: var(--tx); }
 html[data-appearance='night'] .glass-card,
 html[data-appearance='night'] .glass-tile,
 html[data-appearance='night'] .section-card,
